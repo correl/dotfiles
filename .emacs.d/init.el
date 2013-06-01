@@ -47,6 +47,12 @@
   (color-theme-ld-dark)
   (color-theme-ld-dark))
 
+;; Projmake
+(defun projmake-mode-hook ()
+  (projmake-mode)
+  (projmake-search-load-project))
+(add-hook 'erlang-mode-hook 'projmake-mode-hook)
+
 ;; Window transparency
 (set-frame-parameter (selected-frame) 'alpha '(85 50))
 (add-to-list 'default-frame-alist '(alpha 85 50))  
