@@ -26,7 +26,8 @@
 ;; (setq stack-trace-on-error t)
 
 ;; SLIME
-(load (expand-file-name "~/quicklisp/slime-helper.el"))
+(if (file-exists-p "~/quicklisp/slime-helper.el")
+    (load (expand-file-name "~/quicklisp/slime-helper.el")))
 
 ;; Erlang configuration
 (add-to-list
