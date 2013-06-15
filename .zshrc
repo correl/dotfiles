@@ -5,7 +5,7 @@ fi
 source $HOME/antigen/antigen.zsh
 
 # Load the oh-my-zsh library
-antigen-lib
+antigen use oh-my-zsh
 
 # Bundles from the default repo (robbyrussel's oh-my-zsh)
 antigen-bundles <<EOF
