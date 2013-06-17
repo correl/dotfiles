@@ -48,6 +48,12 @@
   (color-theme-ld-dark)
   (color-theme-ld-dark))
 
+;; Lisp-Flavored Erlang
+(add-to-list
+ 'load-path
+ (car (file-expand-wildcards "/usr/lib/erlang/lib/lfe-*/emacs")))
+(require 'lfe-start 'nil 'noerror)
+
 ;; Projmake
 (defun projmake-mode-hook ()
   (projmake-mode)
