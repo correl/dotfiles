@@ -68,8 +68,8 @@
 (add-hook 'erlang-mode-hook 'projmake-mode-hook)
 
 ;; Window transparency
-(set-frame-parameter (selected-frame) 'alpha '(85 50))
-(add-to-list 'default-frame-alist '(alpha 85 50))  
+(set-frame-parameter (selected-frame) 'alpha '(85 85))
+(add-to-list 'default-frame-alist '(alpha 85 85))  
 
 (setq auto-mode-alist
       (cons '("\\.md" . markdown-mode) auto-mode-alist))
