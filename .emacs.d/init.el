@@ -19,6 +19,13 @@
 (require 'auto-complete-config)
 (ac-config-default)
 
+;; Whitespace
+(require 'whitespace)
+(setq whitespace-line-column 80) ;; limit line length
+(setq whitespace-style '(face lines-tail))
+
+(global-whitespace-mode +1)
+
 ;; Git Gutter
 (global-git-gutter-mode t)
 
