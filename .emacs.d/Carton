@@ -8,6 +8,7 @@
 (depends-on "org")
 (depends-on "auto-complete")
 (depends-on "git-gutter")
+(depends-on "smex")
 
 ;; PHP
 (depends-on "multi-web-mode")
