@@ -26,6 +26,10 @@
 
 (global-whitespace-mode +1)
 
+;; Smex
+(global-set-key (kbd "M-x") 'smex)
+(global-set-key (kbd "M-X") 'smex-major-mode-commands)
+
 ;; Git Gutter
 (global-git-gutter-mode t)
 
