@@ -9,6 +9,7 @@
 (depends-on "auto-complete")
 (depends-on "git-gutter")
 (depends-on "smex")
+(depends-on "expand-region")
 
 ;; PHP
 (depends-on "multi-web-mode")

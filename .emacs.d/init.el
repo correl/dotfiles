@@ -30,6 +30,9 @@
 (global-set-key (kbd "M-x") 'smex)
 (global-set-key (kbd "M-X") 'smex-major-mode-commands)
 
+;; Expand Region
+(global-set-key (kbd "C-=") 'er/expand-region)
+
 ;; Git Gutter
 (global-git-gutter-mode t)
 
