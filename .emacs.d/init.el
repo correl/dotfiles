@@ -19,13 +19,6 @@
 (require 'auto-complete-config)
 (ac-config-default)
 
-;; Whitespace
-(require 'whitespace)
-(setq whitespace-line-column 80) ;; limit line length
-(setq whitespace-style '(face lines-tail))
-
-(global-whitespace-mode +1)
-
 ;; Smex
 (global-set-key (kbd "M-x") 'smex)
 (global-set-key (kbd "M-X") 'smex-major-mode-commands)
