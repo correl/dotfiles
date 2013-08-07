@@ -20,7 +20,6 @@
 
 ;; Erlang
 (depends-on "erlang")
-(depends-on "projmake-mode")
 
 ;; Haskell
 (depends-on "haskell-mode")
