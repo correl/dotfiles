@@ -19,6 +19,19 @@
 (require 'auto-complete-config)
 (ac-config-default)
 
+;; Magit
+(defun magit-fullscreen ()
+  (defadvice magit-status (around magit-fullscreen activate)
+    (window-configuration-to-register :magit-fullscreen)
+    ad-do-it
+    (delete-other-windows))
+
+  (defadvice magit-quit-window (around magit-restore-screen activate)
+    ad-do-it
+    (jump-to-register :magit-fullscreen)))
+
+(eval-after-load 'magit '(magit-fullscreen))
+
 ;; Smex
 (global-set-key (kbd "M-x") 'smex)
 (global-set-key (kbd "M-X") 'smex-major-mode-commands)
