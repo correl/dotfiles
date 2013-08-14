@@ -13,145 +13,33 @@
 
 (package-initialize)
 
+;; Emacs
+(global-set-key (kbd "C-,") 'kill-whole-line)
+
+;; ido-mode
 (ido-mode)
+(setq ido-enable-flex-matching t)
 
 ;; Autocomplete
 (require 'auto-complete-config)
 (ac-config-default)
 
-;; Magit
-(defun magit-fullscreen ()
-  (defadvice magit-status (around magit-fullscreen activate)
-    (window-configuration-to-register :magit-fullscreen)
-    ad-do-it
-    (delete-other-windows))
-
-  (defadvice magit-quit-window (around magit-restore-screen activate)
-    ad-do-it
-    (jump-to-register :magit-fullscreen)))
-
-(eval-after-load 'magit '(magit-fullscreen))
-
-;; Smex
-(global-set-key (kbd "M-x") 'smex)
-(global-set-key (kbd "M-X") 'smex-major-mode-commands)
-
 ;; Expand Region
 (global-set-key (kbd "C-=") 'er/expand-region)
-
-;; Git Gutter
-(global-git-gutter-mode t)
-
-(defadvice ediff-make-temp-file (before make-temp-file-suspend-ll
-                                        activate compile preactivate)
-  "Disable git-gutter when running ediff"
-  (global-git-gutter-mode 0))
-
-(add-hook 'ediff-cleanup-hook
-          '(lambda ()
-             (global-git-gutter-mode t)))
-
-;; Fixes an issue with ECB
-;; (setq stack-trace-on-error t)
-
-;; Diff colors
-(defun custom-diff-colors ()
-  "update the colors for diff faces"
-  (set-face-attribute
-   'diff-added nil :foreground "green")
-  (set-face-attribute
-   'diff-removed nil :foreground "red")
-  (set-face-attribute
-   'diff-changed nil :foreground "purple"))
-(eval-after-load "diff-mode" '(custom-diff-colors))
-
-;; SLIME
-(if (file-exists-p "~/quicklisp/slime-helper.el")
-    (load (expand-file-name "~/quicklisp/slime-helper.el")))
-
-;; Erlang configuration
-(add-to-list
- 'load-path
- (car (file-expand-wildcards "/usr/lib/erlang/lib/tools-*/emacs")))
-(setq erlang-root-dir "/usr/lib/erlang")
-(setq exec-path (cons "/usr/lib/erlang/bin" exec-path))
-(require 'erlang-start)
-(add-hook 'erlang-mode-hook
-             (lambda ()
-            ;; when starting an Erlang shell in Emacs, the node name
-            ;; by default should be "emacs"
-            (setq inferior-erlang-machine-options '("-sname" "emacs"))))
-
-(require 'color-theme)
-(color-theme-initialize)
-(if (display-graphic-p)
-  (color-theme-ld-dark)
-  (color-theme-ld-dark))
-
-;; Lisp-Flavored Erlang
-(add-to-list
- 'load-path
- (car (file-expand-wildcards "/usr/lib/erlang/lib/lfe-*/emacs")))
-(require 'lfe-start 'nil 'noerror)
 
 ;; Window transparency
 (set-frame-parameter (selected-frame) 'alpha '(85 85))
 (add-to-list 'default-frame-alist '(alpha 85 85))  
 
-(setq auto-mode-alist
-      (cons '("\\.md" . markdown-mode) auto-mode-alist))
 
-(setq ido-enable-flex-matching t)
-(global-set-key (kbd "C-,") 'kill-whole-line)
-
-;; PHP Mode
-(add-to-list 'auto-mode-alist '("\\.php$" . php-mode))
-(add-to-list 'auto-mode-alist '("\\.inc$" . php-mode))
-
-;; Multi-Web-Mode
-(require 'multi-web-mode)
-(setq mweb-default-major-mode 'html-mode)
-(setq mweb-tags '((php-mode "<\\?php\\|<\\? \\|<\\?=" "\\?>")
-                  (js-mode "<script[^>]*>" "</script>")
-                  (css-mode "<style[^>]*>" "</style>")))
-(setq mweb-filename-extensions '("php" "htm" "html" "ctp" "phtml" "php4" "php5"))
-(multi-web-global-mode 1)
-
-;; SLIME
-(setq inferior-lisp-program "clisp")
-
-;; emacsredux.com
-(defun rename-file-and-buffer ()
-  "Rename the current buffer and file it is visiting."
-  (interactive)
-  (let ((filename (buffer-file-name)))
-    (if (not (and filename (file-exists-p filename)))
-        (message "Buffer is not visiting a file!")
-      (let ((new-name (read-file-name "New name: " filename)))
-        (cond
-         ((vc-backend filename) (vc-rename-file filename new-name))
-         (t
-          (rename-file filename new-name t)
-          (rename-buffer new-name)
-          (set-visited-file-name new-name)
-          (set-buffer-modified-p nil)))))))
-
-(defadvice ido-find-file (after find-file-sudo activate)
-  "Find file as root if necessary."
-  (unless (and buffer-file-name
-               (file-writable-p buffer-file-name))
-    (find-alternate-file (concat "/sudo:root@localhost:" buffer-file-name))))
-
-(defun eval-and-replace ()
-  "Replace the preceding sexp with its value."
-  (interactive)
-  (backward-kill-sexp)
-  (condition-case nil
-      (prin1 (eval (read (current-kill 0)))
-             (current-buffer))
-    (error (message "Invalid expression")
-           (insert (current-kill 0)))))
-(global-set-key (kbd "C-)") 'eval-and-replace)
+;; Load custom init scripts from ~/.emacs.d/init.d
+;;
+(let ((init-dir "~/.emacs.d/init.d")
+      (file-pattern "\\.elc?$"))
+  (when (file-directory-p init-dir)
+    (mapcar (lambda (lisp-file)
+              (load-file lisp-file))
+            (directory-files (expand-file-name init-dir) t file-pattern))))
 
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
