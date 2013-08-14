@@ -37,8 +37,8 @@ if which virtualenvwrapper.sh >/dev/null; then
     source virtualenvwrapper.sh
 fi
 
-# Emacs Carton
-if [ ! -d ${HOME}/.carton ]; then
-    curl -fsSkL https://raw.github.com/rejeep/carton/master/go | sh
+# Emacs Cask
+if [ ! -d ${HOME}/.cask ]; then
+    curl -fsSkL https://raw.github.com/rejeep/cask.el/master/go | sh
 fi
-export PATH="${HOME}/.carton/bin:$PATH"
+export PATH="${HOME}/.cask/bin:$PATH"
