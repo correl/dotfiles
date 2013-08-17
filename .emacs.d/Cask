@@ -10,6 +10,7 @@
 (depends-on "git-gutter")
 (depends-on "smex")
 (depends-on "expand-region")
+(depends-on "powerline")
 
 ;; PHP
 (depends-on "multi-web-mode")
