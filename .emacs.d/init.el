@@ -13,6 +13,9 @@
 
 (package-initialize)
 
+(require 'cask "~/.cask/cask.el")
+(cask-initialize)
+
 ;; Emacs
 (global-set-key (kbd "C-,") 'kill-whole-line)
 
