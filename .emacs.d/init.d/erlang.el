@@ -11,12 +11,6 @@
             ;; by default should be "emacs"
             (setq inferior-erlang-machine-options '("-sname" "emacs"))))
 
-(require 'color-theme)
-(color-theme-initialize)
-(if (display-graphic-p)
-  (color-theme-ld-dark)
-  (color-theme-ld-dark))
-
 ;; Lisp-Flavored Erlang
 (add-to-list
  'load-path

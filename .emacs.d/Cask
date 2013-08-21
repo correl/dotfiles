@@ -12,6 +12,10 @@
 (depends-on "expand-region")
 (depends-on "powerline")
 
+;; Themes
+(depends-on "theme-park-mode")
+(depends-on "twilight-theme")
+(depends-on "late-night-theme")
 ;; PHP
 (depends-on "multi-web-mode")
 (depends-on "php-mode")

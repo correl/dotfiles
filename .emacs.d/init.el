@@ -19,6 +19,9 @@
 ;; Emacs
 (global-set-key (kbd "C-,") 'kill-whole-line)
 
+;; Theme
+(load-theme 'twilight t)
+
 ;; ido-mode
 (ido-mode)
 (setq ido-enable-flex-matching t)
