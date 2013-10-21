@@ -11,6 +11,8 @@
 (depends-on "smex")
 (depends-on "expand-region")
 (depends-on "powerline")
+(depends-on "ack-and-a-half")
+(depends-on "projectile")
 
 ;; Themes
 (depends-on "theme-park-mode")
