@@ -6,7 +6,8 @@
   "Customize PHP indentation"
 
   (c-set-offset 'arglist-cont-nonempty 'c-lineup-arglist)
-  (c-set-offset 'substatement-open 0))
+  (c-set-offset 'substatement-open 0)
+  (c-set-offset 'case-label '+))
 
 (add-hook 'php-mode-hook 'my-php-mode-hook)
 
