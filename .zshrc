@@ -39,6 +39,6 @@ fi
 
 # Emacs Cask
 if [ ! -d ${HOME}/.cask ]; then
-    curl -fsSkL https://raw.github.com/rejeep/cask.el/master/go | sh
+    curl -fsSkL https://raw.github.com/cask/cask.el/master/go | python
 fi
 export PATH="${HOME}/.cask/bin:$PATH"
