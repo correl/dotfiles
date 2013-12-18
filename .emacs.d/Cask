@@ -13,6 +13,7 @@
 (depends-on "powerline")
 (depends-on "ack-and-a-half")
 (depends-on "projectile")
+(depends-on "flycheck")
 
 ;; Themes
 (depends-on "theme-park-mode")
