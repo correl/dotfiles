@@ -33,11 +33,6 @@
 ;; Expand Region
 (global-set-key (kbd "C-=") 'er/expand-region)
 
-;; Window transparency
-(set-frame-parameter (selected-frame) 'alpha '(85 85))
-(add-to-list 'default-frame-alist '(alpha 85 85))  
-
-
 ;; Load custom init scripts from ~/.emacs.d/init.d
 ;;
 (let ((init-dir "~/.emacs.d/init.d")
