@@ -42,3 +42,7 @@ if [ ! -d ${HOME}/.cask ]; then
     curl -fsSkL https://raw.github.com/cask/cask.el/master/go | python
 fi
 export PATH="${HOME}/.cask/bin:$PATH"
+
+if [ -d ${HOME}/.cabal/bin ]; then
+    export PATH="${HOME}/.cabal/bin:$PATH"
+fi
