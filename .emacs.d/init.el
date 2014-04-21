@@ -19,9 +19,6 @@
 ;; Emacs
 (global-set-key (kbd "C-,") 'kill-whole-line)
 
-;; Theme
-(load-theme 'twilight t)
-
 ;; ido-mode
 (ido-mode)
 (setq ido-enable-flex-matching t)
@@ -60,11 +57,17 @@
  '(inferior-lisp-program "sbcl")
  '(inhibit-startup-screen t))
 (put 'narrow-to-region 'disabled nil)
-(custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(default ((t (:inherit nil :stipple nil :background "black" :foreground "white" :inverse-video nil :box nil :strike-through nil :overline nil :underline nil :slant normal :weight normal :height 80 :width normal :foundry "unknown" :family "DejaVu Sans Mono"))))
- '(font-lock-function-name-face ((t (:foreground "LightSkyBlue" :weight bold))))
- '(font-lock-type-face ((t (:foreground "PaleGreen" :weight bold)))))
+
+(when (display-graphic-p)
+  ;; Theme
+  (load-theme 'twilight t)
+
+  ;; Font customizations
+  (custom-set-faces
+   ;; custom-set-faces was added by Custom.
+   ;; If you edit it by hand, you could mess it up, so be careful.
+   ;; Your init file should contain only one such instance.
+   ;; If there is more than one, they won't work right.
+   '(default ((t (:inherit nil :stipple nil :background "black" :foreground "white" :inverse-video nil :box nil :strike-through nil :overline nil :underline nil :slant normal :weight normal :height 80 :width normal :foundry "unknown" :family "DejaVu Sans Mono"))))
+   '(font-lock-function-name-face ((t (:foreground "LightSkyBlue" :weight bold))))
+   '(font-lock-type-face ((t (:foreground "PaleGreen" :weight bold))))))
