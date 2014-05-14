@@ -1,5 +1,5 @@
 ; -*- mode: emacs-lisp; -*-
-(source "elpa" "http://tromey.com/elpa/")
+(source "elpa" "http://elpa.gnu.org/packages/")
 (source "marmalade" "http://marmalade-repo.org/packages/")
 (source "melpa" "http://melpa.milkbox.net/packages/")
 

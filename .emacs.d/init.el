@@ -2,7 +2,8 @@
 
 (require 'package)
 (add-to-list 'package-archives
-             '("elpa" . "http://tromey.com/elpa/"))
+             '("elpa" . "http://elpa.gnu.org/packages/"))
+
 ;; Add the user-contributed repository
 (add-to-list 'package-archives
              '("marmalade" . "http://marmalade-repo.org/packages/"))
