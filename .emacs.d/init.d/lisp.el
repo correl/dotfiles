@@ -4,5 +4,16 @@
 
 (setq inferior-lisp-program "clisp")
 
-;; Paredit
-(eval-after-load "paredit" '(add-hook 'lisp-mode #'enable-paredit-mode))
+(mapcar (lambda (mode-hook)
+          (eval-after-load "paredit" `(add-hook ',mode-hook #'enable-paredit-mode))
+          (eval-after-load "rainbow-delimiters" `(add-hook ',mode-hook #'rainbow-delimiters-mode))
+          (eval-after-load "rainbow-identifiers" `(add-hook ',mode-hook #'rainbow-identifiers-mode))
+          (add-hook mode-hook (lambda ()
+                           (show-paren-mode)
+                           (electric-indent-mode 1)))
+          )
+        '(lisp-mode-hook
+          emacs-lisp-mode-hook
+          scheme-mode-hook
+          lfe-mode-hook))
+

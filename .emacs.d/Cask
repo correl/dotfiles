@@ -38,3 +38,8 @@
 ;; Common Lisp
 ;; (depends-on "slime")
 ;; (depends-on "slime-repl")
+
+;; Lisp / Scheme
+(depends-on "paredit")
+(depends-on "rainbow-delimiters")
+(depends-on "rainbow-identifiers")
