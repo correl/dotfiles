@@ -10,10 +10,13 @@
           (eval-after-load "rainbow-identifiers" `(add-hook ',mode-hook #'rainbow-identifiers-mode))
           (add-hook mode-hook (lambda ()
                            (show-paren-mode)
-                           (electric-indent-mode 1)))
+                           (electric-indent-mode 1)
+                           (rainbow-delimiters-mode)
+                           (rainbow-identifiers-mode)))
           )
         '(lisp-mode-hook
           emacs-lisp-mode-hook
           scheme-mode-hook
-          lfe-mode-hook))
+          lfe-mode-hook
+          clojure-mode-hook))
 
