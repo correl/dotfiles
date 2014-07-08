@@ -12,8 +12,7 @@
                            (show-paren-mode)
                            (electric-indent-mode 1)
                            (rainbow-delimiters-mode)
-                           (rainbow-identifiers-mode)
-                           (pretty-lambda-mode)))
+                           (rainbow-identifiers-mode)))
           )
         '(lisp-mode-hook
           emacs-lisp-mode-hook
