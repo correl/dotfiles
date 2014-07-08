@@ -42,3 +42,4 @@
 (depends-on "paredit")
 (depends-on "rainbow-delimiters")
 (depends-on "rainbow-identifiers")
+(depends-on "pretty-lambda")
