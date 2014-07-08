@@ -19,8 +19,8 @@
 (depends-on "twilight-theme")
 (depends-on "late-night-theme")
 ;; PHP
-(depends-on "multi-web-mode")
 (depends-on "php-mode")
+(depends-on "web-mode")
 
 ;; Python
 (depends-on "python")
