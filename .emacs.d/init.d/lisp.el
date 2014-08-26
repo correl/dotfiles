@@ -11,8 +11,9 @@
           (add-hook mode-hook (lambda ()
                            (show-paren-mode)
                            (electric-indent-mode 1)
-                           (rainbow-delimiters-mode)
-                           (rainbow-identifiers-mode)))
+                           (paredit-mode 1)
+                           (rainbow-delimiters-mode 1)
+                           (rainbow-identifiers-mode 1)))
           )
         '(lisp-mode-hook
           emacs-lisp-mode-hook
