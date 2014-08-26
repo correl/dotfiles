@@ -31,14 +31,15 @@
 ;; Expand Region
 (global-set-key (kbd "C-=") 'er/expand-region)
 
-;; Load custom init scripts from ~/.emacs.d/init.d
-;;
-(let ((init-dir "~/.emacs.d/init.d")
-      (file-pattern "\\.elc?$"))
-  (when (file-directory-p init-dir)
-    (mapcar (lambda (lisp-file)
-              (load-file lisp-file))
-            (directory-files (expand-file-name init-dir) t file-pattern))))
+(defun load-elisp-directory (path)
+  (let ((file-pattern "\\.elc?$"))
+    (when (file-directory-p path)
+      (mapcar (lambda (lisp-file)
+                (load-file lisp-file))
+              (directory-files (expand-file-name path) t file-pattern)))))
+
+(load-elisp-directory "~/.emacs.d/init.d")
+(load-elisp-directory "~/.emacs.local.d")
 
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
