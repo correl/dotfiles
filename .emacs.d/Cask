@@ -1,11 +1,13 @@
-; -*- mode: emacs-lisp; -*-
-(source "elpa" "http://elpa.gnu.org/packages/")
-(source "marmalade" "http://marmalade-repo.org/packages/")
-(source "melpa" "http://melpa.milkbox.net/packages/")
+;; -*- mode: emacs-lisp; -*-
+
+(source gnu)
+(source melpa)
+(source marmalade)
+(source org)
 
 (depends-on "color-theme")
 (depends-on "magit")
-(depends-on "org")
+(depends-on "org-plus-contrib")
 (depends-on "auto-complete")
 (depends-on "git-gutter")
 (depends-on "smex")
