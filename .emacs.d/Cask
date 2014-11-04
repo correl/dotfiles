@@ -31,6 +31,9 @@
 ;; Python
 (depends-on "python")
 
+;; Ruby
+(depends-on "rvm")
+
 ;; Erlang
 (depends-on "erlang")
 

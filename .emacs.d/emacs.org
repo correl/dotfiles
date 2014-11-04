@@ -194,6 +194,12 @@
 
      (add-hook 'php-mode-hook 'my-php-mode-hook)
    #+END_SRC
+** Ruby
+   #+name: programming
+   #+BEGIN_SRC emacs-lisp
+     (require 'rvm)
+     (rvm-use-default)
+   #+END_SRC
 * Other functionality
 ** Rename file and buffer
    Taken from [[http://emacsredux.com/blog/2013/05/04/rename-file-and-buffer/][Emacs Redux]]
