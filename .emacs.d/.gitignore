@@ -1,5 +1,15 @@
+# Packages
 .cask
-elpa
+
+# Configuration
+emacs.el
+custom.el
+
+# Data
 auto-save-list
 session.*
 ac-comphist.dat
+eshell
+projectile-bookmarks.eld
+url
+.org-id-locations

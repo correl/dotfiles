@@ -1,0 +1,345 @@
+#+TITLE: Emacs Configuration
+
+* Startup
+  Disable the emacs startup screen.
+  #+name: startup
+  #+BEGIN_SRC emacs-lisp
+    (setq inhibit-startup-screen +1)
+  #+END_SRC
+* Global key bindings
+  #+name: global-keys
+  #+BEGIN_SRC emacs-lisp
+    (global-set-key (kbd "C-,") 'kill-whole-line)
+  #+END_SRC
+* Look and Feel
+  #+name: look-and-feel
+  #+BEGIN_SRC emacs-lisp
+    (load-theme 'twilight 't)
+  #+END_SRC
+* Autocomplete
+  #+name: autocomplete
+  #+BEGIN_SRC emacs-lisp
+    (require 'auto-complete-config)
+    (ac-config-default)
+  #+END_SRC
+* Package Configuration
+** Ido
+   #+name: packages
+   #+BEGIN_SRC emacs-lisp
+     (ido-mode +1)
+     (setq ido-enable-flex-matching t)
+   #+END_SRC
+** Smex
+   #+name: packages
+   #+BEGIN_SRC emacs-lisp
+     (global-set-key (kbd "M-x") 'smex)
+     (global-set-key (kbd "M-X") 'smex-major-mode-commands)
+   #+END_SRC
+** Expand Region
+   #+name: packages
+   #+BEGIN_SRC emacs-lisp
+     (global-set-key (kbd "C-=") 'er/expand-region)
+   #+END_SRC
+** Flycheck
+   #+name: packages
+   #+BEGIN_SRC emacs-lisp
+     (add-hook 'after-init-hook #'global-flycheck-mode)
+   #+END_SRC
+** Git-Gutter
+   #+name: packages
+   #+BEGIN_SRC emacs-lisp
+     (global-git-gutter-mode t)
+
+     (defadvice ediff-make-temp-file (before make-temp-file-suspend-ll
+                                             activate compile preactivate)
+       "Disable git-gutter when running ediff"
+       (global-git-gutter-mode 0))
+
+     (add-hook 'ediff-cleanup-hook
+               '(lambda ()
+                  (global-git-gutter-mode t)))
+
+   #+END_SRC
+** Magit
+   #+name: packages
+   #+BEGIN_SRC emacs-lisp
+     (defun magit-fullscreen ()
+       (defadvice magit-status (around magit-fullscreen activate)
+	 (window-configuration-to-register :magit-fullscreen)
+	 ad-do-it
+	 (delete-other-windows))
+
+       (defadvice magit-quit-window (around magit-restore-screen activate)
+	 ad-do-it
+	 (jump-to-register :magit-fullscreen)))
+
+     (eval-after-load 'magit '(magit-fullscreen))
+   #+END_SRC
+** Markdown
+   #+name: packages
+   #+BEGIN_SRC emacs-lisp
+     (setq auto-mode-alist
+           (cons '("\\.md" . markdown-mode) auto-mode-alist))
+   #+END_SRC
+** Org
+*** Babel
+**** Syntax highlighting
+     #+name: packages
+     #+BEGIN_SRC emacs-lisp
+       (setq-default org-src-fontify-natively t)
+     #+END_SRC
+**** Language evaluation
+     #+name: packages
+     #+BEGIN_SRC emacs-lisp
+       (defvar my/org-babel-evaluated-languages
+         '(emacs-lisp)
+         "List of languages that may be evaluated in Org documents")
+
+       <<org-babel-languages>>
+
+       (org-babel-do-load-languages
+        'org-babel-load-languages
+        (mapcar (lambda (lang)
+                  (cons lang t))
+                my/org-babel-evaluated-languages))
+     #+END_SRC
+***** Graphviz
+      #+name: org-babel-languages
+      #+BEGIN_SRC emacs-lisp
+        (add-to-list 'org-src-lang-modes (quote ("dot" . graphviz-dot)))
+
+        (add-to-list 'my/org-babel-evaluated-languages 'dot)
+      #+END_SRC
+***** Ditaa
+      #+name: org-babel-languages
+      #+BEGIN_SRC emacs-lisp
+        (add-to-list 'my/org-babel-evaluated-languages 'ditaa)
+      #+END_SRC
+***** PlantUML
+      #+name: org-babel-languages
+      #+BEGIN_SRC emacs-lisp
+        (add-to-list 'my/org-babel-evaluated-languages 'plantuml)
+      #+END_SRC
+***** Mscgen
+      A message sequence chart renderer.
+      #+name: org-babel-languages
+      #+BEGIN_SRC emacs-lisp
+        (add-to-list 'my/org-babel-evaluated-languages 'mscgen)
+      #+END_SRC
+** Powerline
+   #+name: packages
+   #+BEGIN_SRC emacs-lisp
+     (powerline-default-theme)
+   #+END_SRC
+** Projectile
+   #+name: packages
+   #+BEGIN_SRC emacs-lisp
+     (projectile-global-mode)
+   #+END_SRC
+** Web Mode
+   #+name: packages
+   #+BEGIN_SRC emacs-lisp
+     (add-hook 'web-mode-hook (lambda ()
+                                (setq web-mode-markup-indent-offset 4)
+                                (setq web-mode-css-indent-offset 4)
+                                (setq web-mode-code-indent-offset 4)))
+   #+END_SRC
+* Programming
+** Lisps
+   #+name: programming
+   #+BEGIN_SRC emacs-lisp
+     ;; SLIME
+     (if (file-exists-p "~/quicklisp/slime-helper.el")
+         (load (expand-file-name "~/quicklisp/slime-helper.el")))
+
+     (setq inferior-lisp-program "clisp")
+
+     (mapcar (lambda (mode-hook)
+               (eval-after-load "paredit" `(add-hook ',mode-hook #'enable-paredit-mode))
+               (eval-after-load "rainbow-delimiters" `(add-hook ',mode-hook #'rainbow-delimiters-mode))
+               (eval-after-load "rainbow-identifiers" `(add-hook ',mode-hook #'rainbow-identifiers-mode))
+               (add-hook mode-hook (lambda ()
+                                (show-paren-mode)
+                                (electric-indent-mode 1)
+                                (paredit-mode 1)
+                                (rainbow-delimiters-mode 1)
+                                (rainbow-identifiers-mode 1)))
+               )
+             '(lisp-mode-hook
+               emacs-lisp-mode-hook
+               scheme-mode-hook
+               lfe-mode-hook
+               clojure-mode-hook))
+   #+END_SRC
+** Erlang
+   #+name: programming
+   #+BEGIN_SRC emacs-lisp
+     (add-hook 'erlang-mode-hook
+               (lambda ()
+                 (setq inferior-erlang-machine-options '("-sname" "emacs"
+                                                         "-hidden"))))
+   #+END_SRC
+** PHP
+   #+name: programming
+   #+BEGIN_SRC emacs-lisp
+     (add-to-list 'auto-mode-alist '("\\.php$" . php-mode))
+     (add-to-list 'auto-mode-alist '("\\.inc$" . php-mode))
+
+     (defun my-php-mode-hook ()
+       "Customize PHP indentation"
+
+       (c-set-offset 'arglist-cont-nonempty 'c-lineup-arglist)
+       (c-set-offset 'substatement-open 0)
+       (c-set-offset 'case-label '+))
+
+     (add-hook 'php-mode-hook 'my-php-mode-hook)
+   #+END_SRC
+* Other functionality
+** Rename file and buffer
+   Taken from [[http://emacsredux.com/blog/2013/05/04/rename-file-and-buffer/][Emacs Redux]]
+   #+name: other
+   #+BEGIN_SRC emacs-lisp
+     ;; emacsredux.com
+     (defun rename-file-and-buffer ()
+       "Rename the current buffer and file it is visiting."
+       (interactive)
+       (let ((filename (buffer-file-name)))
+	 (if (not (and filename (file-exists-p filename)))
+	     (message "Buffer is not visiting a file!")
+	   (let ((new-name (read-file-name "New name: " filename)))
+	     (cond
+	      ((vc-backend filename) (vc-rename-file filename new-name))
+	      (t
+	       (rename-file filename new-name t)
+	       (rename-buffer new-name)
+	       (set-visited-file-name new-name)
+	       (set-buffer-modified-p nil)))))))
+   #+END_SRC
+** Eval and Replace
+   Taken from [[http://emacsredux.com/blog/2013/06/21/eval-and-replace/][Emacs Redux]]
+   #+name: other
+   #+BEGIN_SRC emacs-lisp
+     (defun eval-and-replace ()
+       "Replace the preceding sexp with its value."
+       (interactive)
+       (backward-kill-sexp)
+       (condition-case nil
+           (prin1 (eval (read (current-kill 0)))
+                  (current-buffer))
+         (error (message "Invalid expression")
+                (insert (current-kill 0)))))
+
+     (global-set-key (kbd "C-)") 'eval-and-replace)
+   #+END_SRC
+** Smarter navigation to the beginning of a line
+   Taken from [[http://emacsredux.com/blog/2013/05/22/smarter-navigation-to-the-beginning-of-a-line/][Emacs Redux]]
+   #+name: other
+   #+BEGIN_SRC emacs-lisp
+     (defun smarter-move-beginning-of-line (arg)
+       "Move point back to indentation of beginning of line.
+
+     Move point to the first non-whitespace character on this line.
+     If point is already there, move to the beginning of the line.
+     Effectively toggle between the first non-whitespace character and
+     the beginning of the line.
+
+     If ARG is not nil or 1, move forward ARG - 1 lines first.  If
+     point reaches the beginning or end of the buffer, stop there."
+       (interactive "^p")
+       (setq arg (or arg 1))
+
+       ;; Move lines first
+       (when (/= arg 1)
+	 (let ((line-move-visual nil))
+	   (forward-line (1- arg))))
+
+       (let ((orig-point (point)))
+	 (back-to-indentation)
+	 (when (= orig-point (point))
+	   (move-beginning-of-line 1))))
+
+     ;; remap C-a to `smarter-move-beginning-of-line'
+     (global-set-key [remap move-beginning-of-line]
+		     'smarter-move-beginning-of-line)
+   #+END_SRC
+** Edit file with sudo
+   Taken from [[http://www.emacswiki.org/TrampMode#toc32][EmacsWiki]]
+   #+name: other
+   #+BEGIN_SRC emacs-lisp
+     (require 'dired)
+     (defun sudo-edit-current-file ()
+       (interactive)
+       (let ((my-file-name) ; fill this with the file to open
+             (position))    ; if the file is already open save position
+         (if (equal major-mode 'dired-mode) ; test if we are in dired-mode 
+             (progn
+               (setq my-file-name (dired-get-file-for-visit))
+               (find-alternate-file (prepare-tramp-sudo-string my-file-name)))
+           (setq my-file-name (buffer-file-name); hopefully anything else is an already opened file
+                 position (point))
+           (find-alternate-file (prepare-tramp-sudo-string my-file-name))
+           (goto-char position))))
+
+
+     (defun prepare-tramp-sudo-string (tempfile)
+       (if (file-remote-p tempfile)
+           (let ((vec (tramp-dissect-file-name tempfile)))
+
+             (tramp-make-tramp-file-name
+              "sudo"
+              (tramp-file-name-user nil)
+              (tramp-file-name-host vec)
+              (tramp-file-name-localname vec)
+              (format "ssh:%s@%s|"
+                      (tramp-file-name-user vec)
+                      (tramp-file-name-host vec))))
+         (concat "/sudo:root@localhost:" tempfile)))
+
+     (define-key dired-mode-map [s-return] 'sudo-edit-current-file)
+   #+END_SRC
+* Custom settings
+  Store options set via =customize-*= in a separate file (Emacs stores
+  them in =init.el= by default).
+  
+  #+name: custom-settings
+  #+BEGIN_SRC emacs-lisp
+    (setq custom-file "~/.emacs.d/custom.el")
+    (if (file-exists-p custom-file)
+        (load custom-file))
+  #+END_SRC
+* Auto-loading elisp files
+  Any elisp files dropped into =~/.emacs.local.d/= will be
+  automatically loaded.
+
+  #+name: auto-load
+  #+BEGIN_SRC emacs-lisp
+    (defun my/load-elisp-directory (path)
+      (let ((file-pattern "\\.elc?$"))
+        (when (file-directory-p path)
+          (mapcar (lambda (lisp-file)
+                    (load-file lisp-file))
+                  (directory-files (expand-file-name path) t file-pattern)))))
+
+    (my/load-elisp-directory "~/.emacs.d/init.d")
+    (my/load-elisp-directory "~/.emacs.local.d")
+  #+END_SRC
+* Configuration file layout
+  
+  Here I define the emacs.el file that gets generated by the code in
+  this org file.
+  
+  #+BEGIN_SRC emacs-lisp :tangle yes :noweb no-export :exports code
+    ;;;; Do not modify this file by hand.  It was automatically generated
+    ;;;; from `emacs.org` in the same directory. See that file for more
+    ;;;; information.
+    ;;;;
+
+    <<custom-settings>>
+    <<look-and-feel>>
+    <<autocomplete>>
+    <<packages>>
+    <<programming>>
+    <<other>>
+    <<auto-load>>
+    <<startup>>
+  #+END_SRC
