@@ -14,7 +14,7 @@
 * Look and Feel
   #+name: look-and-feel
   #+BEGIN_SRC emacs-lisp
-    (load-theme 'twilight 't)
+    (load-theme 'solarized-dark 't)
   #+END_SRC
 * Autocomplete
   #+name: autocomplete

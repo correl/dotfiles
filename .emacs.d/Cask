@@ -24,6 +24,8 @@
 ;; Themes
 (depends-on "twilight-theme")
 (depends-on "late-night-theme")
+(depends-on "solarized-theme")
+
 ;; PHP
 (depends-on "php-mode")
 (depends-on "web-mode")
