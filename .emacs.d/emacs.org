@@ -82,6 +82,32 @@
            (cons '("\\.md" . markdown-mode) auto-mode-alist))
    #+END_SRC
 ** Org
+*** Modules
+    #+name: org-module-table
+    | org-habit |
+
+    #+name: packages
+    #+BEGIN_SRC emacs-lisp :noweb yes
+      (let ((modules (mapcar (lambda (m) (make-symbol (car m)))
+                             '<<org-module-table()>>)))
+        (mapcar (lambda (m) (add-to-list 'org-modules m))
+                modules))
+      (org-load-modules-maybe t)
+    #+END_SRC
+*** Tasks
+**** Log completion
+     #+name: packages
+     #+BEGIN_SRC emacs-lisp
+       (setq org-log-done 'time)
+     #+END_SRC
+**** Habits
+     Shift the consistency graph over a bit to make room for task
+     names.
+     #+name: packages
+     #+BEGIN_SRC emacs-lisp
+       (setq org-habit-graph-column 70)
+       (setq org-habit-show-habits-only-for-today nil)
+     #+END_SRC
 *** Babel
 **** Syntax highlighting
      #+name: packages
