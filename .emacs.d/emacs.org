@@ -170,6 +170,15 @@
                                 (setq web-mode-css-indent-offset 4)
                                 (setq web-mode-code-indent-offset 4)))
    #+END_SRC
+** BBDB
+   #+name: packages
+   #+BEGIN_SRC emacs-lisp
+     (require 'bbdb)
+     (load "bbdb-com" t)
+     (bbdb-initialize 'gnus 'message)
+     (bbdb-insinuate-message)
+     (add-hook 'gnus-startup-hook 'bbdb-insinuate-gnus)
+   #+END_SRC
 ** Gnus
    #+name: packages
    #+BEGIN_SRC emacs-lisp

@@ -16,6 +16,7 @@
 (depends-on "ack-and-a-half")
 (depends-on "projectile")
 (depends-on "flycheck")
+(depends-on "bbdb")
 
 ;; Misc
 (depends-on "sauron")
