@@ -349,6 +349,53 @@
 
      (define-key dired-mode-map [s-return] 'sudo-edit-current-file)
    #+END_SRC
+** Backups
+   Borrowed from Sacha Chua
+   https://github.com/sachac/.emacs.d/
+
+   This is one of the things people usually want to change right away. By default, Emacs saves backup files in the current directory. These are the files ending in =~= that are cluttering up your directory lists. The following code stashes them all in =~/.emacs.d/backups=, where I can find them with =C-x C-f= (=find-file=) if I really need to.
+
+   #+begin_src emacs-lisp
+     (setq backup-directory-alist '(("." . "~/.emacs.d/backups")))
+   #+end_src
+
+   Disk space is cheap. Save lots.
+
+   #+begin_src emacs-lisp
+     (setq delete-old-versions -1)
+     (setq version-control t)
+     (setq vc-make-backup-files t)
+     (setq auto-save-file-name-transforms '((".*" "~/.emacs.d/auto-save-list/" t)))
+   #+end_src
+** History
+   From http://www.wisdomandwonder.com/wordpress/wp-content/uploads/2014/03/C3F.html
+   #+begin_src emacs-lisp
+     (setq savehist-file "~/.emacs.d/savehist")
+     (savehist-mode 1)
+     (setq history-length t)
+     (setq history-delete-duplicates t)
+     (setq savehist-save-minibuffer-history 1)
+     (setq savehist-additional-variables
+           '(kill-ring
+             search-ring
+             regexp-search-ring))
+   #+end_src
+** Copy filename to clipboard
+
+   http://emacsredux.com/blog/2013/03/27/copy-filename-to-the-clipboard/
+   https://github.com/bbatsov/prelude
+
+   #+begin_src emacs-lisp
+     (defun prelude-copy-file-name-to-clipboard ()
+       "Copy the current buffer file name to the clipboard."
+       (interactive)
+       (let ((filename (if (equal major-mode 'dired-mode)
+                           default-directory
+                         (buffer-file-name))))
+         (when filename
+           (kill-new filename)
+           (message "Copied buffer file name '%s' to the clipboard." filename))))
+   #+end_src
 * Custom settings
   Store options set via =customize-*= in a separate file (Emacs stores
   them in =init.el= by default).
