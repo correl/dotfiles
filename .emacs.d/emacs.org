@@ -88,7 +88,7 @@
 
     #+name: packages
     #+BEGIN_SRC emacs-lisp :noweb yes
-      (let ((modules (mapcar (lambda (m) (make-symbol (car m)))
+      (let ((modules (mapcar (lambda (m) (intern (car m)))
                              '<<org-module-table()>>)))
         (mapcar (lambda (m) (add-to-list 'org-modules m))
                 modules))
