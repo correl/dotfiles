@@ -1,7 +1,7 @@
 #+TITLE: Emacs Configuration
 
 * Startup
-  Disable the emacs startup screen.
+** Disable the emacs startup screen.
   #+name: startup
   #+BEGIN_SRC emacs-lisp
     (setq inhibit-startup-screen +1)
@@ -14,72 +14,94 @@
 * Look and Feel
   #+name: look-and-feel
   #+BEGIN_SRC emacs-lisp
-    (load-theme 'solarized-dark 't)
-  #+END_SRC
-* Autocomplete
-  #+name: autocomplete
-  #+BEGIN_SRC emacs-lisp
-    (require 'auto-complete-config)
-    (ac-config-default)
+    (use-package solarized-theme
+      :ensure t
+      :init (load-theme 'solarized-dark 't))
   #+END_SRC
 * Package Configuration
 ** Ido
    #+name: packages
    #+BEGIN_SRC emacs-lisp
-     (ido-mode +1)
-     (setq ido-enable-flex-matching t)
+     (use-package ido
+       :defer t
+       :idle (require 'ido)
+       :config (progn (setq ido-enable-flex-matching t)
+                      (setq ido-everywhere t)
+                      (ido-mode t)))
+   #+END_SRC
+** Autocomplete
+   #+name: autocomplete
+   #+BEGIN_SRC emacs-lisp
+     (use-package auto-complete
+       :ensure t
+       :defer t
+       :init
+       (progn (require 'auto-complete-config)
+              (ac-config-default)
+              (global-auto-complete-mode t)))
    #+END_SRC
 ** Smex
    #+name: packages
    #+BEGIN_SRC emacs-lisp
-     (global-set-key (kbd "M-x") 'smex)
-     (global-set-key (kbd "M-X") 'smex-major-mode-commands)
+     (use-package smex
+       :ensure t
+       :bind (("M-x" . smex)
+              ("M-X" . smex-major-mode-commands)))
    #+END_SRC
 ** Expand Region
    #+name: packages
    #+BEGIN_SRC emacs-lisp
-     (global-set-key (kbd "C-=") 'er/expand-region)
+     (use-package expand-region
+       :ensure t
+       :bind ("C-=" . er/expand-region))
    #+END_SRC
 ** Flycheck
    #+name: packages
    #+BEGIN_SRC emacs-lisp
-     (add-hook 'after-init-hook #'global-flycheck-mode)
+     (use-package flycheck
+       :ensure t
+       :defer t
+       :init
+       (add-hook 'after-init-hook #'global-flycheck-mode))
    #+END_SRC
 ** Git-Gutter
    #+name: packages
    #+BEGIN_SRC emacs-lisp
-     (global-git-gutter-mode t)
-
-     (defadvice ediff-make-temp-file (before make-temp-file-suspend-ll
-                                             activate compile preactivate)
-       "Disable git-gutter when running ediff"
-       (global-git-gutter-mode 0))
-
-     (add-hook 'ediff-cleanup-hook
-               '(lambda ()
-                  (global-git-gutter-mode t)))
-
+     (use-package git-gutter
+       :ensure t
+       :defer t
+       :idle (global-git-gutter-mode t)
+       :config
+       (progn
+         (defadvice ediff-make-temp-file (before make-temp-file-suspend-ll
+                                                 activate compile preactivate)
+           "Disable git-gutter when running ediff"
+           (global-git-gutter-mode 0))
+         
+         (add-hook 'ediff-cleanup-hook
+                   '(lambda ()
+                      (global-git-gutter-mode t)))))
    #+END_SRC
 ** Magit
    #+name: packages
    #+BEGIN_SRC emacs-lisp
-     (defun magit-fullscreen ()
-       (defadvice magit-status (around magit-fullscreen activate)
-	 (window-configuration-to-register :magit-fullscreen)
-	 ad-do-it
-	 (delete-other-windows))
-
-       (defadvice magit-quit-window (around magit-restore-screen activate)
-	 ad-do-it
-	 (jump-to-register :magit-fullscreen)))
-
-     (eval-after-load 'magit '(magit-fullscreen))
-   #+END_SRC
-** Markdown
-   #+name: packages
-   #+BEGIN_SRC emacs-lisp
-     (setq auto-mode-alist
-           (cons '("\\.md" . markdown-mode) auto-mode-alist))
+     (use-package magit
+       :ensure t
+       :commands (magit-init
+                  magit-status
+                  magit-diff
+                  magit-commit
+                  magit-blame-mode)
+       :config
+       (progn
+         (defadvice magit-status (around magit-fullscreen activate)
+           (window-configuration-to-register :magit-fullscreen)
+           ad-do-it
+           (delete-other-windows))
+         
+         (defadvice magit-quit-window (around magit-restore-screen activate)
+           ad-do-it
+           (jump-to-register :magit-fullscreen))))
    #+END_SRC
 ** Org
 *** Modules
@@ -179,38 +201,50 @@
 ** Powerline
    #+name: packages
    #+BEGIN_SRC emacs-lisp
-     (powerline-default-theme)
+     (use-package powerline
+       :ensure t
+       :init (powerline-default-theme))
    #+END_SRC
 ** Projectile
    #+name: packages
    #+BEGIN_SRC emacs-lisp
-     (projectile-global-mode)
+     (use-package projectile
+       :ensure t
+       :defer t
+       :idle (projectile-global-mode))
    #+END_SRC
 ** Web Mode
    #+name: packages
    #+BEGIN_SRC emacs-lisp
-     (add-hook 'web-mode-hook (lambda ()
-                                (setq web-mode-markup-indent-offset 4)
-                                (setq web-mode-css-indent-offset 4)
-                                (setq web-mode-code-indent-offset 4)))
+     (use-package web-mode
+       :ensure t
+       :mode ("\\.html$" . web-mode)
+       :config (add-hook 'web-mode-hook (lambda ()
+                                          (setq web-mode-markup-indent-offset 4)
+                                          (setq web-mode-css-indent-offset 4)
+                                          (setq web-mode-code-indent-offset 4))))
    #+END_SRC
 ** BBDB
    #+name: packages
    #+BEGIN_SRC emacs-lisp
-     (require 'bbdb)
-     (load "bbdb-com" t)
-     (bbdb-initialize 'gnus 'message)
-     (bbdb-insinuate-message)
-     (add-hook 'gnus-startup-hook 'bbdb-insinuate-gnus)
+     (use-package bbdb
+       :ensure t
+       :defer t
+       :idle (require 'bbdb)
+       :config (progn (load "bbdb-com" t)
+                      (bbdb-initialize 'gnus 'message)
+                      (bbdb-insinuate-message)
+                      (add-hook 'gnus-startup-hook 'bbdb-insinuate-gnus)))
    #+END_SRC
 ** Gnus
    #+name: packages
    #+BEGIN_SRC emacs-lisp
-     (defun my/configure-gnus ()
-       <<gnus>>
-       )
-
-     (setq gnus-before-startup-hook 'my/configure-gnus)
+     (use-package gnus
+       :commands gnus
+       :init (progn (defun my/configure-gnus ()
+                        <<gnus>>
+                        )
+                      (setq gnus-before-startup-hook 'my/configure-gnus)))
    #+END_SRC
 *** Avoid rich-text messages
     #+name: gnus
@@ -250,60 +284,104 @@
       (setq mm-inline-large-images t)
     #+END_SRC
 * Programming
+** Libraries
+*** Dash
+    A modern list api for Emacs. No 'cl required.
+
+    #+name: programming
+    #+BEGIN_SRC emacs-lisp
+      (use-package dash
+        :ensure t
+        :config (dash-enable-font-lock))
+    #+END_SRC
 ** Lisps
-   #+name: programming
+   #+name: lisps
+   | Mode       | Description          | Package  |
+   |------------+----------------------+----------|
+   | lisp       | Common Lisp          |          |
+   | emacs-lisp | Emacs Lisp           |          |
+   | scheme     | Scheme               |          |
+   | lfe        | Lisp-Flavored Erlang | lfe-mode |
+   | clojure    | Clojure              |          | 
+
+   #+BEGIN_SRC emacs-lisp :noweb yes :results code
+     (let ((packages (-remove 'null
+                              (mapcar 'last (cddr '<<lisps()>>)))))
+       `(progn ,@packages))
+   #+END_SRC
+
+   #+RESULTS:
    #+BEGIN_SRC emacs-lisp
+   (progn
+     ("")
+     ("")
+     ("")
+     ("lfe-mode")
+     (""))
+   #+END_SRC
+
+  
+   #+name: programming
+   #+BEGIN_SRC emacs-lisp :noweb yes
      ;; SLIME
      (if (file-exists-p "~/quicklisp/slime-helper.el")
          (load (expand-file-name "~/quicklisp/slime-helper.el")))
 
      (setq inferior-lisp-program "clisp")
 
-     (mapcar (lambda (mode-hook)
-               (eval-after-load "paredit" `(add-hook ',mode-hook #'enable-paredit-mode))
-               (eval-after-load "rainbow-delimiters" `(add-hook ',mode-hook #'rainbow-delimiters-mode))
-               (eval-after-load "rainbow-identifiers" `(add-hook ',mode-hook #'rainbow-identifiers-mode))
+     (use-package paredit
+       :ensure t)
+
+     (use-package rainbow-identifiers
+       :ensure t)
+
+     (use-package rainbow-delimiters
+       :ensure t)
+
+     (mapc (lambda (lisp)
+             (let ((mode-hook (intern (concat lisp "-mode-hook"))))
+               (message (format "Installing LISP mode hook for %S" mode-hook))
                (add-hook mode-hook (lambda ()
-                                (show-paren-mode)
-                                (electric-indent-mode 1)
-                                (paredit-mode 1)
-                                (rainbow-delimiters-mode 1)
-                                (rainbow-identifiers-mode 1)))
-               )
-             '(lisp-mode-hook
-               emacs-lisp-mode-hook
-               scheme-mode-hook
-               lfe-mode-hook
-               clojure-mode-hook))
+                                     (show-paren-mode t)
+                                     (electric-indent-mode t)
+                                     (paredit-mode t)
+                                     (rainbow-delimiters-mode t)
+                                     (rainbow-identifiers-mode t)))))
+           (mapcar 'car (cddr '<<lisps()>>)))
    #+END_SRC
 ** Erlang
    #+name: programming
    #+BEGIN_SRC emacs-lisp
-     (add-hook 'erlang-mode-hook
-               (lambda ()
-                 (setq inferior-erlang-machine-options '("-sname" "emacs"
-                                                         "-hidden"))))
+     (use-package erlang
+       :ensure t
+       :config (add-hook 'erlang-mode-hook
+                         (lambda ()
+                           (setq inferior-erlang-machine-options '("-sname" "emacs"
+                                                                   "-hidden")))))
    #+END_SRC
 ** PHP
    #+name: programming
    #+BEGIN_SRC emacs-lisp
-     (add-to-list 'auto-mode-alist '("\\.php$" . php-mode))
-     (add-to-list 'auto-mode-alist '("\\.inc$" . php-mode))
+          (use-package web-mode
+            :ensure t
+            :mode "\\.html?$")
 
-     (defun my-php-mode-hook ()
-       "Customize PHP indentation"
-
-       (c-set-offset 'arglist-cont-nonempty 'c-lineup-arglist)
-       (c-set-offset 'substatement-open 0)
-       (c-set-offset 'case-label '+))
-
-     (add-hook 'php-mode-hook 'my-php-mode-hook)
+          (use-package php-mode
+            :ensure t
+            :mode (("\\.php$" . php-mode)
+                   ("\\.inc$" . php-mode))
+            :config (add-hook 'php-mode-hook (lambda ()
+                                               "Customize PHP indentation"
+                                               (c-set-offset 'arglist-cont-nonempty 'c-lineup-arglist)
+                                               (c-set-offset 'substatement-open 0)
+                                               (c-set-offset 'case-label '+))))
    #+END_SRC
 ** Ruby
    #+name: programming
    #+BEGIN_SRC emacs-lisp
-     (require 'rvm)
-     (rvm-use-default)
+     (use-package rvm
+       :ensure t
+       :idle (rvm-use-default))
    #+END_SRC
 * Other functionality
 ** Rename file and buffer
@@ -499,12 +577,12 @@
     ;;;; information.
     ;;;;
 
-    <<custom-settings>>
+    <<startup>>
     <<look-and-feel>>
     <<autocomplete>>
     <<packages>>
     <<programming>>
     <<other>>
     <<auto-load>>
-    <<startup>>
+    <<custom-settings>>
   #+END_SRC
