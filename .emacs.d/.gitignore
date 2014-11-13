@@ -13,3 +13,9 @@ eshell
 projectile-bookmarks.eld
 url
 .org-id-locations
+abbrev_defs
+backups
+bookmarks
+savehist
+tramp
+var
