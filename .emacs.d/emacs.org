@@ -450,6 +450,9 @@
   Any elisp files dropped into =~/.emacs.local.d/= will be
   automatically loaded.
 
+  I usually use this is a testing ground for new configuration before
+  adding it here, and also for any personal / sensitive configuration.
+
   #+name: auto-load
   #+BEGIN_SRC emacs-lisp
     (defun my/load-elisp-directory (path)
@@ -459,7 +462,6 @@
                     (load-file lisp-file))
                   (directory-files (expand-file-name path) t file-pattern)))))
 
-    (my/load-elisp-directory "~/.emacs.d/init.d")
     (my/load-elisp-directory "~/.emacs.local.d")
   #+END_SRC
 * Configuration file layout
