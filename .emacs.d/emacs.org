@@ -115,43 +115,57 @@
        (setq-default org-src-fontify-natively t)
      #+END_SRC
 **** Language evaluation
-     #+name: packages
-     #+BEGIN_SRC emacs-lisp
-       (defvar my/org-babel-evaluated-languages
-         '(emacs-lisp)
-         "List of languages that may be evaluated in Org documents")
 
-       <<org-babel-languages>>
+     Org-babel evaluation will be turned on for the following
+     languages. Setting ~Confirm Evaluation~ to ~No~ disables the
+     [[http://orgmode.org/manual/Code-evaluation-security.html][security prompt]] for that language.
+
+     #+name: org-babel-languages
+     | Language     | Alias | Confirm Evaluation? | Description                     |
+     |--------------+-------+---------------------+---------------------------------|
+     | emacs-lisp   |       | Yes                 | Emacs Lisp                      |
+     | graphviz-dot | dot   | No                  | Directed and undirected graphs  |
+     | ditaa        |       | No                  | Ascii diagrams                  |
+     | plantuml     |       | No                  | Flow charts                     |
+     | mscgen       |       | No                  | Message sequence charts         |
+     | haskell      |       | Yes                 | A pure, functional language     |
+     | python       |       | Yes                 | A dynamic, all-purpose language |
+     | ruby         |       | Yes                 | A dynamic, all-purpose language |
+
+     #+name: packages
+     #+BEGIN_SRC emacs-lisp :noweb yes
+       (defvar my/org-babel-evaluated-languages ())
+       (defvar my/org-src-lang-modes ())
+       (defvar my/org-babel-no-confirm-languages ())
+
+       (defun my/org-confirm-babel-evaluate (lang body)
+         (not (member lang my/org-babel-no-confirm-languages)))
+
+       (let ((language-table (cddr '<<org-babel-languages()>>)))
+         (mapcar (lambda (lang-pair)
+                   (let* ((alias (if (not (string= (cadr lang-pair) "")) (cadr lang-pair)))
+                          (lang (if alias (make-symbol alias) (make-symbol (car lang-pair))))
+                          (confirm (not (string= (cl-caddr lang-pair) "No"))))
+                     (if alias
+                         (add-to-list 'my/org-src-lang-modes (cons alias lang)))
+                     (if (not confirm)
+                         (add-to-list 'my/org-babel-no-confirm-languages lang))
+                     (add-to-list 'my/org-babel-evaluated-languages lang)
+                     lang))
+                 language-table))
+
+       (mapcar (lambda (alias)
+                 (add-to-list 'org-src-lang-modes alias))
+               my/org-src-lang-modes)
 
        (org-babel-do-load-languages
         'org-babel-load-languages
         (mapcar (lambda (lang)
                   (cons lang t))
                 my/org-babel-evaluated-languages))
-     #+END_SRC
-***** Graphviz
-      #+name: org-babel-languages
-      #+BEGIN_SRC emacs-lisp
-        (add-to-list 'org-src-lang-modes (quote ("dot" . graphviz-dot)))
 
-        (add-to-list 'my/org-babel-evaluated-languages 'dot)
-      #+END_SRC
-***** Ditaa
-      #+name: org-babel-languages
-      #+BEGIN_SRC emacs-lisp
-        (add-to-list 'my/org-babel-evaluated-languages 'ditaa)
-      #+END_SRC
-***** PlantUML
-      #+name: org-babel-languages
-      #+BEGIN_SRC emacs-lisp
-        (add-to-list 'my/org-babel-evaluated-languages 'plantuml)
-      #+END_SRC
-***** Mscgen
-      A message sequence chart renderer.
-      #+name: org-babel-languages
-      #+BEGIN_SRC emacs-lisp
-        (add-to-list 'my/org-babel-evaluated-languages 'mscgen)
-      #+END_SRC
+       (setq org-confirm-babel-evaluate 'my/org-confirm-babel-evaluate)
+     #+END_SRC
 ** Powerline
    #+name: packages
    #+BEGIN_SRC emacs-lisp
