@@ -95,6 +95,11 @@
       (org-load-modules-maybe t)
     #+END_SRC
 *** Tasks
+**** Keep logs in their own drawer
+     #+name: packages
+     #+BEGIN_SRC emacs-lisp
+       (setq org-log-into-drawer t)
+     #+END_SRC
 **** Log completion
      #+name: packages
      #+BEGIN_SRC emacs-lisp
@@ -108,6 +113,10 @@
        (setq org-habit-graph-column 70)
        (setq org-habit-show-habits-only-for-today nil)
      #+END_SRC
+*** Refiling
+    #+BEGIN_SRC emacs-lisp
+      (setq org-refile-targets '((org-agenda-files . (:maxlevel . 6))))
+    #+END_SRC
 *** Babel
 **** Syntax highlighting
      #+name: packages
