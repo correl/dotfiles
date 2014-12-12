@@ -213,6 +213,12 @@
        :defer t
        :idle (projectile-global-mode))
    #+END_SRC
+** Ack-and-a-half
+   #+name: packages
+   #+BEGIN_SRC emacs-lisp
+     (use-package ack-and-a-half
+       :ensure t)
+   #+END_SRC
 ** Web Mode
    #+name: packages
    #+BEGIN_SRC emacs-lisp
