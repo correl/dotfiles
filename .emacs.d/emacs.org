@@ -162,6 +162,7 @@
      | haskell      |       | Yes                 | A pure, functional language     |
      | python       |       | Yes                 | A dynamic, all-purpose language |
      | ruby         |       | Yes                 | A dynamic, all-purpose language |
+     | sh           |       | Yes                 | Shell scripts                   |
 
      #+name: packages
      #+BEGIN_SRC emacs-lisp :noweb yes
@@ -170,13 +171,13 @@
        (defvar my/org-babel-no-confirm-languages ())
 
        (defun my/org-confirm-babel-evaluate (lang body)
-         (not (member lang my/org-babel-no-confirm-languages)))
+         (not (member (intern lang) my/org-babel-no-confirm-languages)))
 
        (let ((language-table (cddr '<<org-babel-languages()>>)))
          (mapcar (lambda (lang-pair)
                    (let* ((alias (if (not (string= (cadr lang-pair) "")) (cadr lang-pair)))
-                          (lang (make-symbol (car lang-pair)))
-                          (lang-or-alias (if alias (make-symbol alias) lang))
+                          (lang (intern (car lang-pair)))
+                          (lang-or-alias (if alias (intern alias) lang))
                           (confirm (not (string= (cl-caddr lang-pair) "No"))))
                      (if alias
                          (add-to-list 'my/org-src-lang-modes (cons alias lang)))
@@ -390,6 +391,11 @@
        :idle (rvm-use-default))
    #+END_SRC
 * Other functionality
+** Disable tab indenting by default
+   #+name: other
+   #+BEGIN_SRC emacs-lisp
+     (setq-default indent-tabs-mode nil)
+   #+END_SRC
 ** Rename file and buffer
    Taken from [[http://emacsredux.com/blog/2013/05/04/rename-file-and-buffer/][Emacs Redux]]
    #+name: other
