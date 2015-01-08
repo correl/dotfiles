@@ -19,16 +19,6 @@
       :init (load-theme 'solarized-dark 't))
   #+END_SRC
 * Package Configuration
-** Ido
-   #+name: packages
-   #+BEGIN_SRC emacs-lisp
-     (use-package ido
-       :defer t
-       :idle (require 'ido)
-       :config (progn (setq ido-enable-flex-matching t)
-                      (setq ido-everywhere t)
-                      (ido-mode t)))
-   #+END_SRC
 ** Autocomplete
    #+name: autocomplete
    #+BEGIN_SRC emacs-lisp
@@ -40,13 +30,25 @@
               (ac-config-default)
               (global-auto-complete-mode t)))
    #+END_SRC
-** Smex
-   #+name: packages
+** Helm
+   #+name: helm
    #+BEGIN_SRC emacs-lisp
-     (use-package smex
+     (use-package helm
        :ensure t
-       :bind (("M-x" . smex)
-              ("M-X" . smex-major-mode-commands)))
+       :diminish helm-mode
+       :bind (("M-x" . helm-M-x)
+              ("M-y" . helm-show-kill-ring)
+              ("C-x b" . helm-mini)
+              ("C-x C-b" . helm-buffers-list)
+              ("C-x C-f" . helm-find-files)
+              ("C-x C-r" . helm-recentf))
+       :init (progn
+               (require 'helm-config)
+               (helm-mode 1)
+               (add-hook 'eshell-mode-hook
+                         (lambda ()
+                           (define-key eshell-mode-map (kbd "TAB") 'helm-esh-pcomplete)
+                           (define-key eshell-mode-map (kbd "C-c C-l") 'helm-eshell-history)))))
    #+END_SRC
 ** Expand Region
    #+name: packages
@@ -212,10 +214,12 @@
 ** Projectile
    #+name: packages
    #+BEGIN_SRC emacs-lisp
-     (use-package projectile
-       :ensure t
-       :defer t
-       :idle (projectile-global-mode))
+          (use-package projectile
+            :ensure t
+            :defer t
+            :idle (projectile-global-mode)
+            :config (progn (require 'helm-projectile)
+                           (helm-projectile-on)))
    #+END_SRC
 ** Ack-and-a-half
    #+name: packages
