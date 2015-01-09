@@ -404,6 +404,13 @@
        :ensure t
        :mode "\.yml$")
    #+END_SRC
+** Docker
+   #+name: programming
+   #+BEGIN_SRC emacs-lisp
+     (use-package dockerfile-mode
+       :ensure t
+       :mode "^Dockerfile$")
+   #+END_SRC
 * Other functionality
 ** Disable tab indenting by default
    #+name: other
