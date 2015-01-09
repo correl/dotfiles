@@ -397,6 +397,13 @@
        :ensure t
        :idle (rvm-use-default))
    #+END_SRC
+** Yaml
+   #+name: programming
+   #+BEGIN_SRC emacs-lisp
+     (use-package yaml-mode
+       :ensure t
+       :mode "\.yml$")
+   #+END_SRC
 * Other functionality
 ** Disable tab indenting by default
    #+name: other
