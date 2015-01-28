@@ -1,651 +1,652 @@
 #+TITLE: Emacs Configuration
+#+STARTUP: indent
 
 * Startup
 ** Disable the emacs startup screen.
-  #+name: startup
-  #+BEGIN_SRC emacs-lisp
-    (setq inhibit-startup-screen +1)
-  #+END_SRC
+#+name: startupa
+#+BEGIN_SRC emacs-lisp
+  (setq inhibit-startup-screen +1)
+#+END_SRC
 * Global key bindings
-  #+name: global-keys
-  #+BEGIN_SRC emacs-lisp
-    (global-set-key (kbd "C-,") 'kill-whole-line)
-  #+END_SRC
+#+name: global-keys
+#+BEGIN_SRC emacs-lisp
+  (global-set-key (kbd "C-,") 'kill-whole-line)
+#+END_SRC
 * Look and Feel
-  #+name: look-and-feel
-  #+BEGIN_SRC emacs-lisp
-    (use-package solarized-theme
-      :ensure t
-      :init (load-theme 'solarized-dark 't))
-  #+END_SRC
+#+name: look-and-feel
+#+BEGIN_SRC emacs-lisp
+  (use-package solarized-theme
+    :ensure t
+    :init (load-theme 'solarized-dark 't))
+#+END_SRC
 * Package Configuration
 ** Autocomplete
-   #+name: autocomplete
-   #+BEGIN_SRC emacs-lisp
-     (use-package auto-complete
-       :ensure t
-       :defer t
-       :init
-       (progn (require 'auto-complete-config)
-              (ac-config-default)
-              (global-auto-complete-mode t)))
-   #+END_SRC
+#+name: autocomplete
+#+BEGIN_SRC emacs-lisp
+  (use-package auto-complete
+    :ensure t
+    :defer t
+    :init
+    (progn (require 'auto-complete-config)
+           (ac-config-default)
+           (global-auto-complete-mode t)))
+#+END_SRC
 ** Helm
-   #+name: packages
-   #+BEGIN_SRC emacs-lisp
-     (use-package helm
-       :ensure t
-       :diminish helm-mode
-       :bind (("M-x" . helm-M-x)
-              ("M-y" . helm-show-kill-ring)
-              ("C-x b" . helm-mini)
-              ("C-x C-b" . helm-buffers-list)
-              ("C-x C-f" . helm-find-files)
-              ("C-x C-r" . helm-recentf)
-              ("C-x c o" . helm-occur)
-              ("C-x c s" . helm-swoop))
-       :init (progn
-               (require 'helm-config)
-               (helm-mode 1)
-               (add-hook 'eshell-mode-hook
-                         (lambda ()
-                           (define-key eshell-mode-map (kbd "TAB") 'helm-esh-pcomplete)
-                           (define-key eshell-mode-map (kbd "C-c C-l") 'helm-eshell-history)))))
-   #+END_SRC
+#+name: packages
+#+BEGIN_SRC emacs-lisp
+  (use-package helm
+    :ensure t
+    :diminish helm-mode
+    :bind (("M-x" . helm-M-x)
+           ("M-y" . helm-show-kill-ring)
+           ("C-x b" . helm-mini)
+           ("C-x C-b" . helm-buffers-list)
+           ("C-x C-f" . helm-find-files)
+           ("C-x C-r" . helm-recentf)
+           ("C-x c o" . helm-occur)
+           ("C-x c s" . helm-swoop))
+    :init (progn
+            (require 'helm-config)
+            (helm-mode 1)
+            (add-hook 'eshell-mode-hook
+                      (lambda ()
+                        (define-key eshell-mode-map (kbd "TAB") 'helm-esh-pcomplete)
+                        (define-key eshell-mode-map (kbd "C-c C-l") 'helm-eshell-history)))))
+#+END_SRC
 *** helm-descbinds
-    #+name: helm
-    #+BEGIN_SRC emacs-lisp
-      (use-package helm-descbinds
-        :ensure t
-        :bind (("C-h b" . helm-descbinds)
-               ("C-h w" . helm-descbinds)))
-    #+END_SRC
+#+name: helm
+#+BEGIN_SRC emacs-lisp
+  (use-package helm-descbinds
+    :ensure t
+    :bind (("C-h b" . helm-descbinds)
+           ("C-h w" . helm-descbinds)))
+#+END_SRC
 ** Ace Jump
-   #+name: packages
-   #+BEGIN_SRC emacs-lisp
-     (use-package ace-jump-mode
-       :ensure t)
-   #+END_SRC
+#+name: packages
+#+BEGIN_SRC emacs-lisp
+  (use-package ace-jump-mode
+    :ensure t)
+#+END_SRC
 *** ace-isearch
-    #+name: packages
-    #+BEGIN_SRC emacs-lisp
-      (use-package ace-isearch
-        :ensure t
-        :init (global-ace-isearch-mode t))
-    #+END_SRC
+#+name: packages
+#+BEGIN_SRC emacs-lisp
+  (use-package ace-isearch
+    :ensure t
+    :init (global-ace-isearch-mode t))
+#+END_SRC
 *** ace-window
-    #+name: packages
-    #+BEGIN_SRC emacs-lisp
-      (use-package ace-window
-        :ensure t
-        :bind ("C-x o" . ace-window))    
-    #+END_SRC
+#+name: packages
+#+BEGIN_SRC emacs-lisp
+  (use-package ace-window
+    :ensure t
+    :bind ("C-x o" . ace-window))    
+#+END_SRC
 ** Expand Region
-   #+name: packages
-   #+BEGIN_SRC emacs-lisp
-     (use-package expand-region
-       :ensure t
-       :bind ("C-=" . er/expand-region))
-   #+END_SRC
+#+name: packages
+#+BEGIN_SRC emacs-lisp
+  (use-package expand-region
+    :ensure t
+    :bind ("C-=" . er/expand-region))
+#+END_SRC
 ** Flycheck
-   #+name: packages
-   #+BEGIN_SRC emacs-lisp
-     (use-package flycheck
-       :ensure t
-       :defer t
-       :init
-       (add-hook 'after-init-hook #'global-flycheck-mode))
-   #+END_SRC
+#+name: packages
+#+BEGIN_SRC emacs-lisp
+  (use-package flycheck
+    :ensure t
+    :defer t
+    :init
+    (add-hook 'after-init-hook #'global-flycheck-mode))
+#+END_SRC
 ** Git-Gutter
-   #+name: packages
-   #+BEGIN_SRC emacs-lisp
-     (use-package git-gutter
-       :ensure t
-       :defer t
-       :idle (global-git-gutter-mode t)
-       :config
-       (progn
-         (defadvice ediff-make-temp-file (before make-temp-file-suspend-ll
-                                                 activate compile preactivate)
-           "Disable git-gutter when running ediff"
-           (global-git-gutter-mode 0))
-         
-         (add-hook 'ediff-cleanup-hook
-                   '(lambda ()
-                      (global-git-gutter-mode t)))))
-   #+END_SRC
+#+name: packages
+#+BEGIN_SRC emacs-lisp
+  (use-package git-gutter
+    :ensure t
+    :defer t
+    :idle (global-git-gutter-mode t)
+    :config
+    (progn
+      (defadvice ediff-make-temp-file (before make-temp-file-suspend-ll
+                                              activate compile preactivate)
+        "Disable git-gutter when running ediff"
+        (global-git-gutter-mode 0))
+      
+      (add-hook 'ediff-cleanup-hook
+                '(lambda ()
+                   (global-git-gutter-mode t)))))
+#+END_SRC
 ** Magit
-   #+name: packages
-   #+BEGIN_SRC emacs-lisp
-     (use-package magit
-       :ensure t
-       :commands (magit-init
-                  magit-status
-                  magit-diff
-                  magit-commit)
-       :config
-       (progn
-         (defadvice magit-status (around magit-fullscreen activate)
-           (window-configuration-to-register :magit-fullscreen)
-           ad-do-it
-           (delete-other-windows))
-         
-         (defadvice magit-quit-window (around magit-restore-screen activate)
-           ad-do-it
-           (jump-to-register :magit-fullscreen))))
+#+name: packages
+#+BEGIN_SRC emacs-lisp
+  (use-package magit
+    :ensure t
+    :commands (magit-init
+               magit-status
+               magit-diff
+               magit-commit)
+    :config
+    (progn
+      (defadvice magit-status (around magit-fullscreen activate)
+        (window-configuration-to-register :magit-fullscreen)
+        ad-do-it
+        (delete-other-windows))
+      
+      (defadvice magit-quit-window (around magit-restore-screen activate)
+        ad-do-it
+        (jump-to-register :magit-fullscreen))))
 
-     (use-package magit-blame
-       :ensure magit
-       :commands (magit-blame-mode))
-   #+END_SRC
+  (use-package magit-blame
+    :ensure magit
+    :commands (magit-blame-mode))
+#+END_SRC
 ** Org
 *** Modules
-    #+name: org-module-table
-    | org-habit |
+#+name: org-module-table
+| org-habit |
 
-    #+name: packages
-    #+BEGIN_SRC emacs-lisp :noweb yes
-      (let ((modules (mapcar (lambda (m) (intern (car m)))
-                             '<<org-module-table()>>)))
-        (mapcar (lambda (m) (add-to-list 'org-modules m))
-                modules))
-      (org-load-modules-maybe t)
-    #+END_SRC
+#+name: packages
+#+BEGIN_SRC emacs-lisp :noweb yes
+  (let ((modules (mapcar (lambda (m) (intern (car m)))
+                         '<<org-module-table()>>)))
+    (mapcar (lambda (m) (add-to-list 'org-modules m))
+            modules))
+  (org-load-modules-maybe t)
+#+END_SRC
 *** Tasks
 **** Keep logs in their own drawer
-     #+name: packages
-     #+BEGIN_SRC emacs-lisp
-       (setq org-log-into-drawer t)
-     #+END_SRC
+#+name: packages
+#+BEGIN_SRC emacs-lisp
+  (setq org-log-into-drawer t)
+#+END_SRC
 **** Log completion
-     #+name: packages
-     #+BEGIN_SRC emacs-lisp
-       (setq org-log-done 'time)
-     #+END_SRC
+#+name: packages
+#+BEGIN_SRC emacs-lisp
+  (setq org-log-done 'time)
+#+END_SRC
 **** Habits
-     Shift the consistency graph over a bit to make room for task
-     names.
-     #+name: packages
-     #+BEGIN_SRC emacs-lisp
-       (setq org-habit-graph-column 70)
-       (setq org-habit-show-habits-only-for-today nil)
-     #+END_SRC
+Shift the consistency graph over a bit to make room for task
+names.
+#+name: packages
+#+BEGIN_SRC emacs-lisp
+  (setq org-habit-graph-column 70)
+  (setq org-habit-show-habits-only-for-today nil)
+#+END_SRC
 *** Refiling
-    #+BEGIN_SRC emacs-lisp
-      (setq org-refile-targets '((org-agenda-files . (:maxlevel . 6))))
-    #+END_SRC
+#+BEGIN_SRC emacs-lisp
+  (setq org-refile-targets '((org-agenda-files . (:maxlevel . 6))))
+#+END_SRC
 *** Babel
 **** Syntax highlighting
-     #+name: packages
-     #+BEGIN_SRC emacs-lisp
-       (setq-default org-src-fontify-natively t)
-     #+END_SRC
+#+name: packages
+#+BEGIN_SRC emacs-lisp
+  (setq-default org-src-fontify-natively t)
+#+END_SRC
 **** Language evaluation
 
-     Org-babel evaluation will be turned on for the following
-     languages. Setting ~Confirm Evaluation~ to ~No~ disables the
-     [[http://orgmode.org/manual/Code-evaluation-security.html][security prompt]] for that language.
+Org-babel evaluation will be turned on for the following
+languages. Setting ~Confirm Evaluation~ to ~No~ disables the
+[[http://orgmode.org/manual/Code-evaluation-security.html][security prompt]] for that language.
 
-     #+name: org-babel-languages
-     | Language     | Alias | Confirm Evaluation? | Description                     |
-     |--------------+-------+---------------------+---------------------------------|
-     | emacs-lisp   |       | Yes                 | Emacs Lisp                      |
-     | graphviz-dot | dot   | No                  | Directed and undirected graphs  |
-     | ditaa        |       | No                  | Ascii diagrams                  |
-     | plantuml     |       | No                  | Flow charts                     |
-     | mscgen       |       | No                  | Message sequence charts         |
-     | haskell      |       | Yes                 | A pure, functional language     |
-     | python       |       | Yes                 | A dynamic, all-purpose language |
-     | ruby         |       | Yes                 | A dynamic, all-purpose language |
-     | sh           |       | Yes                 | Shell scripts                   |
+#+name: org-babel-languages
+| Language     | Alias | Confirm Evaluation? | Description                     |
+|--------------+-------+---------------------+---------------------------------|
+| emacs-lisp   |       | Yes                 | Emacs Lisp                      |
+| graphviz-dot | dot   | No                  | Directed and undirected graphs  |
+| ditaa        |       | No                  | Ascii diagrams                  |
+| plantuml     |       | No                  | Flow charts                     |
+| mscgen       |       | No                  | Message sequence charts         |
+| haskell      |       | Yes                 | A pure, functional language     |
+| python       |       | Yes                 | A dynamic, all-purpose language |
+| ruby         |       | Yes                 | A dynamic, all-purpose language |
+| sh           |       | Yes                 | Shell scripts                   |
 
-     #+name: packages
-     #+BEGIN_SRC emacs-lisp :noweb yes
-       (defvar my/org-babel-evaluated-languages ())
-       (defvar my/org-src-lang-modes ())
-       (defvar my/org-babel-no-confirm-languages ())
+#+name: packages
+#+BEGIN_SRC emacs-lisp :noweb yes
+  (defvar my/org-babel-evaluated-languages ())
+  (defvar my/org-src-lang-modes ())
+  (defvar my/org-babel-no-confirm-languages ())
 
-       (defun my/org-confirm-babel-evaluate (lang body)
-         (not (member (intern lang) my/org-babel-no-confirm-languages)))
+  (defun my/org-confirm-babel-evaluate (lang body)
+    (not (member (intern lang) my/org-babel-no-confirm-languages)))
 
-       (let ((language-table (cddr '<<org-babel-languages()>>)))
-         (mapcar (lambda (lang-pair)
-                   (let* ((alias (if (not (string= (cadr lang-pair) "")) (cadr lang-pair)))
-                          (lang (intern (car lang-pair)))
-                          (lang-or-alias (if alias (intern alias) lang))
-                          (confirm (not (string= (cl-caddr lang-pair) "No"))))
-                     (if alias
-                         (add-to-list 'my/org-src-lang-modes (cons alias lang)))
-                     (if (not confirm)
-                         (add-to-list 'my/org-babel-no-confirm-languages lang-or-alias))
-                     (add-to-list 'my/org-babel-evaluated-languages lang-or-alias)
-                     lang-or-alias))
-                 language-table))
+  (let ((language-table (cddr '<<org-babel-languages()>>)))
+    (mapcar (lambda (lang-pair)
+              (let* ((alias (if (not (string= (cadr lang-pair) "")) (cadr lang-pair)))
+                     (lang (intern (car lang-pair)))
+                     (lang-or-alias (if alias (intern alias) lang))
+                     (confirm (not (string= (cl-caddr lang-pair) "No"))))
+                (if alias
+                    (add-to-list 'my/org-src-lang-modes (cons alias lang)))
+                (if (not confirm)
+                    (add-to-list 'my/org-babel-no-confirm-languages lang-or-alias))
+                (add-to-list 'my/org-babel-evaluated-languages lang-or-alias)
+                lang-or-alias))
+            language-table))
 
-       (mapcar (lambda (alias)
-                 (add-to-list 'org-src-lang-modes alias))
-               my/org-src-lang-modes)
+  (mapcar (lambda (alias)
+            (add-to-list 'org-src-lang-modes alias))
+          my/org-src-lang-modes)
 
-       (org-babel-do-load-languages
-        'org-babel-load-languages
-        (mapcar (lambda (lang)
-                  (cons lang t))
-                my/org-babel-evaluated-languages))
+  (org-babel-do-load-languages
+   'org-babel-load-languages
+   (mapcar (lambda (lang)
+             (cons lang t))
+           my/org-babel-evaluated-languages))
 
-       (setq org-confirm-babel-evaluate 'my/org-confirm-babel-evaluate)
-     #+END_SRC
+  (setq org-confirm-babel-evaluate 'my/org-confirm-babel-evaluate)
+#+END_SRC
 ** Powerline
-   #+name: packages
-   #+BEGIN_SRC emacs-lisp
-     (use-package powerline
-       :ensure t
-       :init (powerline-default-theme))
-   #+END_SRC
+#+name: packages
+#+BEGIN_SRC emacs-lisp
+  (use-package powerline
+    :ensure t
+    :init (powerline-default-theme))
+#+END_SRC
 ** Projectile
-   #+name: packages
-   #+BEGIN_SRC emacs-lisp
-          (use-package projectile
-            :ensure t
-            :defer t
-            :idle (projectile-global-mode)
-            :config (progn (require 'helm-projectile)
-                           (helm-projectile-on)))
-   #+END_SRC
+#+name: packages
+#+BEGIN_SRC emacs-lisp
+  (use-package projectile
+    :ensure t
+    :defer t
+    :idle (projectile-global-mode)
+    :config (progn (require 'helm-projectile)
+                   (helm-projectile-on)))
+#+END_SRC
 ** Ack-and-a-half
-   #+name: packages
-   #+BEGIN_SRC emacs-lisp
-     (use-package ack-and-a-half
-       :ensure t)
-   #+END_SRC
+#+name: packages
+#+BEGIN_SRC emacs-lisp
+  (use-package ack-and-a-half
+    :ensure t)
+#+END_SRC
 ** Web Mode
-   #+name: packages
-   #+BEGIN_SRC emacs-lisp
-     (use-package web-mode
-       :ensure t
-       :mode ("\\.html$" . web-mode)
-       :config (add-hook 'web-mode-hook (lambda ()
-                                          (setq web-mode-markup-indent-offset 4)
-                                          (setq web-mode-css-indent-offset 4)
-                                          (setq web-mode-code-indent-offset 4))))
-   #+END_SRC
+#+name: packages
+#+BEGIN_SRC emacs-lisp
+  (use-package web-mode
+    :ensure t
+    :mode ("\\.html$" . web-mode)
+    :config (add-hook 'web-mode-hook (lambda ()
+                                       (setq web-mode-markup-indent-offset 4)
+                                       (setq web-mode-css-indent-offset 4)
+                                       (setq web-mode-code-indent-offset 4))))
+#+END_SRC
 ** BBDB
-   #+name: packages
-   #+BEGIN_SRC emacs-lisp
-     (use-package bbdb
-       :ensure t
-       :defer t
-       :idle (require 'bbdb)
-       :config (progn (load "bbdb-com" t)
-                      (bbdb-initialize 'gnus 'message)
-                      (bbdb-insinuate-message)
-                      (add-hook 'gnus-startup-hook 'bbdb-insinuate-gnus)))
-   #+END_SRC
+#+name: packages
+#+BEGIN_SRC emacs-lisp
+  (use-package bbdb
+    :ensure t
+    :defer t
+    :idle (require 'bbdb)
+    :config (progn (load "bbdb-com" t)
+                   (bbdb-initialize 'gnus 'message)
+                   (bbdb-insinuate-message)
+                   (add-hook 'gnus-startup-hook 'bbdb-insinuate-gnus)))
+#+END_SRC
 ** Gnus
-   #+name: packages
-   #+BEGIN_SRC emacs-lisp
-     (use-package gnus
-       :commands gnus
-       :init (progn (defun my/configure-gnus ()
-                        <<gnus>>
-                        )
-                      (setq gnus-before-startup-hook 'my/configure-gnus)))
-   #+END_SRC
+#+name: packages
+#+BEGIN_SRC emacs-lisp
+  (use-package gnus
+    :commands gnus
+    :init (progn (defun my/configure-gnus ()
+                     <<gnus>>
+                     )
+                   (setq gnus-before-startup-hook 'my/configure-gnus)))
+#+END_SRC
 *** Avoid rich-text messages
-    #+name: gnus
-    #+BEGIN_SRC emacs-lisp
-      (setq mm-discouraged-alternatives '("text/html" "text/richtext"))
-    #+END_SRC
+#+name: gnus
+#+BEGIN_SRC emacs-lisp
+  (setq mm-discouraged-alternatives '("text/html" "text/richtext"))
+#+END_SRC
 *** Summary view formatting
-    Taken from http://groups.google.com/group/gnu.emacs.gnus/browse_thread/thread/a673a74356e7141f
+Taken from http://groups.google.com/group/gnu.emacs.gnus/browse_thread/thread/a673a74356e7141f
 
-    #+name: gnus
-    #+BEGIN_SRC emacs-lisp
-      (when window-system
-        (setq gnus-sum-thread-tree-indent "  ")
-        (setq gnus-sum-thread-tree-root "") ;; "● ")
-        (setq gnus-sum-thread-tree-false-root "") ;; "◯ ")
-        (setq gnus-sum-thread-tree-single-indent "") ;; "◎ ")
-        (setq gnus-sum-thread-tree-vertical        "│")
-        (setq gnus-sum-thread-tree-leaf-with-other "├─► ")
-        (setq gnus-sum-thread-tree-single-leaf     "╰─► "))
-      (setq gnus-summary-line-format
-            (concat
-             "%0{%U%R%z%}"
-             "%3{│%}" "%1{%d%}" "%3{│%}" ;; date
-             "  "
-             "%4{%-20,20f%}"               ;; name
-             "  "
-             "%3{│%}"
-             " "
-             "%1{%B%}"
-             "%s\n"))
-      (setq gnus-summary-display-arrow t)
-    #+END_SRC
+#+name: gnus
+#+BEGIN_SRC emacs-lisp
+  (when window-system
+    (setq gnus-sum-thread-tree-indent "  ")
+    (setq gnus-sum-thread-tree-root "") ;; "● ")
+    (setq gnus-sum-thread-tree-false-root "") ;; "◯ ")
+    (setq gnus-sum-thread-tree-single-indent "") ;; "◎ ")
+    (setq gnus-sum-thread-tree-vertical        "│")
+    (setq gnus-sum-thread-tree-leaf-with-other "├─► ")
+    (setq gnus-sum-thread-tree-single-leaf     "╰─► "))
+  (setq gnus-summary-line-format
+        (concat
+         "%0{%U%R%z%}"
+         "%3{│%}" "%1{%d%}" "%3{│%}" ;; date
+         "  "
+         "%4{%-20,20f%}"               ;; name
+         "  "
+         "%3{│%}"
+         " "
+         "%1{%B%}"
+         "%s\n"))
+  (setq gnus-summary-display-arrow t)
+#+END_SRC
 *** Inline images
-    #+name: gnus
-    #+BEGIN_SRC emacs-lisp
-      (add-to-list 'mm-attachment-override-types "image/.*")
-      (setq mm-inline-large-images t)
-    #+END_SRC
+#+name: gnus
+#+BEGIN_SRC emacs-lisp
+  (add-to-list 'mm-attachment-override-types "image/.*")
+  (setq mm-inline-large-images t)
+#+END_SRC
 * Programming
 ** Libraries
 *** Dash
-    A modern list api for Emacs. No 'cl required.
+A modern list api for Emacs. No 'cl required.
 
-    #+name: programming
-    #+BEGIN_SRC emacs-lisp
-      (use-package dash
-        :ensure t
-        :config (dash-enable-font-lock))
-    #+END_SRC
+#+name: programming
+#+BEGIN_SRC emacs-lisp
+  (use-package dash
+    :ensure t
+    :config (dash-enable-font-lock))
+#+END_SRC
 ** Lisps
-   #+name: lisps
-   | Mode       | Description          | Package  |
-   |------------+----------------------+----------|
-   | lisp       | Common Lisp          |          |
-   | emacs-lisp | Emacs Lisp           |          |
-   | scheme     | Scheme               |          |
-   | lfe        | Lisp-Flavored Erlang | lfe-mode |
-   | clojure    | Clojure              |          | 
+#+name: lisps
+| Mode       | Description          | Package  |
+|------------+----------------------+----------|
+| lisp       | Common Lisp          |          |
+| emacs-lisp | Emacs Lisp           |          |
+| scheme     | Scheme               |          |
+| lfe        | Lisp-Flavored Erlang | lfe-mode |
+| clojure    | Clojure              |          | 
 
-   #+BEGIN_SRC emacs-lisp :noweb yes :results code
-     (let ((packages (-remove 'null
-                              (mapcar 'last (cddr '<<lisps()>>)))))
-       `(progn ,@packages))
-   #+END_SRC
+#+BEGIN_SRC emacs-lisp :noweb yes :results code
+  (let ((packages (-remove 'null
+                           (mapcar 'last (cddr '<<lisps()>>)))))
+    `(progn ,@packages))
+#+END_SRC
 
-   #+RESULTS:
-   #+BEGIN_SRC emacs-lisp
-   (progn
-     ("")
-     ("")
-     ("")
-     ("lfe-mode")
-     (""))
-   #+END_SRC
+#+RESULTS:
+#+BEGIN_SRC emacs-lisp
+  (progn
+    ("")
+    ("")
+    ("")
+    ("lfe-mode")
+    (""))
+#+END_SRC
 
-  
-   #+name: programming
-   #+BEGIN_SRC emacs-lisp :noweb yes
-     ;; SLIME
-     (if (file-exists-p "~/quicklisp/slime-helper.el")
-         (load (expand-file-name "~/quicklisp/slime-helper.el")))
 
-     (setq inferior-lisp-program "clisp")
+#+name: programming
+#+BEGIN_SRC emacs-lisp :noweb yes
+  ;; SLIME
+  (if (file-exists-p "~/quicklisp/slime-helper.el")
+      (load (expand-file-name "~/quicklisp/slime-helper.el")))
 
-     (use-package paredit
-       :ensure t)
+  (setq inferior-lisp-program "clisp")
 
-     (use-package rainbow-identifiers
-       :ensure t)
+  (use-package paredit
+    :ensure t)
 
-     (use-package rainbow-delimiters
-       :ensure t)
+  (use-package rainbow-identifiers
+    :ensure t)
 
-     (mapc (lambda (lisp)
-             (let ((mode-hook (intern (concat lisp "-mode-hook"))))
-               (message (format "Installing LISP mode hook for %S" mode-hook))
-               (add-hook mode-hook (lambda ()
-                                     (show-paren-mode t)
-                                     (electric-indent-mode t)
-                                     (paredit-mode t)
-                                     (rainbow-delimiters-mode t)
-                                     (rainbow-identifiers-mode t)))))
-           (mapcar 'car (cddr '<<lisps()>>)))
-   #+END_SRC
+  (use-package rainbow-delimiters
+    :ensure t)
+
+  (mapc (lambda (lisp)
+          (let ((mode-hook (intern (concat lisp "-mode-hook"))))
+            (message (format "Installing LISP mode hook for %S" mode-hook))
+            (add-hook mode-hook (lambda ()
+                                  (show-paren-mode t)
+                                  (electric-indent-mode t)
+                                  (paredit-mode t)
+                                  (rainbow-delimiters-mode t)
+                                  (rainbow-identifiers-mode t)))))
+        (mapcar 'car (cddr '<<lisps()>>)))
+#+END_SRC
 ** Erlang
-   #+name: programming
-   #+BEGIN_SRC emacs-lisp
-     (use-package erlang
-       :ensure t
-       :config (add-hook 'erlang-mode-hook
-                         (lambda ()
-                           (setq inferior-erlang-machine-options '("-sname" "emacs"
-                                                                   "-hidden")))))
-   #+END_SRC
+#+name: programming
+#+BEGIN_SRC emacs-lisp
+  (use-package erlang
+    :ensure t
+    :config (add-hook 'erlang-mode-hook
+                      (lambda ()
+                        (setq inferior-erlang-machine-options '("-sname" "emacs"
+                                                                "-hidden")))))
+#+END_SRC
 ** PHP
-   #+name: programming
-   #+BEGIN_SRC emacs-lisp
-          (use-package web-mode
-            :ensure t
-            :mode "\\.html?$")
+#+name: programming
+#+BEGIN_SRC emacs-lisp
+  (use-package web-mode
+    :ensure t
+    :mode "\\.html?$")
 
-          (use-package php-mode
-            :ensure t
-            :mode (("\\.php$" . php-mode)
-                   ("\\.inc$" . php-mode))
-            :config (add-hook 'php-mode-hook (lambda ()
-                                               "Customize PHP indentation"
-                                               (c-set-offset 'arglist-cont-nonempty 'c-lineup-arglist)
-                                               (c-set-offset 'substatement-open 0)
-                                               (c-set-offset 'case-label '+))))
-   #+END_SRC
+  (use-package php-mode
+    :ensure t
+    :mode (("\\.php$" . php-mode)
+           ("\\.inc$" . php-mode))
+    :config (add-hook 'php-mode-hook (lambda ()
+                                       "Customize PHP indentation"
+                                       (c-set-offset 'arglist-cont-nonempty 'c-lineup-arglist)
+                                       (c-set-offset 'substatement-open 0)
+                                       (c-set-offset 'case-label '+))))
+#+END_SRC
 ** Ruby
-   #+name: programming
-   #+BEGIN_SRC emacs-lisp
-     (use-package rvm
-       :ensure t
-       :idle (rvm-use-default))
-   #+END_SRC
+#+name: programming
+#+BEGIN_SRC emacs-lisp
+  (use-package rvm
+    :ensure t
+    :idle (rvm-use-default))
+#+END_SRC
 ** Yaml
-   #+name: programming
-   #+BEGIN_SRC emacs-lisp
-     (use-package yaml-mode
-       :ensure t
-       :mode "\.yml$")
-   #+END_SRC
+#+name: programming
+#+BEGIN_SRC emacs-lisp
+  (use-package yaml-mode
+    :ensure t
+    :mode "\.yml$")
+#+END_SRC
 ** Docker
-   #+name: programming
-   #+BEGIN_SRC emacs-lisp
-     (use-package dockerfile-mode
-       :ensure t
-       :mode "^Dockerfile$")
-   #+END_SRC
+#+name: programming
+#+BEGIN_SRC emacs-lisp
+  (use-package dockerfile-mode
+    :ensure t
+    :mode "^Dockerfile$")
+#+END_SRC
 * Other functionality
 ** Disable tab indenting by default
-   #+name: other
-   #+BEGIN_SRC emacs-lisp
-     (setq-default indent-tabs-mode nil)
-   #+END_SRC
+#+name: other
+#+BEGIN_SRC emacs-lisp
+  (setq-default indent-tabs-mode nil)
+#+END_SRC
 ** Rename file and buffer
-   Taken from [[http://emacsredux.com/blog/2013/05/04/rename-file-and-buffer/][Emacs Redux]]
-   #+name: other
-   #+BEGIN_SRC emacs-lisp
-     ;; emacsredux.com
-     (defun rename-file-and-buffer ()
-       "Rename the current buffer and file it is visiting."
-       (interactive)
-       (let ((filename (buffer-file-name)))
-	 (if (not (and filename (file-exists-p filename)))
-	     (message "Buffer is not visiting a file!")
-	   (let ((new-name (read-file-name "New name: " filename)))
-	     (cond
-	      ((vc-backend filename) (vc-rename-file filename new-name))
-	      (t
-	       (rename-file filename new-name t)
-	       (rename-buffer new-name)
-	       (set-visited-file-name new-name)
-	       (set-buffer-modified-p nil)))))))
-   #+END_SRC
+Taken from [[http://emacsredux.com/blog/2013/05/04/rename-file-and-buffer/][Emacs Redux]]
+#+name: other
+#+BEGIN_SRC emacs-lisp
+  ;; emacsredux.com
+  (defun rename-file-and-buffer ()
+    "Rename the current buffer and file it is visiting."
+    (interactive)
+    (let ((filename (buffer-file-name)))
+      (if (not (and filename (file-exists-p filename)))
+          (message "Buffer is not visiting a file!")
+        (let ((new-name (read-file-name "New name: " filename)))
+          (cond
+           ((vc-backend filename) (vc-rename-file filename new-name))
+           (t
+            (rename-file filename new-name t)
+            (rename-buffer new-name)
+            (set-visited-file-name new-name)
+            (set-buffer-modified-p nil)))))))
+#+END_SRC
 ** Eval and Replace
-   Taken from [[http://emacsredux.com/blog/2013/06/21/eval-and-replace/][Emacs Redux]]
-   #+name: other
-   #+BEGIN_SRC emacs-lisp
-     (defun eval-and-replace ()
-       "Replace the preceding sexp with its value."
-       (interactive)
-       (backward-kill-sexp)
-       (condition-case nil
-           (prin1 (eval (read (current-kill 0)))
-                  (current-buffer))
-         (error (message "Invalid expression")
-                (insert (current-kill 0)))))
+Taken from [[http://emacsredux.com/blog/2013/06/21/eval-and-replace/][Emacs Redux]]
+#+name: other
+#+BEGIN_SRC emacs-lisp
+  (defun eval-and-replace ()
+    "Replace the preceding sexp with its value."
+    (interactive)
+    (backward-kill-sexp)
+    (condition-case nil
+        (prin1 (eval (read (current-kill 0)))
+               (current-buffer))
+      (error (message "Invalid expression")
+             (insert (current-kill 0)))))
 
-     (global-set-key (kbd "C-)") 'eval-and-replace)
-   #+END_SRC
+  (global-set-key (kbd "C-)") 'eval-and-replace)
+#+END_SRC
 ** Smarter navigation to the beginning of a line
-   Taken from [[http://emacsredux.com/blog/2013/05/22/smarter-navigation-to-the-beginning-of-a-line/][Emacs Redux]]
-   #+name: other
-   #+BEGIN_SRC emacs-lisp
-     (defun smarter-move-beginning-of-line (arg)
-       "Move point back to indentation of beginning of line.
+Taken from [[http://emacsredux.com/blog/2013/05/22/smarter-navigation-to-the-beginning-of-a-line/][Emacs Redux]]
+#+name: other
+#+BEGIN_SRC emacs-lisp
+  (defun smarter-move-beginning-of-line (arg)
+    "Move point back to indentation of beginning of line.
 
-     Move point to the first non-whitespace character on this line.
-     If point is already there, move to the beginning of the line.
-     Effectively toggle between the first non-whitespace character and
-     the beginning of the line.
+  Move point to the first non-whitespace character on this line.
+  If point is already there, move to the beginning of the line.
+  Effectively toggle between the first non-whitespace character and
+  the beginning of the line.
 
-     If ARG is not nil or 1, move forward ARG - 1 lines first.  If
-     point reaches the beginning or end of the buffer, stop there."
-       (interactive "^p")
-       (setq arg (or arg 1))
+  If ARG is not nil or 1, move forward ARG - 1 lines first.  If
+  point reaches the beginning or end of the buffer, stop there."
+    (interactive "^p")
+    (setq arg (or arg 1))
 
-       ;; Move lines first
-       (when (/= arg 1)
-	 (let ((line-move-visual nil))
-	   (forward-line (1- arg))))
+    ;; Move lines first
+    (when (/= arg 1)
+      (let ((line-move-visual nil))
+        (forward-line (1- arg))))
 
-       (let ((orig-point (point)))
-	 (back-to-indentation)
-	 (when (= orig-point (point))
-	   (move-beginning-of-line 1))))
+    (let ((orig-point (point)))
+      (back-to-indentation)
+      (when (= orig-point (point))
+        (move-beginning-of-line 1))))
 
-     ;; remap C-a to `smarter-move-beginning-of-line'
-     (global-set-key [remap move-beginning-of-line]
-		     'smarter-move-beginning-of-line)
-   #+END_SRC
+  ;; remap C-a to `smarter-move-beginning-of-line'
+  (global-set-key [remap move-beginning-of-line]
+                  'smarter-move-beginning-of-line)
+#+END_SRC
 ** Edit file with sudo
-   Taken from [[http://www.emacswiki.org/TrampMode#toc32][EmacsWiki]]
-   #+name: other
-   #+BEGIN_SRC emacs-lisp
-     (require 'dired)
-     (defun sudo-edit-current-file ()
-       (interactive)
-       (let ((my-file-name) ; fill this with the file to open
-             (position))    ; if the file is already open save position
-         (if (equal major-mode 'dired-mode) ; test if we are in dired-mode 
-             (progn
-               (setq my-file-name (dired-get-file-for-visit))
-               (find-alternate-file (prepare-tramp-sudo-string my-file-name)))
-           (setq my-file-name (buffer-file-name); hopefully anything else is an already opened file
-                 position (point))
-           (find-alternate-file (prepare-tramp-sudo-string my-file-name))
-           (goto-char position))))
+Taken from [[http://www.emacswiki.org/TrampMode#toc32][EmacsWiki]]
+#+name: other
+#+BEGIN_SRC emacs-lisp
+  (require 'dired)
+  (defun sudo-edit-current-file ()
+    (interactive)
+    (let ((my-file-name) ; fill this with the file to open
+          (position))    ; if the file is already open save position
+      (if (equal major-mode 'dired-mode) ; test if we are in dired-mode 
+          (progn
+            (setq my-file-name (dired-get-file-for-visit))
+            (find-alternate-file (prepare-tramp-sudo-string my-file-name)))
+        (setq my-file-name (buffer-file-name); hopefully anything else is an already opened file
+              position (point))
+        (find-alternate-file (prepare-tramp-sudo-string my-file-name))
+        (goto-char position))))
 
 
-     (defun prepare-tramp-sudo-string (tempfile)
-       (if (file-remote-p tempfile)
-           (let ((vec (tramp-dissect-file-name tempfile)))
+  (defun prepare-tramp-sudo-string (tempfile)
+    (if (file-remote-p tempfile)
+        (let ((vec (tramp-dissect-file-name tempfile)))
 
-             (tramp-make-tramp-file-name
-              "sudo"
-              (tramp-file-name-user nil)
-              (tramp-file-name-host vec)
-              (tramp-file-name-localname vec)
-              (format "ssh:%s@%s|"
-                      (tramp-file-name-user vec)
-                      (tramp-file-name-host vec))))
-         (concat "/sudo:root@localhost:" tempfile)))
+          (tramp-make-tramp-file-name
+           "sudo"
+           (tramp-file-name-user nil)
+           (tramp-file-name-host vec)
+           (tramp-file-name-localname vec)
+           (format "ssh:%s@%s|"
+                   (tramp-file-name-user vec)
+                   (tramp-file-name-host vec))))
+      (concat "/sudo:root@localhost:" tempfile)))
 
-     (define-key dired-mode-map [s-return] 'sudo-edit-current-file)
-   #+END_SRC
+  (define-key dired-mode-map [s-return] 'sudo-edit-current-file)
+#+END_SRC
 ** Backups
-   Borrowed from Sacha Chua
-   https://github.com/sachac/.emacs.d/
+Borrowed from Sacha Chua
+https://github.com/sachac/.emacs.d/
 
-   This is one of the things people usually want to change right away. By default, Emacs saves backup files in the current directory. These are the files ending in =~= that are cluttering up your directory lists. The following code stashes them all in =~/.emacs.d/backups=, where I can find them with =C-x C-f= (=find-file=) if I really need to.
+This is one of the things people usually want to change right away. By default, Emacs saves backup files in the current directory. These are the files ending in =~= that are cluttering up your directory lists. The following code stashes them all in =~/.emacs.d/backups=, where I can find them with =C-x C-f= (=find-file=) if I really need to.
 
-   #+name: other
-   #+begin_src emacs-lisp
-     (setq backup-directory-alist '(("." . "~/.emacs.d/backups")))
-   #+end_src
+#+name: other
+#+begin_src emacs-lisp
+  (setq backup-directory-alist '(("." . "~/.emacs.d/backups")))
+#+end_src
 
-   Disk space is cheap. Save lots.
+Disk space is cheap. Save lots.
 
-   #+name: other
-   #+begin_src emacs-lisp
-     (setq delete-old-versions -1)
-     (setq version-control t)
-     (setq vc-make-backup-files t)
-     (setq auto-save-file-name-transforms '((".*" "~/.emacs.d/auto-save-list/" t)))
-   #+end_src
+#+name: other
+#+begin_src emacs-lisp
+  (setq delete-old-versions -1)
+  (setq version-control t)
+  (setq vc-make-backup-files t)
+  (setq auto-save-file-name-transforms '((".*" "~/.emacs.d/auto-save-list/" t)))
+#+end_src
 ** History
-   From http://www.wisdomandwonder.com/wordpress/wp-content/uploads/2014/03/C3F.html
+From http://www.wisdomandwonder.com/wordpress/wp-content/uploads/2014/03/C3F.html
 
-   #+name: other
-   #+begin_src emacs-lisp
-     (setq savehist-file "~/.emacs.d/savehist")
-     (savehist-mode 1)
-     (setq history-length t)
-     (setq history-delete-duplicates t)
-     (setq savehist-save-minibuffer-history 1)
-     (setq savehist-additional-variables
-           '(kill-ring
-             search-ring
-             regexp-search-ring))
-   #+end_src
+#+name: other
+#+begin_src emacs-lisp
+  (setq savehist-file "~/.emacs.d/savehist")
+  (savehist-mode 1)
+  (setq history-length t)
+  (setq history-delete-duplicates t)
+  (setq savehist-save-minibuffer-history 1)
+  (setq savehist-additional-variables
+        '(kill-ring
+          search-ring
+          regexp-search-ring))
+#+end_src
 ** Copy filename to clipboard
 
-   http://emacsredux.com/blog/2013/03/27/copy-filename-to-the-clipboard/
-   https://github.com/bbatsov/prelude
+http://emacsredux.com/blog/2013/03/27/copy-filename-to-the-clipboard/
+https://github.com/bbatsov/prelude
 
-   #+name: other
-   #+begin_src emacs-lisp
-     (defun prelude-copy-file-name-to-clipboard ()
-       "Copy the current buffer file name to the clipboard."
-       (interactive)
-       (let ((filename (if (equal major-mode 'dired-mode)
-                           default-directory
-                         (buffer-file-name))))
-         (when filename
-           (kill-new filename)
-           (message "Copied buffer file name '%s' to the clipboard." filename))))
-   #+end_src
+#+name: other
+#+begin_src emacs-lisp
+  (defun prelude-copy-file-name-to-clipboard ()
+    "Copy the current buffer file name to the clipboard."
+    (interactive)
+    (let ((filename (if (equal major-mode 'dired-mode)
+                        default-directory
+                      (buffer-file-name))))
+      (when filename
+        (kill-new filename)
+        (message "Copied buffer file name '%s' to the clipboard." filename))))
+#+end_src
 * Custom settings
-  Store options set via =customize-*= in a separate file (Emacs stores
-  them in =init.el= by default).
-  
-  #+name: custom-settings
-  #+BEGIN_SRC emacs-lisp
-    (setq custom-file "~/.emacs.d/custom.el")
-    (if (file-exists-p custom-file)
-        (load custom-file))
-  #+END_SRC
+Store options set via =customize-*= in a separate file (Emacs stores
+them in =init.el= by default).
+
+#+name: custom-settings
+#+BEGIN_SRC emacs-lisp
+  (setq custom-file "~/.emacs.d/custom.el")
+  (if (file-exists-p custom-file)
+      (load custom-file))
+#+END_SRC
 * Auto-loading elisp files
-  Any elisp files dropped into =~/.emacs.local.d/= will be
-  automatically loaded.
+Any elisp files dropped into =~/.emacs.local.d/= will be
+automatically loaded.
 
-  I usually use this is a testing ground for new configuration before
-  adding it here, and also for any personal / sensitive configuration.
+I usually use this is a testing ground for new configuration before
+adding it here, and also for any personal / sensitive configuration.
 
-  #+name: auto-load
-  #+BEGIN_SRC emacs-lisp
-    (defun my/load-elisp-directory (path)
-      (let ((file-pattern "\\.elc?$"))
-        (when (file-directory-p path)
-          (mapcar (lambda (lisp-file)
-                    (load-file lisp-file))
-                  (directory-files (expand-file-name path) t file-pattern)))))
+#+name: auto-load
+#+BEGIN_SRC emacs-lisp
+  (defun my/load-elisp-directory (path)
+    (let ((file-pattern "\\.elc?$"))
+      (when (file-directory-p path)
+        (mapcar (lambda (lisp-file)
+                  (load-file lisp-file))
+                (directory-files (expand-file-name path) t file-pattern)))))
 
-    (my/load-elisp-directory "~/.emacs.local.d")
-  #+END_SRC
+  (my/load-elisp-directory "~/.emacs.local.d")
+#+END_SRC
 * Configuration file layout
-  
-  Here I define the emacs.el file that gets generated by the code in
-  this org file.
-  
-  #+BEGIN_SRC emacs-lisp :tangle yes :noweb no-export :exports code
-    ;;;; Do not modify this file by hand.  It was automatically generated
-    ;;;; from `emacs.org` in the same directory. See that file for more
-    ;;;; information.
-    ;;;;
 
-    <<startup>>
-    <<look-and-feel>>
-    <<autocomplete>>
-    <<packages>>
-    <<programming>>
-    <<other>>
-    <<auto-load>>
-    <<custom-settings>>
-  #+END_SRC
+Here I define the emacs.el file that gets generated by the code in
+this org file.
+
+#+BEGIN_SRC emacs-lisp :tangle yes :noweb no-export :exports code
+  ;;;; Do not modify this file by hand.  It was automatically generated
+  ;;;; from `emacs.org` in the same directory. See that file for more
+  ;;;; information.
+  ;;;;
+
+  <<startup>>
+  <<look-and-feel>>
+  <<autocomplete>>
+  <<packages>>
+  <<programming>>
+  <<other>>
+  <<auto-load>>
+  <<custom-settings>>
+#+END_SRC
