@@ -3,7 +3,7 @@
 
 * Startup
 ** Disable the emacs startup screen.
-#+name: startupa
+#+name: startup
 #+BEGIN_SRC emacs-lisp
   (setq inhibit-startup-screen +1)
 #+END_SRC
@@ -54,7 +54,7 @@
                         (define-key eshell-mode-map (kbd "C-c C-l") 'helm-eshell-history)))))
 #+END_SRC
 *** helm-descbinds
-#+name: helm
+#+name: packages
 #+BEGIN_SRC emacs-lisp
   (use-package helm-descbinds
     :ensure t
