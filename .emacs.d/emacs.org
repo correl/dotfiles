@@ -81,6 +81,16 @@
     :ensure t
     :bind ("C-x o" . ace-window))    
 #+END_SRC
+** Guide Key
+#+name: packages
+#+BEGIN_SRC emacs-lisp
+  (use-package guide-key
+    :ensure t
+    :diminish guide-key-mode
+    :init (progn
+            (setq guide-key/guide-key-sequence t)
+            (guide-key-mode 1)))
+#+END_SRC
 ** Expand Region
 #+name: packages
 #+BEGIN_SRC emacs-lisp
