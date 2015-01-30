@@ -454,6 +454,13 @@ A modern list api for Emacs. No 'cl required.
     :ensure t
     :mode "^Dockerfile$")
 #+END_SRC
+** Graphviz
+#+name: programming
+#+BEGIN_SRC emacs-lisp
+  (use-package graphviz-dot-mode
+    :ensure t
+    :mode "\.dot$")
+#+END_SRC
 * Other functionality
 ** Disable tab indenting by default
 #+name: other
