@@ -353,30 +353,14 @@ A modern list api for Emacs. No 'cl required.
 #+END_SRC
 ** Lisps
 #+name: lisps
-| Mode       | Description          | Package  |
-|------------+----------------------+----------|
-| lisp       | Common Lisp          |          |
-| emacs-lisp | Emacs Lisp           |          |
-| scheme     | Scheme               |          |
-| lfe        | Lisp-Flavored Erlang | lfe-mode |
-| clojure    | Clojure              |          | 
-
-#+BEGIN_SRC emacs-lisp :noweb yes :results code
-  (let ((packages (-remove 'null
-                           (mapcar 'last (cddr '<<lisps()>>)))))
-    `(progn ,@packages))
-#+END_SRC
-
-#+RESULTS:
-#+BEGIN_SRC emacs-lisp
-  (progn
-    ("")
-    ("")
-    ("")
-    ("lfe-mode")
-    (""))
-#+END_SRC
-
+| Mode       | Description               |
+|------------+---------------------------|
+| lisp       | Common Lisp               |
+| emacs-lisp | Emacs Lisp                |
+| scheme     | Scheme                    |
+| lfe        | Lisp-Flavored Erlang      |
+| clojure    | Clojure                   |
+| hy         | Hy (Lisp-flavored Python) |
 
 #+name: programming
 #+BEGIN_SRC emacs-lisp :noweb yes
@@ -397,7 +381,7 @@ A modern list api for Emacs. No 'cl required.
 
   (mapc (lambda (lisp)
           (let ((mode-hook (intern (concat lisp "-mode-hook"))))
-            (message (format "Installing LISP mode hook for %S" mode-hook))
+            (message (format "Installing LISP mode hook for %S" lisp))
             (add-hook mode-hook (lambda ()
                                   (show-paren-mode t)
                                   (electric-indent-mode t)
@@ -405,6 +389,36 @@ A modern list api for Emacs. No 'cl required.
                                   (rainbow-delimiters-mode t)
                                   (rainbow-identifiers-mode t)))))
         (mapcar 'car (cddr '<<lisps()>>)))
+#+END_SRC
+*** Lisp-Flavored Erlang
+#+name: programming
+#+BEGIN_SRC emacs-lisp
+  (use-package lfe-mode
+    :ensure t
+    :mode "\\.lfe$")
+#+END_SRC
+*** Clojure
+#+name: programming
+#+BEGIN_SRC emacs-lisp
+  (use-package clojure-mode
+    :ensure t
+    :mode (("\\.clj[sx]?$" . clojure-mode)
+           ("\\.edn$" . clojure-mode)))
+#+END_SRC
+**** Cider
+Communicates with the clojure REPL.
+#+name: programming
+#+BEGIN_SRC emacs-lisp
+  (use-package cider
+    :ensure t
+    :commands (cider-jack-in cider))
+#+END_SRC
+*** Hy
+#+name: programming
+#+BEGIN_SRC emacs-lisp
+  (use-package hy-mode
+    :ensure t
+    :mode "\\.hy$")
 #+END_SRC
 ** Erlang
 #+name: programming
