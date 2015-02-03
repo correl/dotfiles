@@ -61,6 +61,13 @@
     :bind (("C-h b" . helm-descbinds)
            ("C-h w" . helm-descbinds)))
 #+END_SRC
+*** helm-ag
+Helm search plugin for [[Ag%20(The%20Silver%20Searcher)][Ag (The Silver Searcher)]]
+#+name: packages
+#+BEGIN_SRC emacs-lisp
+  (use-package helm-ag
+    :ensure t)
+#+END_SRC
 ** Ace Jump
 #+name: packages
 #+BEGIN_SRC emacs-lisp
@@ -252,6 +259,15 @@ languages. Setting ~Confirm Evaluation~ to ~No~ disables the
     :ensure t
     :init (powerline-default-theme))
 #+END_SRC
+** Ag (The Silver Searcher)
+This is a code searching tool that replaces =ack=, and is an order of
+magnitude faster.
+
+#+name: packages
+#+BEGIN_SRC emacs-lisp
+  (use-package ag
+    :ensure t)
+#+END_SRC
 ** Projectile
 #+name: packages
 #+BEGIN_SRC emacs-lisp
@@ -261,12 +277,6 @@ languages. Setting ~Confirm Evaluation~ to ~No~ disables the
     :idle (projectile-global-mode)
     :config (progn (require 'helm-projectile)
                    (helm-projectile-on)))
-#+END_SRC
-** Ack-and-a-half
-#+name: packages
-#+BEGIN_SRC emacs-lisp
-  (use-package ack-and-a-half
-    :ensure t)
 #+END_SRC
 ** Web Mode
 #+name: packages
