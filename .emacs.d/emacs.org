@@ -26,7 +26,7 @@
   (use-package auto-complete
     :ensure t
     :defer t
-    :init
+    :config
     (progn (require 'auto-complete-config)
            (ac-config-default)
            (global-auto-complete-mode t)))
@@ -45,13 +45,13 @@
            ("C-x C-r" . helm-recentf)
            ("C-x c o" . helm-occur)
            ("C-x c s" . helm-swoop))
-    :init (progn
-            (require 'helm-config)
-            (helm-mode 1)
-            (add-hook 'eshell-mode-hook
-                      (lambda ()
-                        (define-key eshell-mode-map (kbd "TAB") 'helm-esh-pcomplete)
-                        (define-key eshell-mode-map (kbd "C-c C-l") 'helm-eshell-history)))))
+    :config (progn
+              (require 'helm-config)
+              (helm-mode 1)
+              (add-hook 'eshell-mode-hook
+                        (lambda ()
+                          (define-key eshell-mode-map (kbd "TAB") 'helm-esh-pcomplete)
+                          (define-key eshell-mode-map (kbd "C-c C-l") 'helm-eshell-history)))))
 #+END_SRC
 *** helm-descbinds
 #+name: packages
@@ -65,21 +65,24 @@
 Helm search plugin for [[Ag%20(The%20Silver%20Searcher)][Ag (The Silver Searcher)]]
 #+name: packages
 #+BEGIN_SRC emacs-lisp
-  (use-package helm-ag
-    :ensure t)
+    (use-package helm-ag
+      :ensure t
+      :defer t)
 #+END_SRC
 ** Ace Jump
 #+name: packages
 #+BEGIN_SRC emacs-lisp
-  (use-package ace-jump-mode
-    :ensure t)
+    (use-package ace-jump-mode
+      :ensure t
+      :defer t)
 #+END_SRC
 *** ace-isearch
 #+name: packages
 #+BEGIN_SRC emacs-lisp
   (use-package ace-isearch
     :ensure t
-    :init (global-ace-isearch-mode t))
+    :defer t
+    :config (global-ace-isearch-mode t))
 #+END_SRC
 *** ace-window
 #+name: packages
@@ -94,9 +97,10 @@ Helm search plugin for [[Ag%20(The%20Silver%20Searcher)][Ag (The Silver Searcher
   (use-package guide-key
     :ensure t
     :diminish guide-key-mode
-    :init (progn
-            (setq guide-key/guide-key-sequence t)
-            (guide-key-mode 1)))
+    :defer t
+    :config (progn
+              (setq guide-key/guide-key-sequence t)
+              (guide-key-mode 1)))
 #+END_SRC
 ** Expand Region
 #+name: packages
@@ -266,7 +270,8 @@ magnitude faster.
 #+name: packages
 #+BEGIN_SRC emacs-lisp
   (use-package ag
-    :ensure t)
+    :ensure t
+    :defer t)
 #+END_SRC
 ** Projectile
 #+name: packages
