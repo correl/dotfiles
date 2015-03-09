@@ -26,10 +26,10 @@
   (use-package auto-complete
     :ensure t
     :defer t
+    :idle (global-auto-complete-mode t)
     :config
     (progn (require 'auto-complete-config)
-           (ac-config-default)
-           (global-auto-complete-mode t)))
+           (ac-config-default)))
 #+END_SRC
 ** Helm
 #+name: packages
