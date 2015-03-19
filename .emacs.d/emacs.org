@@ -25,10 +25,9 @@
 #+BEGIN_SRC emacs-lisp
   (use-package auto-complete
     :ensure t
-    :defer t
-    :idle (global-auto-complete-mode t)
     :config
-    (progn (require 'auto-complete-config)
+    (progn (global-auto-complete-mode t)
+           (require 'auto-complete-config)
            (ac-config-default)))
 #+END_SRC
 ** Helm
@@ -123,10 +122,9 @@ Helm search plugin for [[Ag%20(The%20Silver%20Searcher)][Ag (The Silver Searcher
 #+BEGIN_SRC emacs-lisp
   (use-package git-gutter
     :ensure t
-    :defer t
-    :idle (global-git-gutter-mode t)
     :config
     (progn
+      (global-git-gutter-mode t)
       (defadvice ediff-make-temp-file (before make-temp-file-suspend-ll
                                               activate compile preactivate)
         "Disable git-gutter when running ediff"
@@ -278,10 +276,9 @@ magnitude faster.
 #+BEGIN_SRC emacs-lisp
   (use-package projectile
     :ensure t
-    :defer t
-    :idle (projectile-global-mode)
     :config (progn (require 'helm-projectile)
-                   (helm-projectile-on)))
+                   (helm-projectile-on)
+                   (projectile-global-mode)))
 #+END_SRC
 ** Web Mode
 #+name: packages
@@ -467,7 +464,7 @@ Communicates with the clojure REPL.
 #+BEGIN_SRC emacs-lisp
   (use-package rvm
     :ensure t
-    :idle (rvm-use-default))
+    :config (rvm-use-default))
 #+END_SRC
 ** Yaml
 #+name: programming
