@@ -258,6 +258,7 @@ languages. Setting ~Confirm Evaluation~ to ~No~ disables the
 #+name: packages
 #+BEGIN_SRC emacs-lisp
   (use-package powerline
+    :disabled t
     :ensure t
     :init (powerline-default-theme))
 #+END_SRC
