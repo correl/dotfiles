@@ -357,6 +357,21 @@ Taken from http://groups.google.com/group/gnu.emacs.gnus/browse_thread/thread/a6
   (add-to-list 'mm-attachment-override-types "image/.*")
   (setq mm-inline-large-images t)
 #+END_SRC
+* LaTeX
+** AUCTeX
+#+name: packages
+#+BEGIN_SRC emacs-lisp
+  (use-package tex-site
+    :ensure auctex)
+#+END_SRC
+** LaTeX-Extra
+#+name: packages
+#+BEGIN_SRC emacs-lisp
+  (use-package latex-extra
+    :ensure t
+    :commands latex-extra-mode
+    :init (add-hook 'LaTeX-mode-hook #'latex-extra-mode))
+#+END_SRC
 * Programming
 ** Libraries
 *** Dash
