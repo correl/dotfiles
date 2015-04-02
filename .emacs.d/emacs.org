@@ -68,6 +68,14 @@ Helm search plugin for [[Ag%20(The%20Silver%20Searcher)][Ag (The Silver Searcher
       :ensure t
       :defer t)
 #+END_SRC
+*** helm-projectile
+Helm projectile integration
+#+name: packages
+#+BEGIN_SRC emacs-lisp
+  (use-package helm-projectile
+    :ensure t
+    :defer t)
+#+END_SRC
 ** Ace Jump
 #+name: packages
 #+BEGIN_SRC emacs-lisp
