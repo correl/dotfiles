@@ -127,6 +127,7 @@ Helm projectile integration
 #+BEGIN_SRC emacs-lisp
   (use-package git-gutter
     :ensure t
+    :diminish git-gutter-mode
     :config
     (progn
       (global-git-gutter-mode t)
@@ -144,6 +145,7 @@ Helm projectile integration
 #+BEGIN_SRC emacs-lisp
   (use-package magit
     :ensure t
+    :diminish magit-auto-revert-mode
     :commands (magit-init
                magit-status
                magit-diff
@@ -281,7 +283,9 @@ magnitude faster.
 #+BEGIN_SRC emacs-lisp
   (use-package projectile
     :ensure t
-    :config (progn (require 'helm-projectile)
+    :config (progn (setq projectile-mode-line
+                         '(:eval (format " [%s]" (projectile-project-name))))
+                   (require 'helm-projectile)
                    (helm-projectile-on)
                    (projectile-global-mode)))
 #+END_SRC
@@ -369,6 +373,7 @@ Taken from http://groups.google.com/group/gnu.emacs.gnus/browse_thread/thread/a6
 #+BEGIN_SRC emacs-lisp
   (use-package latex-extra
     :ensure t
+    :diminish latex-extra-mode
     :commands latex-extra-mode
     :init (add-hook 'LaTeX-mode-hook #'latex-extra-mode))
 #+END_SRC
