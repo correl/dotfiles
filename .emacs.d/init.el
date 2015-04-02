@@ -11,7 +11,9 @@
     (package-install 'use-package)
     (package-initialize)))
 
-(require 'use-package)
+(eval-and-compile
+  (defvar use-package-verbose t)
+  (require 'use-package))
 
 (use-package org
 	     :ensure org-plus-contrib)
