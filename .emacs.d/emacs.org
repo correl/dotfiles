@@ -512,6 +512,13 @@ Communicates with the clojure REPL.
     :ensure t
     :mode "\.dot$")
 #+END_SRC
+** Cython
+#+name: programming
+#+BEGIN_SRC emacs-lisp
+  (use-package cython-mode
+    :ensure t
+    :mode "\.pyx")
+#+END_SRC
 * Other functionality
 ** Disable tab indenting by default
 #+name: other
