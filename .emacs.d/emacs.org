@@ -218,6 +218,7 @@ languages. Setting ~Confirm Evaluation~ to ~No~ disables the
 |--------------+-------+---------------------+---------------------------------|
 | emacs-lisp   |       | Yes                 | Emacs Lisp                      |
 | graphviz-dot | dot   | No                  | Directed and undirected graphs  |
+| gnuplot      |       | No                  | Graphs                          |
 | ditaa        |       | No                  | Ascii diagrams                  |
 | plantuml     |       | No                  | Flow charts                     |
 | mscgen       |       | No                  | Message sequence charts         |
