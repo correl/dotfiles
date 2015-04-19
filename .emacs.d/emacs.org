@@ -681,6 +681,13 @@ https://github.com/bbatsov/prelude
         (kill-new filename)
         (message "Copied buffer file name '%s' to the clipboard." filename))))
 #+end_src
+** Prompt for 'y or n' instead of 'yes or no'
+Because typing out "yes" and "no" is irritating.
+
+#+name: other
+#+BEGIN_SRC emacs-lisp
+  (defalias 'yes-or-no-p #'y-or-n-p)
+#+END_SRC
 * Custom settings
 Store options set via =customize-*= in a separate file (Emacs stores
 them in =init.el= by default).
