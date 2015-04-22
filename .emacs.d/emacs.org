@@ -425,16 +425,20 @@ A modern list api for Emacs. No 'cl required.
   (use-package rainbow-delimiters
     :ensure t)
 
-  (mapc (lambda (lisp)
-          (let ((mode-hook (intern (concat lisp "-mode-hook"))))
-            (message (format "Installing LISP mode hook for %S" lisp))
-            (add-hook mode-hook (lambda ()
-                                  (show-paren-mode t)
-                                  (electric-indent-mode t)
-                                  (paredit-mode t)
-                                  (rainbow-delimiters-mode t)
-                                  (rainbow-identifiers-mode t)))))
-        (mapcar 'car (cddr '<<lisps()>>)))
+  (let ((lisp-mode-hooks
+         (mapcar (lambda (lisp)
+                   (intern (concat lisp "-mode-hook")))
+                 (mapcar 'car (cddr '<<lisps()>>)))))
+    (mapc (lambda (hook)
+            (message (format "Installing LISP mode hook for %S" hook))
+            (add-hook hook (lambda ()
+                             (show-paren-mode t)
+                             (electric-indent-mode t)
+                             (paredit-mode t)
+                             (rainbow-delimiters-mode t)
+                             (rainbow-identifiers-mode t))))
+          (cons 'eval-expression-minibuffer-setup-hook
+                lisp-mode-hooks)))
 #+END_SRC
 *** Lisp-Flavored Erlang
 #+name: programming
