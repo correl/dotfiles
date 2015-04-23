@@ -370,6 +370,19 @@ Taken from http://groups.google.com/group/gnu.emacs.gnus/browse_thread/thread/a6
   (add-to-list 'mm-attachment-override-types "image/.*")
   (setq mm-inline-large-images t)
 #+END_SRC
+** Unfill
+Re-flowing paragraphs with =fill-paragraph= is nice, but there are
+occasions when it's useful to do the inverse, and get rid of the line
+breaks.
+
+#+name: packages
+#+BEGIN_SRC emacs-lisp
+  (use-package unfill
+    :ensure t
+    :commands (unfill-paragraph
+               unfill-region)
+    :bind ("M-Q" . unfill-paragraph))
+#+END_SRC
 * LaTeX
 ** AUCTeX
 #+name: packages
