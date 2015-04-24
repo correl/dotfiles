@@ -23,12 +23,14 @@
 ** Autocomplete
 #+name: autocomplete
 #+BEGIN_SRC emacs-lisp
-  (use-package auto-complete
-    :ensure t
-    :config
-    (progn (global-auto-complete-mode t)
-           (require 'auto-complete-config)
-           (ac-config-default)))
+    (use-package auto-complete
+      :ensure t
+      :config
+      (progn (global-auto-complete-mode t)
+             (require 'auto-complete-config)
+             (ac-config-default)
+             (ac-set-trigger-key "TAB")
+             (ac-set-trigger-key "<tab>")))
 #+END_SRC
 ** Helm
 #+name: packages
@@ -382,6 +384,14 @@ breaks.
     :commands (unfill-paragraph
                unfill-region)
     :bind ("M-Q" . unfill-paragraph))
+#+END_SRC
+** Yasnippet
+#+name: packages
+#+BEGIN_SRC emacs-lisp
+  (use-package yasnippet
+    :ensure t
+    :diminish yas-minor-mode
+    :config (yas-global-mode 1))
 #+END_SRC
 * LaTeX
 ** AUCTeX
@@ -746,9 +756,9 @@ this org file.
 
   <<startup>>
   <<look-and-feel>>
-  <<autocomplete>>
   <<packages>>
   <<programming>>
+  <<autocomplete>>
   <<other>>
   <<auto-load>>
   <<custom-settings>>
