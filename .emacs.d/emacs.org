@@ -414,6 +414,19 @@ breaks.
     :diminish yas-minor-mode
     :config (yas-global-mode 1))
 #+END_SRC
+** Writegood
+#+name: packages
+#+BEGIN_SRC emacs-lisp
+  (use-package writegood-mode
+   :ensure t
+   :commands writegood-mode
+   :diminish writegood-mode
+   :config (mapcar (lambda (mode-hook)
+                     (add-hook mode-hook #'writegood-mode))
+                   '(text-mode-hook
+                     org-mode-hook)))
+
+#+END_SRC
 * LaTeX
 ** AUCTeX
 #+name: packages
