@@ -78,6 +78,15 @@ Helm projectile integration
     :ensure t
     :defer t)
 #+END_SRC
+*** helm-flyspell
+#+name: packages
+#+begin_src emacs-lisp
+  (use-package helm-flyspell
+    :ensure t
+    :commands helm-flyspell-correct
+    :init (eval-after-load 'flyspell
+            '(define-key flyspell-mode-map (kbd "C-;") 'helm-flyspell-correct)))
+#+end_src
 ** Ace Jump
 #+name: packages
 #+BEGIN_SRC emacs-lisp
@@ -123,6 +132,18 @@ Helm projectile integration
     :ensure t
     :init
     (add-hook 'after-init-hook #'global-flycheck-mode))
+#+END_SRC
+** Flyspell
+#+name: packages
+#+BEGIN_SRC emacs-lisp
+  (use-package flyspell
+    :ensure t
+    :commands flyspell-mode
+    :diminish flyspell-mode
+    :config (mapcar (lambda (mode-hook)
+                      (add-to-list mode-hook #'flyspell-mode))
+                    '(text-mode-hook
+                      org-mode-hook)))
 #+END_SRC
 ** Git-Gutter
 #+name: packages
