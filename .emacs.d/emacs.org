@@ -140,10 +140,10 @@ Helm projectile integration
     :ensure t
     :commands flyspell-mode
     :diminish flyspell-mode
-    :config (mapcar (lambda (mode-hook)
-                      (add-to-list mode-hook #'flyspell-mode))
-                    '(text-mode-hook
-                      org-mode-hook)))
+    :init (mapcar (lambda (mode-hook)
+                    (add-to-list mode-hook #'flyspell-mode))
+                  '(text-mode-hook
+                    org-mode-hook)))
 #+END_SRC
 ** Git-Gutter
 #+name: packages
@@ -421,10 +421,10 @@ breaks.
    :ensure t
    :commands writegood-mode
    :diminish writegood-mode
-   :config (mapcar (lambda (mode-hook)
-                     (add-hook mode-hook #'writegood-mode))
-                   '(text-mode-hook
-                     org-mode-hook)))
+   :init (mapcar (lambda (mode-hook)
+                   (add-hook mode-hook #'writegood-mode))
+                 '(text-mode-hook
+                   org-mode-hook)))
 
 #+END_SRC
 * LaTeX
