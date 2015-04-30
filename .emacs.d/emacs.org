@@ -528,14 +528,16 @@ Communicates with the clojure REPL.
     :mode "\\.hy$")
 #+END_SRC
 ** Erlang
+A distributed, fault-tolerant functional language.
 #+name: programming
 #+BEGIN_SRC emacs-lisp
-  (use-package erlang
-    :ensure t
-    :config (add-hook 'erlang-mode-hook
-                      (lambda ()
-                        (setq inferior-erlang-machine-options '("-sname" "emacs"
-                                                                "-hidden")))))
+    (use-package erlang
+      :ensure t
+      :mode ("\.[eh]rl$" . erlang-mode)
+      :config (add-hook 'erlang-mode-hook
+                        (lambda ()
+                          (setq inferior-erlang-machine-options '("-sname" "emacs"
+                                                                  "-hidden")))))
 #+END_SRC
 ** PHP
 #+name: programming
