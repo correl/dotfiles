@@ -285,6 +285,13 @@ languages. Setting ~Confirm Evaluation~ to ~No~ disables the
 
   (setq org-confirm-babel-evaluate 'my/org-confirm-babel-evaluate)
 #+END_SRC
+** Markdown
+#+name: packages
+#+begin_src emacs-lisp
+  (use-package markdown-mode
+    :ensure t
+    :mode "\\.md$")
+#+end_src
 ** Htmlize
 #+name: packages
 #+BEGIN_SRC emacs-lisp
