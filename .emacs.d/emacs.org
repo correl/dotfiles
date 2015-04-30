@@ -7,30 +7,13 @@
 #+BEGIN_SRC emacs-lisp
   (setq inhibit-startup-screen +1)
 #+END_SRC
-* Global key bindings
-#+name: global-keys
-#+BEGIN_SRC emacs-lisp
-  (global-set-key (kbd "C-,") 'kill-whole-line)
-#+END_SRC
-* Look and Feel
+* UI
+** Theme
 #+name: look-and-feel
 #+BEGIN_SRC emacs-lisp
   (use-package solarized-theme
     :ensure t
     :init (load-theme 'solarized-dark 't))
-#+END_SRC
-* Package Configuration
-** Autocomplete
-#+name: autocomplete
-#+BEGIN_SRC emacs-lisp
-    (use-package auto-complete
-      :ensure t
-      :config
-      (progn (global-auto-complete-mode t)
-             (require 'auto-complete-config)
-             (ac-config-default)
-             (ac-set-trigger-key "TAB")
-             (ac-set-trigger-key "<tab>")))
 #+END_SRC
 ** Helm
 #+name: packages
@@ -125,7 +108,185 @@ Helm projectile integration
     :ensure t
     :bind ("C-=" . er/expand-region))
 #+END_SRC
-** Flycheck
+** Powerline
+#+name: packages
+#+BEGIN_SRC emacs-lisp
+  (use-package powerline
+    :ensure t
+    :init (powerline-default-theme))
+#+END_SRC
+** Projectile
+#+name: packages
+#+BEGIN_SRC emacs-lisp
+  (use-package projectile
+    :ensure t
+    :config (progn (setq projectile-mode-line
+                         '(:eval (format " [%s]" (projectile-project-name))))
+                   (require 'helm-projectile)
+                   (helm-projectile-on)
+                   (projectile-global-mode)))
+#+END_SRC
+* Coding
+** Languages
+*** Lisps
+#+name: lisps
+| Mode       | Description               |
+|------------+---------------------------|
+| lisp       | Common Lisp               |
+| emacs-lisp | Emacs Lisp                |
+| scheme     | Scheme                    |
+| lfe        | Lisp-Flavored Erlang      |
+| clojure    | Clojure                   |
+| hy         | Hy (Lisp-flavored Python) |
+
+#+name: programming
+#+BEGIN_SRC emacs-lisp :noweb yes
+  ;; SLIME
+  (if (file-exists-p "~/quicklisp/slime-helper.el")
+      (load (expand-file-name "~/quicklisp/slime-helper.el")))
+
+  (setq inferior-lisp-program "clisp")
+
+  (use-package paredit
+    :ensure t)
+
+  (use-package rainbow-identifiers
+    :ensure t)
+
+  (use-package rainbow-delimiters
+    :ensure t)
+
+  (let ((lisp-mode-hooks
+         (mapcar (lambda (lisp)
+                   (intern (concat lisp "-mode-hook")))
+                 (mapcar 'car (cddr '<<lisps()>>)))))
+    (mapc (lambda (hook)
+            (message (format "Installing LISP mode hook for %S" hook))
+            (add-hook hook (lambda ()
+                             (show-paren-mode t)
+                             (electric-indent-mode t)
+                             (paredit-mode t)
+                             (rainbow-delimiters-mode t)
+                             (rainbow-identifiers-mode t))))
+          (cons 'eval-expression-minibuffer-setup-hook
+                lisp-mode-hooks)))
+#+END_SRC
+**** Lisp-Flavored Erlang
+#+name: programming
+#+BEGIN_SRC emacs-lisp
+  (use-package lfe-mode
+    :ensure t
+    :mode "\\.lfe$")
+#+END_SRC
+**** Clojure
+#+name: programming
+#+BEGIN_SRC emacs-lisp
+  (use-package clojure-mode
+    :ensure t
+    :mode (("\\.clj[sx]?$" . clojure-mode)
+           ("\\.edn$" . clojure-mode)))
+#+END_SRC
+***** Cider
+Communicates with the clojure REPL.
+#+name: programming
+#+BEGIN_SRC emacs-lisp
+  (use-package cider
+    :ensure t
+    :commands (cider-jack-in cider))
+#+END_SRC
+**** Hy
+#+name: programming
+#+BEGIN_SRC emacs-lisp
+  (use-package hy-mode
+    :ensure t
+    :mode "\\.hy$")
+#+END_SRC
+*** Erlang
+A distributed, fault-tolerant functional language.
+#+name: programming
+#+BEGIN_SRC emacs-lisp
+    (use-package erlang
+      :ensure t
+      :mode ("\.[eh]rl$" . erlang-mode)
+      :config (add-hook 'erlang-mode-hook
+                        (lambda ()
+                          (setq inferior-erlang-machine-options '("-sname" "emacs"
+                                                                  "-hidden")))))
+#+END_SRC
+*** Haskell
+A strongly typed, pure functional language.
+#+name: programming
+#+BEGIN_SRC emacs-lisp
+  (use-package haskell-mode
+    :ensure t
+    :mode "\.hs$")
+#+END_SRC
+*** PHP
+#+name: programming
+#+BEGIN_SRC emacs-lisp
+  (use-package web-mode
+    :ensure t
+    :mode "\\.html?$")
+
+  (use-package php-mode
+    :ensure t
+    :mode (("\\.php$" . php-mode)
+           ("\\.inc$" . php-mode))
+    :config (add-hook 'php-mode-hook (lambda ()
+                                       "Customize PHP indentation"
+                                       (c-set-offset 'arglist-cont-nonempty 'c-lineup-arglist)
+                                       (c-set-offset 'substatement-open 0)
+                                       (c-set-offset 'case-label '+))))
+#+END_SRC
+*** Cython
+#+name: programming
+#+BEGIN_SRC emacs-lisp
+  (use-package cython-mode
+    :ensure t
+    :mode "\.pyx")
+#+END_SRC
+*** Ruby
+#+name: programming
+#+BEGIN_SRC emacs-lisp
+  (use-package rvm
+    :ensure t
+    :config (rvm-use-default))
+#+END_SRC
+*** Yaml
+#+name: programming
+#+BEGIN_SRC emacs-lisp
+  (use-package yaml-mode
+    :ensure t
+    :mode "\.yml$")
+#+END_SRC
+*** Docker
+#+name: programming
+#+BEGIN_SRC emacs-lisp
+  (use-package dockerfile-mode
+    :ensure t
+    :mode "^Dockerfile$")
+#+END_SRC
+*** Graphviz
+#+name: programming
+#+BEGIN_SRC emacs-lisp
+  (use-package graphviz-dot-mode
+    :ensure t
+    :mode "\.dot$")
+#+END_SRC
+** Tools
+*** Autocomplete
+#+name: autocomplete
+#+BEGIN_SRC emacs-lisp
+    (use-package auto-complete
+      :ensure t
+      :config
+      (progn (global-auto-complete-mode t)
+             (require 'auto-complete-config)
+             (ac-config-default)
+             (ac-set-trigger-key "TAB")
+             (ac-set-trigger-key "<tab>")))
+#+END_SRC
+*** Flycheck
 #+name: packages
 #+BEGIN_SRC emacs-lisp
   (use-package flycheck
@@ -133,63 +294,49 @@ Helm projectile integration
     :init
     (add-hook 'after-init-hook #'global-flycheck-mode))
 #+END_SRC
-** Flyspell
+*** Web Mode
 #+name: packages
 #+BEGIN_SRC emacs-lisp
-  (use-package flyspell
+  (use-package web-mode
     :ensure t
-    :commands flyspell-mode
-    :diminish flyspell-mode
-    :init (mapcar (lambda (mode-hook)
-                    (add-to-list mode-hook #'flyspell-mode))
-                  '(text-mode-hook
-                    org-mode-hook)))
+    :mode ("\\.html$" . web-mode)
+    :config (add-hook 'web-mode-hook (lambda ()
+                                       (setq web-mode-markup-indent-offset 4)
+                                       (setq web-mode-css-indent-offset 4)
+                                       (setq web-mode-code-indent-offset 4))))
 #+END_SRC
-** Git-Gutter
+*** Yasnippet
 #+name: packages
 #+BEGIN_SRC emacs-lisp
-  (use-package git-gutter
+  (use-package yasnippet
     :ensure t
-    :diminish git-gutter-mode
-    :config
-    (progn
-      (global-git-gutter-mode t)
-      (defadvice ediff-make-temp-file (before make-temp-file-suspend-ll
-                                              activate compile preactivate)
-        "Disable git-gutter when running ediff"
-        (global-git-gutter-mode 0))
-      
-      (add-hook 'ediff-cleanup-hook
-                '(lambda ()
-                   (global-git-gutter-mode t)))))
+    :diminish yas-minor-mode
+    :config (yas-global-mode 1))
 #+END_SRC
-** Magit
-#+name: packages
-#+BEGIN_SRC emacs-lisp
-  (use-package magit
-    :ensure t
-    :diminish magit-auto-revert-mode
-    :commands (magit-init
-               magit-status
-               magit-diff
-               magit-commit)
-    :config
-    (progn
-      (defadvice magit-status (around magit-fullscreen activate)
-        (window-configuration-to-register :magit-fullscreen)
-        ad-do-it
-        (delete-other-windows))
-      
-      (defadvice magit-quit-window (around magit-restore-screen activate)
-        ad-do-it
-        (jump-to-register :magit-fullscreen))))
+*** Ag (The Silver Searcher)
+This is a code searching tool that replaces =ack=, and is an order of
+magnitude faster.
 
-  (use-package magit-blame
-    :ensure magit
-    :commands (magit-blame-mode))
+#+name: packages
+#+BEGIN_SRC emacs-lisp
+  (use-package ag
+    :ensure t
+    :defer t)
 #+END_SRC
-** Org
-*** Modules
+** Libraries
+*** Dash
+A modern list api for Emacs. No 'cl required.
+
+#+name: programming
+#+BEGIN_SRC emacs-lisp
+  (use-package dash
+    :ensure t
+    :config (dash-enable-font-lock))
+#+END_SRC
+* Writing
+** Formats
+*** Org
+**** Modules
 #+name: org-module-table
 | org-habit |
 
@@ -201,18 +348,18 @@ Helm projectile integration
             modules))
   (org-load-modules-maybe t)
 #+END_SRC
-*** Tasks
-**** Keep logs in their own drawer
+**** Tasks
+***** Keep logs in their own drawer
 #+name: packages
 #+BEGIN_SRC emacs-lisp
   (setq org-log-into-drawer t)
 #+END_SRC
-**** Log completion
+***** Log completion
 #+name: packages
 #+BEGIN_SRC emacs-lisp
   (setq org-log-done 'time)
 #+END_SRC
-**** Habits
+***** Habits
 Shift the consistency graph over a bit to make room for task
 names.
 #+name: packages
@@ -220,17 +367,17 @@ names.
   (setq org-habit-graph-column 70)
   (setq org-habit-show-habits-only-for-today nil)
 #+END_SRC
-*** Refiling
+**** Refiling
 #+BEGIN_SRC emacs-lisp
   (setq org-refile-targets '((org-agenda-files . (:maxlevel . 6))))
 #+END_SRC
-*** Babel
-**** Syntax highlighting
+**** Babel
+***** Syntax highlighting
 #+name: packages
 #+BEGIN_SRC emacs-lisp
   (setq-default org-src-fontify-natively t)
 #+END_SRC
-**** Language evaluation
+***** Language evaluation
 
 Org-babel evaluation will be turned on for the following
 languages. Setting ~Confirm Evaluation~ to ~No~ disables the
@@ -285,60 +432,69 @@ languages. Setting ~Confirm Evaluation~ to ~No~ disables the
 
   (setq org-confirm-babel-evaluate 'my/org-confirm-babel-evaluate)
 #+END_SRC
-** Markdown
+*** LaTeX
+**** AUCTeX
+#+name: packages
+#+BEGIN_SRC emacs-lisp
+  (use-package tex-site
+    :ensure auctex)
+#+END_SRC
+**** LaTeX-Extra
+#+name: packages
+#+BEGIN_SRC emacs-lisp
+  (use-package latex-extra
+    :ensure t
+    :diminish latex-extra-mode
+    :commands latex-extra-mode
+    :init (add-hook 'LaTeX-mode-hook #'latex-extra-mode))
+#+END_SRC
+*** Markdown
 #+name: packages
 #+begin_src emacs-lisp
   (use-package markdown-mode
     :ensure t
     :mode "\\.md$")
 #+end_src
-** Htmlize
+** Tools
+*** Flyspell
 #+name: packages
 #+BEGIN_SRC emacs-lisp
-  (use-package htmlize
+  (use-package flyspell
     :ensure t
-    :defer t
-    :commands (htmlize-region htmlize-buffer htmlize-file))
+    :commands flyspell-mode
+    :diminish flyspell-mode
+    :init (mapcar (lambda (mode-hook)
+                    (add-to-list mode-hook #'flyspell-mode))
+                  '(text-mode-hook
+                    org-mode-hook)))
 #+END_SRC
-** Powerline
-#+name: packages
-#+BEGIN_SRC emacs-lisp
-  (use-package powerline
-    :ensure t
-    :init (powerline-default-theme))
-#+END_SRC
-** Ag (The Silver Searcher)
-This is a code searching tool that replaces =ack=, and is an order of
-magnitude faster.
+*** Unfill
+Re-flowing paragraphs with =fill-paragraph= is nice, but there are
+occasions when it's useful to do the inverse, and get rid of the line
+breaks.
 
 #+name: packages
 #+BEGIN_SRC emacs-lisp
-  (use-package ag
+  (use-package unfill
     :ensure t
-    :defer t)
+    :commands (unfill-paragraph
+               unfill-region)
+    :bind ("M-Q" . unfill-paragraph))
 #+END_SRC
-** Projectile
+*** Writegood
 #+name: packages
 #+BEGIN_SRC emacs-lisp
-  (use-package projectile
-    :ensure t
-    :config (progn (setq projectile-mode-line
-                         '(:eval (format " [%s]" (projectile-project-name))))
-                   (require 'helm-projectile)
-                   (helm-projectile-on)
-                   (projectile-global-mode)))
+  (use-package writegood-mode
+   :ensure t
+   :commands writegood-mode
+   :diminish writegood-mode
+   :init (mapcar (lambda (mode-hook)
+                   (add-hook mode-hook #'writegood-mode))
+                 '(text-mode-hook
+                   org-mode-hook)))
+
 #+END_SRC
-** Web Mode
-#+name: packages
-#+BEGIN_SRC emacs-lisp
-  (use-package web-mode
-    :ensure t
-    :mode ("\\.html$" . web-mode)
-    :config (add-hook 'web-mode-hook (lambda ()
-                                       (setq web-mode-markup-indent-offset 4)
-                                       (setq web-mode-css-indent-offset 4)
-                                       (setq web-mode-code-indent-offset 4))))
-#+END_SRC
+* Mail
 ** BBDB
 #+name: packages
 #+BEGIN_SRC emacs-lisp
@@ -400,211 +556,58 @@ Taken from http://groups.google.com/group/gnu.emacs.gnus/browse_thread/thread/a6
   (add-to-list 'mm-attachment-override-types "image/.*")
   (setq mm-inline-large-images t)
 #+END_SRC
-** Unfill
-Re-flowing paragraphs with =fill-paragraph= is nice, but there are
-occasions when it's useful to do the inverse, and get rid of the line
-breaks.
-
+* Publishing
+** Htmlize
 #+name: packages
 #+BEGIN_SRC emacs-lisp
-  (use-package unfill
+  (use-package htmlize
     :ensure t
-    :commands (unfill-paragraph
-               unfill-region)
-    :bind ("M-Q" . unfill-paragraph))
+    :defer t
+    :commands (htmlize-region htmlize-buffer htmlize-file))
 #+END_SRC
-** Yasnippet
+* Source Control
+** Git-Gutter
 #+name: packages
 #+BEGIN_SRC emacs-lisp
-  (use-package yasnippet
+  (use-package git-gutter
     :ensure t
-    :diminish yas-minor-mode
-    :config (yas-global-mode 1))
+    :diminish git-gutter-mode
+    :config
+    (progn
+      (global-git-gutter-mode t)
+      (defadvice ediff-make-temp-file (before make-temp-file-suspend-ll
+                                              activate compile preactivate)
+        "Disable git-gutter when running ediff"
+        (global-git-gutter-mode 0))
+      
+      (add-hook 'ediff-cleanup-hook
+                '(lambda ()
+                   (global-git-gutter-mode t)))))
 #+END_SRC
-** Writegood
+** Magit
 #+name: packages
 #+BEGIN_SRC emacs-lisp
-  (use-package writegood-mode
-   :ensure t
-   :commands writegood-mode
-   :diminish writegood-mode
-   :init (mapcar (lambda (mode-hook)
-                   (add-hook mode-hook #'writegood-mode))
-                 '(text-mode-hook
-                   org-mode-hook)))
+  (use-package magit
+    :ensure t
+    :diminish magit-auto-revert-mode
+    :commands (magit-init
+               magit-status
+               magit-diff
+               magit-commit)
+    :config
+    (progn
+      (defadvice magit-status (around magit-fullscreen activate)
+        (window-configuration-to-register :magit-fullscreen)
+        ad-do-it
+        (delete-other-windows))
+      
+      (defadvice magit-quit-window (around magit-restore-screen activate)
+        ad-do-it
+        (jump-to-register :magit-fullscreen))))
 
-#+END_SRC
-* LaTeX
-** AUCTeX
-#+name: packages
-#+BEGIN_SRC emacs-lisp
-  (use-package tex-site
-    :ensure auctex)
-#+END_SRC
-** LaTeX-Extra
-#+name: packages
-#+BEGIN_SRC emacs-lisp
-  (use-package latex-extra
-    :ensure t
-    :diminish latex-extra-mode
-    :commands latex-extra-mode
-    :init (add-hook 'LaTeX-mode-hook #'latex-extra-mode))
-#+END_SRC
-* Programming
-** Libraries
-*** Dash
-A modern list api for Emacs. No 'cl required.
-
-#+name: programming
-#+BEGIN_SRC emacs-lisp
-  (use-package dash
-    :ensure t
-    :config (dash-enable-font-lock))
-#+END_SRC
-** Lisps
-#+name: lisps
-| Mode       | Description               |
-|------------+---------------------------|
-| lisp       | Common Lisp               |
-| emacs-lisp | Emacs Lisp                |
-| scheme     | Scheme                    |
-| lfe        | Lisp-Flavored Erlang      |
-| clojure    | Clojure                   |
-| hy         | Hy (Lisp-flavored Python) |
-
-#+name: programming
-#+BEGIN_SRC emacs-lisp :noweb yes
-  ;; SLIME
-  (if (file-exists-p "~/quicklisp/slime-helper.el")
-      (load (expand-file-name "~/quicklisp/slime-helper.el")))
-
-  (setq inferior-lisp-program "clisp")
-
-  (use-package paredit
-    :ensure t)
-
-  (use-package rainbow-identifiers
-    :ensure t)
-
-  (use-package rainbow-delimiters
-    :ensure t)
-
-  (let ((lisp-mode-hooks
-         (mapcar (lambda (lisp)
-                   (intern (concat lisp "-mode-hook")))
-                 (mapcar 'car (cddr '<<lisps()>>)))))
-    (mapc (lambda (hook)
-            (message (format "Installing LISP mode hook for %S" hook))
-            (add-hook hook (lambda ()
-                             (show-paren-mode t)
-                             (electric-indent-mode t)
-                             (paredit-mode t)
-                             (rainbow-delimiters-mode t)
-                             (rainbow-identifiers-mode t))))
-          (cons 'eval-expression-minibuffer-setup-hook
-                lisp-mode-hooks)))
-#+END_SRC
-*** Lisp-Flavored Erlang
-#+name: programming
-#+BEGIN_SRC emacs-lisp
-  (use-package lfe-mode
-    :ensure t
-    :mode "\\.lfe$")
-#+END_SRC
-*** Clojure
-#+name: programming
-#+BEGIN_SRC emacs-lisp
-  (use-package clojure-mode
-    :ensure t
-    :mode (("\\.clj[sx]?$" . clojure-mode)
-           ("\\.edn$" . clojure-mode)))
-#+END_SRC
-**** Cider
-Communicates with the clojure REPL.
-#+name: programming
-#+BEGIN_SRC emacs-lisp
-  (use-package cider
-    :ensure t
-    :commands (cider-jack-in cider))
-#+END_SRC
-*** Hy
-#+name: programming
-#+BEGIN_SRC emacs-lisp
-  (use-package hy-mode
-    :ensure t
-    :mode "\\.hy$")
-#+END_SRC
-** Erlang
-A distributed, fault-tolerant functional language.
-#+name: programming
-#+BEGIN_SRC emacs-lisp
-    (use-package erlang
-      :ensure t
-      :mode ("\.[eh]rl$" . erlang-mode)
-      :config (add-hook 'erlang-mode-hook
-                        (lambda ()
-                          (setq inferior-erlang-machine-options '("-sname" "emacs"
-                                                                  "-hidden")))))
-#+END_SRC
-** Haskell
-A strongly typed, pure functional language.
-#+name: programming
-#+BEGIN_SRC emacs-lisp
-  (use-package haskell-mode
-    :ensure t
-    :mode "\.hs$")
-#+END_SRC
-** PHP
-#+name: programming
-#+BEGIN_SRC emacs-lisp
-  (use-package web-mode
-    :ensure t
-    :mode "\\.html?$")
-
-  (use-package php-mode
-    :ensure t
-    :mode (("\\.php$" . php-mode)
-           ("\\.inc$" . php-mode))
-    :config (add-hook 'php-mode-hook (lambda ()
-                                       "Customize PHP indentation"
-                                       (c-set-offset 'arglist-cont-nonempty 'c-lineup-arglist)
-                                       (c-set-offset 'substatement-open 0)
-                                       (c-set-offset 'case-label '+))))
-#+END_SRC
-** Ruby
-#+name: programming
-#+BEGIN_SRC emacs-lisp
-  (use-package rvm
-    :ensure t
-    :config (rvm-use-default))
-#+END_SRC
-** Yaml
-#+name: programming
-#+BEGIN_SRC emacs-lisp
-  (use-package yaml-mode
-    :ensure t
-    :mode "\.yml$")
-#+END_SRC
-** Docker
-#+name: programming
-#+BEGIN_SRC emacs-lisp
-  (use-package dockerfile-mode
-    :ensure t
-    :mode "^Dockerfile$")
-#+END_SRC
-** Graphviz
-#+name: programming
-#+BEGIN_SRC emacs-lisp
-  (use-package graphviz-dot-mode
-    :ensure t
-    :mode "\.dot$")
-#+END_SRC
-** Cython
-#+name: programming
-#+BEGIN_SRC emacs-lisp
-  (use-package cython-mode
-    :ensure t
-    :mode "\.pyx")
+  (use-package magit-blame
+    :ensure magit
+    :commands (magit-blame-mode))
 #+END_SRC
 * Other functionality
 ** Disable tab indenting by default
