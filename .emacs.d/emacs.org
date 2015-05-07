@@ -238,12 +238,19 @@ A strongly typed, pure functional language.
                                        (c-set-offset 'substatement-open 0)
                                        (c-set-offset 'case-label '+))))
 #+END_SRC
-*** Cython
+*** Python
+#+name: programming
+#+BEGIN_SRC emacs-lisp
+  (use-package python-mode
+    :ensure t
+    :mode "\.py$")
+#+END_SRC
+**** Cython
 #+name: programming
 #+BEGIN_SRC emacs-lisp
   (use-package cython-mode
     :ensure t
-    :mode "\.pyx")
+    :mode "\.pyx$")
 #+END_SRC
 *** Ruby
 #+name: programming
