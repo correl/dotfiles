@@ -280,6 +280,12 @@ A strongly typed, pure functional language.
     :ensure t
     :mode "\.dot$")
 #+END_SRC
+*** Gnuplot
+#+name: programming
+#+BEGIN_SRC emacs-lisp
+  (use-package gnuplot
+    :ensure t)
+#+END_SRC
 ** Tools
 *** Autocomplete
 #+name: autocomplete
