@@ -607,6 +607,9 @@ Taken from http://groups.google.com/group/gnu.emacs.gnus/browse_thread/thread/a6
                magit-status
                magit-diff
                magit-commit)
+    :bind (("C-c m s" . magit-status)
+           ("C-c m d" . magit-diff)
+           ("C-c m c" . magit-commit))
     :config
     (progn
       (defadvice magit-status (around magit-fullscreen activate)
@@ -620,7 +623,8 @@ Taken from http://groups.google.com/group/gnu.emacs.gnus/browse_thread/thread/a6
 
   (use-package magit-blame
     :ensure magit
-    :commands (magit-blame-mode))
+    :commands magit-blame-mode
+    :bind ("C-c m b" . magit-blame-mode))
 #+END_SRC
 * Other functionality
 ** Disable tab indenting by default
