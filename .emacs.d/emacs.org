@@ -409,6 +409,7 @@ languages. Setting ~Confirm Evaluation~ to ~No~ disables the
 | python       |       | Yes                 | A dynamic, all-purpose language |
 | ruby         |       | Yes                 | A dynamic, all-purpose language |
 | sh           |       | Yes                 | Shell scripts                   |
+| http         |       | No                  | HTTP requests                   |
 
 #+name: packages
 #+BEGIN_SRC emacs-lisp :noweb yes
@@ -445,6 +446,12 @@ languages. Setting ~Confirm Evaluation~ to ~No~ disables the
 
   (setq org-confirm-babel-evaluate 'my/org-confirm-babel-evaluate)
 #+END_SRC
+****** HTTP
+#+name: packages
+#+begin_src emacs-lisp
+  (use-package ob-http
+    :ensure t)
+#+end_src
 *** LaTeX
 **** AUCTeX
 #+name: packages
