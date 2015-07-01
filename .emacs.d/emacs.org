@@ -459,6 +459,17 @@ languages. Setting ~Confirm Evaluation~ to ~No~ disables the
   (use-package ob-http
     :ensure t)
 #+end_src
+***** Reload images on source execution
+#+name: packages
+#+begin_src emacs-lisp
+  (defun my/redisplay-org-images ()
+    (when org-inline-image-overlays
+      (org-redisplay-inline-images)))
+
+  (add-hook 'org-babel-after-execute-hook
+            'my/redisplay-org-images)
+#+end_src
+
 *** LaTeX
 **** AUCTeX
 #+name: packages
