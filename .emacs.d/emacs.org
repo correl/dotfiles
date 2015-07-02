@@ -627,7 +627,6 @@ Taken from http://groups.google.com/group/gnu.emacs.gnus/browse_thread/thread/a6
 #+BEGIN_SRC emacs-lisp
   (use-package magit
     :ensure t
-    :diminish magit-auto-revert-mode
     :commands (magit-init
                magit-status
                magit-diff
