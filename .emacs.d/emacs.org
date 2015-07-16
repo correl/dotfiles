@@ -296,17 +296,31 @@ A strongly typed, pure functional language.
 #+END_SRC
 ** Tools
 *** Autocomplete
+**** Company
+
+Install and configure Company for auto-completion.
+
 #+name: autocomplete
 #+BEGIN_SRC emacs-lisp
-    (use-package auto-complete
-      :ensure t
-      :config
-      (progn (global-auto-complete-mode t)
-             (require 'auto-complete-config)
-             (ac-config-default)
-             (ac-set-trigger-key "TAB")
-             (ac-set-trigger-key "<tab>")))
+  (use-package company
+    :ensure t
+    :config (progn
+              (add-hook 'prog-mode-hook 'company-mode)
+
+              (bind-key "C-n" #'company-select-next company-active-map)
+              (bind-key "C-p" #'company-select-previous company-active-map)))
 #+END_SRC
+**** Auto-Complete
+
+Not using this for auto-completion anymore, but several packages
+require it.
+
+#+name: autocomplete
+#+begin_src emacs-lisp
+  (use-package auto-complete
+    :ensure t)
+#+end_src
+
 *** Flycheck
 #+name: packages
 #+BEGIN_SRC emacs-lisp
