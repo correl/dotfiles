@@ -131,6 +131,7 @@ Helm projectile integration
 #+BEGIN_SRC emacs-lisp
   (use-package undo-tree
     :ensure t
+    :diminish undo-tree-mode
     :config (global-undo-tree-mode 1))
 #+END_SRC
 * Coding
