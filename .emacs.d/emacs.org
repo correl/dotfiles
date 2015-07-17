@@ -432,6 +432,7 @@ languages. Setting ~Confirm Evaluation~ to ~No~ disables the
 | ruby         |       | Yes                 | A dynamic, all-purpose language |
 | sh           |       | Yes                 | Shell scripts                   |
 | http         |       | No                  | HTTP requests                   |
+| sql          |       | No                  | SQL Queries                     |
 
 #+name: packages
 #+BEGIN_SRC emacs-lisp :noweb yes
