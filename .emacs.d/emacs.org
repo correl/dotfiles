@@ -260,6 +260,30 @@ A strongly typed, pure functional language.
     :ensure t
     :mode "\.pyx$")
 #+END_SRC
+**** Company-Jedi
+Configure jedi and company-mode to provide auto-completion for python.
+#+name: programming
+#+begin_src emacs-lisp
+  (use-package jedi
+    :ensure t
+    :commands jedi:setup
+    :config (progn
+              (setq jedi:use-shortcuts t)
+              (jedi:install-server)))
+
+  (use-package pungi
+    :ensure t
+    :commands pungi:setup-jedi
+    :init (add-hook #'python-mode-hook #'pungi:setup-jedi))
+
+  (use-package company-jedi
+    :ensure t
+    :config (progn
+              (defun my/enable-company-jedi ()
+                (add-to-list 'company-backends 'company-jedi))
+              (add-hook #'python-mode-hook #'my/enable-company-jedi)))
+#+end_src
+
 *** Ruby
 #+name: programming
 #+BEGIN_SRC emacs-lisp
