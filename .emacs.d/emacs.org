@@ -198,7 +198,8 @@ Communicates with the clojure REPL.
 #+BEGIN_SRC emacs-lisp
   (use-package cider
     :ensure t
-    :commands (cider-jack-in cider))
+    :commands (cider-jack-in cider)
+    :config (setq org-babel-clojure-backend 'cider))
 #+END_SRC
 **** Hy
 #+name: programming
