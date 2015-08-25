@@ -408,6 +408,14 @@ A modern list api for Emacs. No 'cl required.
   (org-load-modules-maybe t)
 #+END_SRC
 **** Tasks
+***** Enforce dependencies
+Require child tasks and checkboxes to be done before a parent task can
+be marked done.
+#+BEGIN_SRC emacs-lisp
+  (setq
+   org-enforce-todo-dependencies t
+   org-enforce-todo-checkbox-dependencies t)
+#+END_SRC
 ***** Keep logs in their own drawer
 #+name: packages
 #+BEGIN_SRC emacs-lisp
