@@ -91,15 +91,13 @@ Helm projectile integration
     :ensure t
     :bind ("C-x o" . ace-window))    
 #+END_SRC
-** Guide Key
+** Which Key
 #+name: packages
 #+BEGIN_SRC emacs-lisp
-  (use-package guide-key
+  (use-package which-key
     :ensure t
-    :diminish guide-key-mode
-    :config (progn
-              (setq guide-key/guide-key-sequence t)
-              (guide-key-mode 1)))
+    :diminish which-key-mode
+    :config (which-key-mode t))
 #+END_SRC
 ** Expand Region
 #+name: packages
