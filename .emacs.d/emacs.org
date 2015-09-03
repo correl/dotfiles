@@ -695,7 +695,7 @@ Taken from http://groups.google.com/group/gnu.emacs.gnus/browse_thread/thread/a6
   (use-package magit-blame
     :ensure magit
     :commands magit-blame-mode
-    :bind ("C-c m b" . magit-blame-mode))
+    :bind ("C-c m b" . magit-blame))
 #+END_SRC
 * Other functionality
 ** Disable tab indenting by default
