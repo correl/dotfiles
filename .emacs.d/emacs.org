@@ -273,14 +273,19 @@ Configure jedi and company-mode to provide auto-completion for python.
   (use-package pungi
     :ensure t
     :commands pungi:setup-jedi
-    :init (add-hook #'python-mode-hook #'pungi:setup-jedi))
+    :init (add-hook #'python-mode-hook
+                    (lambda ()
+                      (when buffer-file-name
+                        #'pungi:setup-jedi))))
 
   (use-package company-jedi
     :ensure t
     :config (progn
               (defun my/enable-company-jedi ()
-                (add-to-list 'company-backends 'company-jedi))
-              (add-hook #'python-mode-hook #'my/enable-company-jedi)))
+                (when buffer-file-name
+                  (add-to-list 'company-backends 'company-jedi)))
+              (add-hook #'python-mode-hook
+                        #'my/enable-company-jedi)))
 #+end_src
 
 *** Ruby
