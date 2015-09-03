@@ -657,6 +657,8 @@ Taken from http://groups.google.com/group/gnu.emacs.gnus/browse_thread/thread/a6
   (use-package git-gutter
     :ensure t
     :diminish git-gutter-mode
+    :bind (("C-x g n" . git-gutter:next-hunk)
+           ("C-x g p" . git-gutter:previous-hunk))
     :config
     (progn
       (global-git-gutter-mode t)
