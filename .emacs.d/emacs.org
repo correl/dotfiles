@@ -443,6 +443,12 @@ names.
 #+BEGIN_SRC emacs-lisp
   (setq-default org-src-fontify-natively t)
 #+END_SRC
+***** HTTP
+#+name: packages
+#+begin_src emacs-lisp
+  (use-package ob-http
+    :ensure t)
+#+end_src
 ***** Language evaluation
 
 Org-babel evaluation will be turned on for the following
@@ -500,12 +506,6 @@ languages. Setting ~Confirm Evaluation~ to ~No~ disables the
 
   (setq org-confirm-babel-evaluate 'my/org-confirm-babel-evaluate)
 #+END_SRC
-****** HTTP
-#+name: packages
-#+begin_src emacs-lisp
-  (use-package ob-http
-    :ensure t)
-#+end_src
 ***** Reload images on source execution
 #+name: packages
 #+begin_src emacs-lisp
