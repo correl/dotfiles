@@ -227,6 +227,11 @@ A strongly typed, pure functional language.
   (use-package haskell-mode
     :ensure t
     :mode "\.hs$")
+
+  (use-package hi2
+    :ensure t
+    :commands turn-on-hi2
+    :init (add-hook 'haskell-mode-hook 'turn-on-hi2))
 #+END_SRC
 *** PHP
 #+name: programming
