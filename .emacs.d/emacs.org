@@ -687,7 +687,10 @@ Taken from http://groups.google.com/group/gnu.emacs.gnus/browse_thread/thread/a6
                magit-commit)
     :bind (("C-c m s" . magit-status)
            ("C-c m d" . magit-diff)
-           ("C-c m c" . magit-commit))
+           ("C-c m c" . magit-commit)
+           ("C-c m l l" . magit-log-head)
+           ("C-c m l b" . magit-log-buffer-file)
+           ("C-c m l r" . magit-reflog-head))
     :config
     (progn
       (defadvice magit-status (around magit-fullscreen activate)
