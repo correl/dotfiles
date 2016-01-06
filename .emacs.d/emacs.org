@@ -77,13 +77,6 @@ Helm projectile integration
       :ensure t
       :defer t)
 #+END_SRC
-*** ace-isearch
-#+name: packages
-#+BEGIN_SRC emacs-lisp
-  (use-package ace-isearch
-    :ensure t
-    :config (global-ace-isearch-mode t))
-#+END_SRC
 *** ace-window
 #+name: packages
 #+BEGIN_SRC emacs-lisp
