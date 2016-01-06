@@ -27,8 +27,7 @@
            ("C-x C-b" . helm-buffers-list)
            ("C-x C-f" . helm-find-files)
            ("C-x C-r" . helm-recentf)
-           ("C-x c o" . helm-occur)
-           ("C-x c s" . helm-swoop))
+           ("C-x c o" . helm-occur))
     :config (progn
               (require 'helm-config)
               (helm-mode 1)
@@ -70,6 +69,21 @@ Helm projectile integration
     :init (eval-after-load 'flyspell
             '(define-key flyspell-mode-map (kbd "C-;") 'helm-flyspell-correct)))
 #+end_src
+*** helm-swoop
+#+name: packages
+#+BEGIN_SRC emacs-lisp
+  (use-package helm-swoop
+    :ensure t
+    :bind (("C-x c s" . helm-swoop))
+    :commands (helm-swoop
+               helm-swoop-from-isearch)
+    :init
+    (define-key isearch-mode-map (kbd "M-i") 'helm-swoop-from-isearch)
+    :config
+    (setq helm-swoop-speed-or-color t)
+    (define-key helm-swoop-map (kbd "M-i") 'helm-multi-swoop-all-from-helm-swoop)
+    (define-key helm-swoop-map (kbd "M-m") 'helm-multi-swoop-current-mode-from-helm-swoop))
+#+END_SRC
 ** Ace Jump
 #+name: packages
 #+BEGIN_SRC emacs-lisp
