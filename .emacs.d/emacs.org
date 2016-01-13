@@ -655,6 +655,8 @@ Taken from http://groups.google.com/group/gnu.emacs.gnus/browse_thread/thread/a6
 *** Inline images
 #+name: gnus
 #+BEGIN_SRC emacs-lisp
+  (require 'mm-decode)
+
   (add-to-list 'mm-attachment-override-types "image/.*")
   (setq mm-inline-large-images t)
 #+END_SRC
