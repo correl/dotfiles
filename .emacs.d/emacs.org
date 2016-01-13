@@ -240,13 +240,28 @@ A strongly typed, pure functional language.
     :commands turn-on-hi2
     :init (add-hook 'haskell-mode-hook 'turn-on-hi2))
 #+END_SRC
-*** PHP
+*** Web
+**** HTML
 #+name: programming
 #+BEGIN_SRC emacs-lisp
   (use-package web-mode
     :ensure t
     :mode "\\.html?$")
-
+#+END_SRC
+**** SCSS
+#+name: programming
+#+BEGIN_SRC emacs-lisp
+  (use-package scss-mode
+    :ensure t
+    :mode "\\.scss$"
+    :config (add-hook 'scss-mode-hook
+                      (lambda ()
+                        "Customize SCSS indentation"
+                        (setq css-indent-offset 2))))
+#+END_SRC
+*** PHP
+#+name: programming
+#+BEGIN_SRC emacs-lisp
   (use-package php-mode
     :ensure t
     :mode (("\\.php$" . php-mode)
