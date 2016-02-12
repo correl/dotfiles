@@ -321,7 +321,8 @@ Configure jedi and company-mode to provide auto-completion for python.
 #+BEGIN_SRC emacs-lisp
   (use-package rvm
     :ensure t
-    :config (rvm-use-default))
+    :commands (rvm-use
+               rvm-use-default))
 #+END_SRC
 *** Yaml
 #+name: programming
