@@ -274,6 +274,13 @@ JavaScript.
                         "Customize SCSS indentation"
                         (setq css-indent-offset 2))))
 #+END_SRC
+*** JavaScript
+#+name: programming
+#+BEGIN_SRC emacs-lisp
+  (use-package js2-mode
+    :ensure t
+    :mode ".js$")
+#+END_SRC
 *** PHP
 #+name: programming
 #+BEGIN_SRC emacs-lisp
