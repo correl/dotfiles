@@ -16,7 +16,6 @@
   (require 'use-package))
 
 (use-package org
-	     :ensure org-plus-contrib)
+  :ensure org-plus-contrib)
 
-(require 'org)
 (org-babel-load-file "~/.emacs.d/emacs.org")
