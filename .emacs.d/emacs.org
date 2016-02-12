@@ -241,6 +241,20 @@ A strongly typed, pure functional language.
     :commands turn-on-hi2
     :init (add-hook 'haskell-mode-hook 'turn-on-hi2))
 #+END_SRC
+*** Elm
+A functional, reactive language for the web that compiles to
+JavaScript.
+
+#+name: programming
+#+BEGIN_SRC emacs-lisp
+  (use-package elm-mode
+    :ensure t
+    :mode "\.elm$"
+    :config
+    (add-hook 'elm-mode-hook #'elm-oracle-setup-completion)
+    (add-to-list 'company-backends 'company-elm))
+
+#+END_SRC
 *** Web
 **** HTML
 #+name: programming
