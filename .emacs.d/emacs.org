@@ -614,20 +614,6 @@ breaks.
 
 #+END_SRC
 * Mail
-** BBDB
-#+name: packages
-#+BEGIN_SRC emacs-lisp
-  (use-package bbdb
-    :ensure t
-    :init (progn (require 'bbdb)
-                 (bbdb-initialize 'gnus 'message)
-                 (bbdb-mua-auto-update-init 'gnus 'message)
-                 (setq bbdb-message-all-addresses t)
-                 (add-hook 'gnus-summary-mode-hook
-                           (lambda ()
-                             (define-key gnus-summary-mode-map
-                               (kbd ";") 'bbdb-mua-edit-field)))))
-#+END_SRC
 ** Gnus
 #+name: packages
 #+BEGIN_SRC emacs-lisp
