@@ -447,6 +447,12 @@ A modern list api for Emacs. No 'cl required.
     :config (dash-enable-font-lock))
 #+END_SRC
 * Writing
+** Style
+*** End sentences with a single space
+#+name: packages
+#+BEGIN_SRC emacs-lisp
+  (setq sentence-end-double-space nil)
+#+END_SRC
 ** Formats
 *** Org
 **** Modules
