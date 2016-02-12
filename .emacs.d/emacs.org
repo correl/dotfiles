@@ -418,6 +418,21 @@ require it.
                                        (setq web-mode-css-indent-offset 4)
                                        (setq web-mode-code-indent-offset 4))))
 #+END_SRC
+*** Skewer
+Live web development in Emacs.
+
+#+name: packages
+#+BEGIN_SRC emacs-lisp
+  (use-package skewer-mode
+    :ensure t
+    :commands (run-skewer
+               skewer-mode
+               skewer-css-mode
+               skewer-html-mode)
+    :init (progn (add-hook 'js2-mode-hook 'skewer-mode)
+                 (add-hook 'css-mode-hook 'skewer-css-mode)
+                 (add-hook 'html-mode-hook 'skewer-html-mode)))
+#+END_SRC
 *** Yasnippet
 #+name: packages
 #+BEGIN_SRC emacs-lisp
