@@ -125,6 +125,7 @@ Helm projectile integration
 #+BEGIN_SRC emacs-lisp
   (use-package projectile
     :ensure t
+    :defer 1
     :config (progn (setq projectile-mode-line
                          '(:eval (format " [%s]" (projectile-project-name))))
                    (require 'helm-projectile)
@@ -693,6 +694,7 @@ Taken from http://groups.google.com/group/gnu.emacs.gnus/browse_thread/thread/a6
     :diminish git-gutter-mode
     :bind (("C-x g n" . git-gutter:next-hunk)
            ("C-x g p" . git-gutter:previous-hunk))
+    :defer 1
     :config
     (progn
       (global-git-gutter-mode t)
