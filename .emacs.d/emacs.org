@@ -874,6 +874,13 @@ Disk space is cheap. Save lots.
   (setq vc-make-backup-files t)
   (setq auto-save-file-name-transforms '((".*" "~/.emacs.d/auto-save-list/" t)))
 #+end_src
+** Disable lock files
+Lock files have only ever gotten in my way.
+
+#+name: other
+#+BEGIN_SRC emacs-lisp
+  (setq create-lockfiles nil)
+#+END_SRC
 ** History
 From http://www.wisdomandwonder.com/wordpress/wp-content/uploads/2014/03/C3F.html
 
