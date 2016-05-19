@@ -301,6 +301,32 @@ JavaScript.
     :ensure t
     :mode "\.py$")
 #+END_SRC
+**** Elpy
+
+Full functionality requires a number of python packages to be
+installed:
+
+#+BEGIN_SRC sh :exports code
+  # Either of these
+  pip install rope
+  pip install jedi
+  # flake8 for code checks
+  pip install flake8
+  # importmagic for automatic imports
+  pip install importmagic
+  # and autopep8 for automatic PEP8 formatting
+  pip install autopep8
+  # and yapf for code formatting
+  pip install yapf
+#+END_SRC
+
+#+name: programming
+#+BEGIN_SRC emacs-lisp
+  (use-package elpy
+    :ensure t
+    :init (with-eval-after-load 'python (elpy-enable))
+    :commands (elpy-enable))
+#+END_SRC
 **** Cython
 #+name: programming
 #+BEGIN_SRC emacs-lisp
