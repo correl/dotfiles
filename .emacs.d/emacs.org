@@ -228,6 +228,20 @@ A distributed, fault-tolerant functional language.
                           (setq inferior-erlang-machine-options '("-sname" "emacs"
                                                                   "-hidden")))))
 #+END_SRC
+*** Elixir
+Ruby-flavoured Erlang.
+#+name: programming
+#+BEGIN_SRC emacs-lisp
+  (use-package elixir-mode
+    :ensure t
+    :mode "\\.exs?$")
+
+  (use-package alchemist
+    :ensure t)
+
+  (use-package ob-elixir
+    :ensure t)
+#+END_SRC
 *** Haskell
 A strongly typed, pure functional language.
 #+name: programming
