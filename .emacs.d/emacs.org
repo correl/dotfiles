@@ -398,6 +398,25 @@ Configure jedi and company-mode to provide auto-completion for python.
   (use-package gnuplot
     :ensure t)
 #+END_SRC
+*** PlantUML
+
+Install [[https://github.com/skuro/puml-mode][puml-mode]] and alias it as plantuml-mode so it plays nice with
+org documents and ob-plantuml.
+
+#+name: programming
+#+BEGIN_SRC emacs-lisp
+  (use-package puml-mode
+    :ensure t
+    :mode "\\.plantuml\\'"
+    :config
+
+    (define-derived-mode plantuml-mode
+      puml-mode "PlantUML Mode"))
+#+END_SRC
+
+Don't forget to configure =org-plantuml-jar-path= and
+=puml-plantuml-jar-path= to point to a version of plantuml.jar on your
+system.
 ** Tools
 *** Autocomplete
 **** Company
