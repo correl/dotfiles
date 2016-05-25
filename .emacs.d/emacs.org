@@ -422,7 +422,8 @@ org documents and ob-plantuml.
   (use-package puml-mode
     :ensure t
     :mode "\\.plantuml\\'"
-    :config
+    :commands puml-mode
+    :init
 
     (define-derived-mode plantuml-mode
       puml-mode "PlantUML Mode"))
