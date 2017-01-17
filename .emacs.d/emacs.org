@@ -603,7 +603,7 @@ languages. Setting ~Confirm Evaluation~ to ~No~ disables the
 | haskell      |       | Yes                 | A pure, functional language     |
 | python       |       | Yes                 | A dynamic, all-purpose language |
 | ruby         |       | Yes                 | A dynamic, all-purpose language |
-| sh           |       | Yes                 | Shell scripts                   |
+| shell        |       | Yes                 | Shell scripts                   |
 | http         |       | No                  | HTTP requests                   |
 | sql          |       | No                  | SQL Queries                     |
 
