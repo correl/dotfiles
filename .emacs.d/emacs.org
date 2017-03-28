@@ -1052,6 +1052,19 @@ Because typing out "yes" and "no" is irritating.
 #+BEGIN_SRC emacs-lisp
   (defalias 'yes-or-no-p #'y-or-n-p)
 #+END_SRC
+** Support ANSI colors in compilation buffers
+
+http://stackoverflow.com/a/13408008
+
+#+name: other
+#+BEGIN_SRC emacs-lisp
+  (require 'ansi-color)
+  (defun colorize-compilation-buffer ()
+    (toggle-read-only)
+    (ansi-color-apply-on-region compilation-filter-start (point))
+    (toggle-read-only))
+  (add-hook 'compilation-filter-hook 'colorize-compilation-buffer)
+#+END_SRC
 * Custom settings
 Store options set via =customize-*= in a separate file (Emacs stores
 them in =init.el= by default).
