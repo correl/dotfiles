@@ -69,76 +69,16 @@ Helm projectile integration
     :init (eval-after-load 'flyspell
             '(define-key flyspell-mode-map (kbd "C-;") 'helm-flyspell-correct)))
 #+end_src
-*** helm-swoop
+*** swiper-helm
+
+Replace isearch-forward with swiper-helm for a nicer experience.
+
 #+name: packages
 #+BEGIN_SRC emacs-lisp
-  (use-package helm-swoop
+  (use-package swiper-helm
     :ensure t
-    :bind (("C-x c s" . helm-swoop))
-    :commands (helm-swoop
-               helm-swoop-from-isearch)
-    :init
-    (define-key isearch-mode-map (kbd "M-i") 'helm-swoop-from-isearch)
-    :config
-    (setq helm-swoop-speed-or-color t)
-    (define-key helm-swoop-map (kbd "M-i") 'helm-multi-swoop-all-from-helm-swoop)
-    (define-key helm-swoop-map (kbd "M-m") 'helm-multi-swoop-current-mode-from-helm-swoop))
-#+END_SRC
-** Ace Jump
-#+name: packages
-#+BEGIN_SRC emacs-lisp
-    (use-package ace-jump-mode
-      :ensure t
-      :defer t)
-#+END_SRC
-*** ace-window
-#+name: packages
-#+BEGIN_SRC emacs-lisp
-  (use-package ace-window
-    :ensure t
-    :bind ("C-x o" . ace-window))    
-#+END_SRC
-** Which Key
-#+name: packages
-#+BEGIN_SRC emacs-lisp
-  (use-package which-key
-    :ensure t
-    :diminish which-key-mode
-    :config (which-key-mode t))
-#+END_SRC
-** Expand Region
-#+name: packages
-#+BEGIN_SRC emacs-lisp
-  (use-package expand-region
-    :ensure t
-    :bind ("C-=" . er/expand-region))
-#+END_SRC
-** Powerline
-#+name: packages
-#+BEGIN_SRC emacs-lisp
-  (use-package powerline
-    :ensure t
-    :init (powerline-default-theme))
-#+END_SRC
-** Projectile
-#+name: packages
-#+BEGIN_SRC emacs-lisp
-  (use-package projectile
-    :ensure t
-    :defer 1
-    :config (progn (setq projectile-mode-line
-                         '(:eval (format " [%s]" (projectile-project-name))))
-                   (require 'helm-projectile)
-                   (helm-projectile-on)
-                   (projectile-global-mode)))
-#+END_SRC
-** Undo-Tree
-#+name: packages
-#+BEGIN_SRC emacs-lisp
-  (use-package undo-tree
-    :ensure t
-    :diminish undo-tree-mode
-    :config (global-undo-tree-mode 1))
+    :commands (swiper-helm)
+    :bind (("C-s" . swiper-helm)))
 #+END_SRC
 * Coding
 ** Languages
@@ -606,6 +546,7 @@ languages. Setting ~Confirm Evaluation~ to ~No~ disables the
 | shell        |       | Yes                 | Shell scripts                   |
 | http         |       | No                  | HTTP requests                   |
 | sql          |       | No                  | SQL Queries                     |
+| ledger       |       | No                  | Double-Entry Accounting         |
 
 #+name: packages
 #+BEGIN_SRC emacs-lisp :noweb yes
