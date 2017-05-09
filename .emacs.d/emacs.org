@@ -69,16 +69,16 @@ Helm projectile integration
     :init (eval-after-load 'flyspell
             '(define-key flyspell-mode-map (kbd "C-;") 'helm-flyspell-correct)))
 #+end_src
-*** swiper-helm
+*** helm-swoop
 
-Replace isearch-forward with swiper-helm for a nicer experience.
+Replace isearch-forward with helm-swoop for a nicer experience.
 
 #+name: packages
 #+BEGIN_SRC emacs-lisp
-  (use-package swiper-helm
+  (use-package helm-swoop
     :ensure t
-    :commands (swiper-helm)
-    :bind (("C-s" . swiper-helm)))
+    :commands (helm-swoop)
+    :bind (("C-s" . helm-swoop)))
 #+END_SRC
 * Coding
 ** Languages
