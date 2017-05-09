@@ -50,15 +50,7 @@ Helm search plugin for [[Ag%20(The%20Silver%20Searcher)][Ag (The Silver Searcher
 #+BEGIN_SRC emacs-lisp
     (use-package helm-ag
       :ensure t
-      :defer t)
-#+END_SRC
-*** helm-projectile
-Helm projectile integration
-#+name: packages
-#+BEGIN_SRC emacs-lisp
-  (use-package helm-projectile
-    :ensure t
-    :defer t)
+      :defer 1)
 #+END_SRC
 *** helm-flyspell
 #+name: packages
@@ -373,6 +365,19 @@ Don't forget to configure =org-plantuml-jar-path= and
 =puml-plantuml-jar-path= to point to a version of plantuml.jar on your
 system.
 ** Tools
+*** Projectile
+#+name: packages
+#+BEGIN_SRC emacs-lisp
+  (use-package projectile
+    :ensure t
+    :defer 1
+    :config
+
+    (projectile-mode t)
+    (use-package helm-projectile
+      :ensure t
+      :config (helm-projectile-on)))
+#+END_SRC
 *** Autocomplete
 **** Company
 
@@ -449,7 +454,7 @@ magnitude faster.
 #+BEGIN_SRC emacs-lisp
   (use-package ag
     :ensure t
-    :defer t)
+    :defer 1)
 #+END_SRC
 ** Libraries
 *** Dash
@@ -763,7 +768,6 @@ Taken from http://groups.google.com/group/gnu.emacs.gnus/browse_thread/thread/a6
 #+BEGIN_SRC emacs-lisp
   (use-package htmlize
     :ensure t
-    :defer t
     :commands (htmlize-region htmlize-buffer htmlize-file))
 #+END_SRC
 * Source Control
