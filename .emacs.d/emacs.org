@@ -456,6 +456,15 @@ magnitude faster.
     :ensure t
     :defer 1)
 #+END_SRC
+*** Expand Region
+Increase selected region by semantic units.
+
+#+name: packages
+#+BEGIN_SRC emacs-lisp
+  (use-package expand-region
+    :ensure t
+    :bind (("C-=" . er/expand-region)))
+#+END_SRC
 ** Libraries
 *** Dash
 A modern list api for Emacs. No 'cl required.
