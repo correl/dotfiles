@@ -53,6 +53,17 @@ Display major-mode names as icons in the mode line when possible.
     :ensure t
     :config (mode-icons-mode))
 #+END_SRC
+** Which-Key
+Display key binding completions after a delay.
+#+name: look-and-feel
+#+BEGIN_SRC emacs-lisp
+  (use-package which-key
+    :ensure t
+    :diminish which-key-mode
+    :config
+    (which-key-setup-side-window-right-bottom)
+    (which-key-mode))
+#+END_SRC
 ** Helm
 #+name: packages
 #+BEGIN_SRC emacs-lisp
