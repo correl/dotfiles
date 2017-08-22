@@ -26,13 +26,14 @@ git-extras
 git-remote-branch
 pip
 ssh-agent
+nojhan/liquidprompt
 
 zsh-users/zsh-syntax-highlighting
 
 EOF
 
     # Themes
-    antigen-theme kphoen
+    # antigen-theme kphoen
 
     antigen-apply
 
