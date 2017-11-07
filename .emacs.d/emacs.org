@@ -1084,6 +1084,24 @@ http://stackoverflow.com/a/13408008
     (toggle-read-only))
   (add-hook 'compilation-filter-hook 'colorize-compilation-buffer)
 #+END_SRC
+** Re-bind modifiers on OSX
+
+On mac keyboards, the command key placement works better for me as
+Meta rather than the default (Super), because it's right where my
+muscle memory expects a PC keyboard's Alt key.
+
+The control keys are typically pretty terrible, too, but I find it
+easier to rebind Caps Lock to Control in the system preferences (which
+is a nice thing to do in other environments, as well).
+
+#+name: other
+#+BEGIN_SRC emacs-lisp
+  (when (equal 'darwin system-type)
+    ;; Command as meta, because alt/option's placement is terrible on
+    ;; mac keyboards (this doesn't interfere with Spotlight's ⌘-Space
+    ;; binding)
+    (setq ns-command-modifier 'meta))
+#+END_SRC
 * Custom settings
 Store options set via =customize-*= in a separate file (Emacs stores
 them in =init.el= by default).
