@@ -335,9 +335,12 @@ installed:
 
 #+name: programming
 #+BEGIN_SRC emacs-lisp
+  (add-to-list 'package-archives
+               '("elpy" . "https://jorgenschaefer.github.io/packages/"))
+
   (use-package elpy
     :ensure t
-    :init (with-eval-after-load 'python (elpy-enable))
+    :after python-mode
     :commands (elpy-enable))
 #+END_SRC
 **** Cython
