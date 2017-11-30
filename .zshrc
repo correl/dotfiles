@@ -18,8 +18,7 @@ else
     # Load the oh-my-zsh library
     antigen use oh-my-zsh
 
-    # Bundles from the default repo (robbyrussel's oh-my-zsh)
-    antigen-bundles <<EOF
+    antigen bundles <<EOF
 
 git
 git-extras
@@ -35,7 +34,7 @@ EOF
     # Themes
     # antigen-theme kphoen
 
-    antigen-apply
+    antigen apply
 
     unsetopt correct_all
 fi
