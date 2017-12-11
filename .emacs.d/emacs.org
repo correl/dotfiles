@@ -737,6 +737,175 @@ Taken from [[http://pragmaticemacs.com/emacs/wrap-text-in-an-org-mode-block/][Pr
   ;;bind to key
   (define-key org-mode-map (kbd "C-<") 'org-begin-template)
 #+END_SRC
+**** Exporting
+***** LaTeX
+#+name: packages
+#+BEGIN_SRC emacs-lisp :noweb yes
+  (use-package ox-latex
+    :defer t
+    :config
+    <<configure-ox-latex>>)
+#+END_SRC
+
+****** Document classes
+
+Add org latex class definitions for some popular LaTeX classes,
+including:
+- [[HTTPS://ctan.org/pkg/koma-script?lang=en][KOMA-Script]]
+- [[https://ctan.org/pkg/memoir?lang=en][Memoir]]
+- [[https://ctan.org/pkg/hitec?lang=en][Hitec]]
+- [[https://ctan.org/pkg/tufte-latex?lang=en][Tufte]]
+- [[https://ctan.org/pkg/labbook?lang=en][Labbook]] (based on KOMA-Script)
+
+#+name: configure-ox-latex
+#+BEGIN_SRC emacs-lisp
+  (seq-map (apply-partially #'add-to-list 'org-latex-classes)
+           '(("koma-letter"
+              "\\documentclass{scrlttr2}"
+              ("\\section{%s}" . "\\section*{%s}")
+              ("\\subsection{%s}" . "\\subsection*{%s}")
+              ("\\subsubsection{%s}" . "\\subsubsection*{%s}")
+              ("\\paragraph{%s}" . "\\paragraph*{%s}")
+              ("\\subparagraph{%s}" . "\\subparagraph*{%s}"))
+             ("koma-article"
+              "\\documentclass{scrartcl}"
+              ("\\section{%s}" . "\\section*{%s}")
+              ("\\subsection{%s}" . "\\subsection*{%s}")
+              ("\\subsubsection{%s}" . "\\subsubsection*{%s}")
+              ("\\paragraph{%s}" . "\\paragraph*{%s}")
+              ("\\subparagraph{%s}" . "\\subparagraph*{%s}"))
+             ("koma-book"
+              "\\documentclass{scrbook}"
+              ("\\section{%s}" . "\\section*{%s}")
+              ("\\subsection{%s}" . "\\subsection*{%s}")
+              ("\\subsubsection{%s}" . "\\subsubsection*{%s}")
+              ("\\paragraph{%s}" . "\\paragraph*{%s}")
+              ("\\subparagraph{%s}" . "\\subparagraph*{%s}"))
+             ("koma-book-chapters"
+              "\\documentclass{scrbook}"
+              ("\\chapter{%s}" . "\\chapter*{%s}")
+              ("\\section{%s}" . "\\section*{%s}")
+              ("\\subsection{%s}" . "\\subsection*{%s}")
+              ("\\subsubsection{%s}" . "\\subsubsection*{%s}")
+              ("\\paragraph{%s}" . "\\paragraph*{%s}")
+              ("\\subparagraph{%s}" . "\\subparagraph*{%s}"))
+             ("koma-report"
+              "\\documentclass{scrreprt}"
+              ("\\chapter{%s}" . "\\chapter*{%s}")
+              ("\\section{%s}" . "\\section*{%s}")
+              ("\\subsection{%s}" . "\\subsection*{%s}")
+              ("\\subsubsection{%s}" . "\\subsubsection*{%s}")
+              ("\\paragraph{%s}" . "\\paragraph*{%s}")
+              ("\\subparagraph{%s}" . "\\subparagraph*{%s}"))
+             ("memoir"
+              "\\documentclass{memoir}"
+              ("\\section{%s}" . "\\section*{%s}")
+              ("\\subsection{%s}" . "\\subsection*{%s}")
+              ("\\subsubsection{%s}" . "\\subsubsection*{%s}")
+              ("\\paragraph{%s}" . "\\paragraph*{%s}")
+              ("\\subparagraph{%s}" . "\\subparagraph*{%s}"))
+             ("hitec"
+              "\\documentclass{hitec}"
+              ("\\section{%s}" . "\\section*{%s}")
+              ("\\subsection{%s}" . "\\subsection*{%s}")
+              ("\\subsubsection{%s}" . "\\subsubsection*{%s}")
+              ("\\paragraph{%s}" . "\\paragraph*{%s}")
+              ("\\subparagraph{%s}" . "\\subparagraph*{%s}"))
+             ("paper"
+              "\\documentclass{paper}"
+              ("\\section{%s}" . "\\section*{%s}")
+              ("\\subsection{%s}" . "\\subsection*{%s}")
+              ("\\subsubsection{%s}" . "\\subsubsection*{%s}")
+              ("\\paragraph{%s}" . "\\paragraph*{%s}")
+              ("\\subparagraph{%s}" . "\\subparagraph*{%s}"))
+             ("letter"
+              "\\documentclass{letter}"
+              ("\\section{%s}" . "\\section*{%s}")
+              ("\\subsection{%s}" . "\\subsection*{%s}")
+              ("\\subsubsection{%s}" . "\\subsubsection*{%s}")
+              ("\\paragraph{%s}" . "\\paragraph*{%s}")
+              ("\\subparagraph{%s}" . "\\subparagraph*{%s}"))
+             ("tufte-handout"
+              "\\documentclass{tufte-handout}"
+              ("\\section{%s}" . "\\section*{%s}")
+              ("\\subsection{%s}" . "\\subsection*{%s}")
+              ("\\subsubsection{%s}" . "\\subsubsection*{%s}")
+              ("\\paragraph{%s}" . "\\paragraph*{%s}")
+              ("\\subparagraph{%s}" . "\\subparagraph*{%s}"))
+             ("tufte-book"
+              "\\documentclass{tufte-book}"
+              ("\\section{%s}" . "\\section*{%s}")
+              ("\\subsection{%s}" . "\\subsection*{%s}")
+              ("\\subsubsection{%s}" . "\\subsubsection*{%s}")
+              ("\\paragraph{%s}" . "\\paragraph*{%s}")
+              ("\\subparagraph{%s}" . "\\subparagraph*{%s}"))
+             ("tufte-book-chapters"
+              "\\documentclass{tufte-book}"
+              ("\\chapter{%s}" . "\\chapter*{%s}")
+              ("\\section{%s}" . "\\section*{%s}")
+              ("\\subsection{%s}" . "\\subsection*{%s}")
+              ("\\subsubsection{%s}" . "\\subsubsection*{%s}")
+              ("\\paragraph{%s}" . "\\paragraph*{%s}")
+              ("\\subparagraph{%s}" . "\\subparagraph*{%s}"))
+             ("labbook"
+              "\\documentclass{labbook}"
+              ("\\chapter{%s}" . "\\chapter*{%s}")
+              ("\\section{%s}" . "\\section*{%s}")
+              ("\\subsection{%s}" . "\\labday{%s}")
+              ("\\subsubsection{%s}" . "\\experiment{%s}")
+              ("\\paragraph{%s}" . "\\paragraph*{%s}")
+              ("\\subparagraph{%s}" . "\\subparagraph*{%s}"))))
+#+END_SRC
+****** Source Highlighting
+
+Configure org-mode LaTeX export to use minted for syntax highlighting.
+
+Some languages / markups I use aren't supported by minted, so I map
+them here so they don't fail.
+
+#+name: ox-latex-minted-mappings
+#+CAPTION: Minted language mappings
+| Language | Mapping      |
+|----------+--------------|
+| dot      | text         |
+| org      | text         |
+| ditaa    | text         |
+| plantuml | text         |
+| csv      | text         |
+| conf     | linux-config |
+
+#+name: configure-ox-latex
+#+BEGIN_SRC emacs-lisp :noweb yes
+  (setq org-latex-listings 'minted)
+  (setq org-latex-minted-options
+        '(("fontsize" "\\scriptsize")))
+  (seq-map (lambda (mapping)
+             (add-to-list 'org-latex-minted-langs
+                          (cons (intern (car mapping)) (cdr mapping))))
+           (seq-drop '<<ox-latex-minted-mappings()>> 2))
+  (add-to-list 'org-latex-packages-alist
+               '("" "minted" nil))
+#+END_SRC
+****** TeX Engine
+
+Prepare the LaTeX export process, and default the compiler to xelatex,
+as it has better unicode support than pdflatex.
+
+#+BEGIN_NOTES
+The =%latex= expansion variable is used so that org documents can
+override the latex compiler using the file-level =LATEX_COMPILER=
+directive.
+#+END_NOTES
+
+#+name: configure-ox-latex
+#+BEGIN_SRC emacs-lisp
+  (setq org-latex-pdf-process
+        (-repeat 3 "%latex -shell-escape -interaction nonstopmode -output-directory %o %f"))
+
+  ;; Default to XeLaTeX
+  (setq org-latex-compiler "xelatex")
+
+#+END_SRC
 *** LaTeX
 **** AUCTeX
 #+name: packages
