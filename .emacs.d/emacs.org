@@ -135,6 +135,17 @@ shown around the search results.
     (setq helm-swoop-speed-or-color t)
     )
 #+END_SRC
+** Undo-Tree
+
+Visualize and traverse undo history as a directed graph.
+
+#+name: packages
+#+BEGIN_SRC emacs-lisp
+  (use-package undo-tree
+    :ensure t
+    :diminish undo-tree-mode
+    :config (global-undo-tree-mode))
+#+END_SRC
 * Coding
 ** Languages
 *** Lisps
@@ -341,7 +352,7 @@ installed:
   (use-package elpy
     :ensure t
     :after python-mode
-    :commands (elpy-enable))
+    :config (elpy-enable))
 #+END_SRC
 **** Cython
 #+name: programming
