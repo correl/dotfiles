@@ -542,6 +542,19 @@ Increase selected region by semantic units.
     :ensure t
     :bind (("C-=" . er/expand-region)))
 #+END_SRC
+*** Nameless
+
+Hide package namespaces in emacs-lisp code.
+
+#+BEGIN_SRC emacs-lisp
+  (use-package nameless
+    :ensure t
+    :commands nameless-mode-from-hook
+    :init
+    (add-hook 'emacs-lisp-mode-hook #'nameless-mode-from-hook)
+    :config
+    (setq nameless-private-prefix t))
+#+END_SRC
 ** Libraries
 *** Dash
 A modern list api for Emacs. No 'cl required.
