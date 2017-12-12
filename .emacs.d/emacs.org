@@ -780,7 +780,9 @@ Taken from https://emacs.stackexchange.com/a/30691.
       (ignore-case t)
       (duplicates t)))
 
-  (add-to-list 'company-backends 'org-keyword-backend)
+  (eval-after-load 'company
+    '(add-to-list 'company-backends 'org-keyword-backend))
+
   (add-hook 'org-mode-hook 'company-mode)
 #+END_SRC
 **** Exporting
