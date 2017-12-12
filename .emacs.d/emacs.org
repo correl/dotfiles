@@ -28,6 +28,18 @@ Visualize the current position within the buffer in the modeline with nyancat!
     (nyan-mode)
     (nyan-start-animation))
 #+END_SRC
+** Display Time & Battery Status
+#+name: look-and-feel
+#+BEGIN_SRC emacs-lisp
+  (setq battery-mode-line-format
+        "[%b%p%%%% (%t)]")
+
+  (display-battery-mode t)
+  (display-time-mode t)
+
+  (use-package fancy-battery-mode
+    :ensure t)
+#+END_SRC
 ** Theme
 #+name: look-and-feel
 #+BEGIN_SRC emacs-lisp
