@@ -1039,6 +1039,19 @@ breaks.
                    org-mode-hook)))
 
 #+END_SRC
+* Finances
+** Ledger
+
+Command-line double-entry accounting system.
+https://www.ledger-cli.org/
+
+#+name: packages
+#+BEGIN_SRC emacs-lisp
+  (use-package ledger-mode
+    :ensure t
+    :mode "\\.ledger$")
+
+#+END_SRC
 * Mail
 ** Gnus
 #+name: packages
