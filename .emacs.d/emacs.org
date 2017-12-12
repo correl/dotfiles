@@ -954,6 +954,16 @@ directive.
                   '(text-mode-hook
                     org-mode-hook)))
 #+END_SRC
+*** Auto-Fill
+Automatically wrap paragraphs while writing in text modes.
+
+#+name: packages
+#+BEGIN_SRC emacs-lisp
+  (mapcar (lambda (mode-hook)
+            (add-hook mode-hook #'auto-fill-mode))
+          '(text-mode-hook
+            org-mode-hook))
+#+END_SRC
 *** Unfill
 Re-flowing paragraphs with =fill-paragraph= is nice, but there are
 occasions when it's useful to do the inverse, and get rid of the line
