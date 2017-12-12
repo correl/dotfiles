@@ -552,6 +552,17 @@ A modern list api for Emacs. No 'cl required.
     :ensure t
     :config (dash-enable-font-lock))
 #+END_SRC
+*** Stream
+
+Lazy sequences in Emacs (compatible with seq.el).
+
+#+name: programming
+#+BEGIN_SRC emacs-lisp
+  (use-package stream
+    :ensure t
+    :if (version<= "25.1" emacs-version)
+    :defer t)
+#+END_SRC
 * Writing
 ** Style
 *** End sentences with a single space
