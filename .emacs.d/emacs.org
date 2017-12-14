@@ -36,9 +36,6 @@ Visualize the current position within the buffer in the modeline with nyancat!
 
   (display-battery-mode t)
   (display-time-mode t)
-
-  (use-package fancy-battery-mode
-    :ensure t)
 #+END_SRC
 ** Theme
 #+name: look-and-feel
