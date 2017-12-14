@@ -155,6 +155,16 @@ Visualize and traverse undo history as a directed graph.
     :diminish undo-tree-mode
     :config (global-undo-tree-mode))
 #+END_SRC
+** Multiple Cursors
+#+name: look-and-feel
+#+BEGIN_SRC emacs-lisp
+  (use-package multiple-cursors
+    :bind (("C-S-c C-S-c" . mc/edit-lines)
+           ("C->" . mc/mark-next-like-this)
+           ("C-<" . mc/mark-previous-like-this)
+           ("C-c C-<" . mc/mark-all-like-this)
+           ("C-M->" . mc/mark-more-like-this-extended)))
+#+END_SRC
 * Coding
 ** Languages
 *** Lisps
