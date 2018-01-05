@@ -298,6 +298,16 @@ JavaScript.
     (add-to-list 'company-backends 'company-elm))
 
 #+END_SRC
+*** Idris
+
+A functional language with dependent types.
+
+#+name: programming
+#+BEGIN_SRC emacs-lisp
+  (use-package idris-mode
+    :ensure t
+    :mode "\.idr$")
+#+END_SRC
 *** Web
 **** HTML
 #+name: programming
