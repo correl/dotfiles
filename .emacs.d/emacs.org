@@ -375,9 +375,6 @@ installed:
 
 #+name: programming
 #+BEGIN_SRC emacs-lisp
-  (add-to-list 'package-archives
-               '("elpy" . "https://jorgenschaefer.github.io/packages/"))
-
   (use-package elpy
     :ensure t
     :after python-mode
