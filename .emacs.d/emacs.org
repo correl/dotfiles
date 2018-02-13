@@ -456,6 +456,19 @@ Don't forget to configure =org-plantuml-jar-path= and
 =plantuml-jar-path= to point to a version of plantuml.jar on your
 system.
 ** Tools
+*** EditorConfig
+
+Editor-agnostic coding style configuration.
+
+#+name: packages
+#+BEGIN_SRC emacs-lisp
+  (use-package editorconfig
+    :ensure t
+    :diminish editorconfig-mode
+    :config
+    (editorconfig-mode 1))
+#+END_SRC
+
 *** Projectile
 #+name: packages
 #+BEGIN_SRC emacs-lisp
