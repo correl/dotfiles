@@ -119,9 +119,9 @@ Helm search plugin for [[Ag%20(The%20Silver%20Searcher)][Ag (The Silver Searcher
     :init (eval-after-load 'flyspell
             '(define-key flyspell-mode-map (kbd "C-;") 'helm-flyspell-correct)))
 #+end_src
-*** swiper-helm
+*** helm-swoop
 
-Replace isearch-forward with swiper-helm for a nicer experience.
+Replace isearch-forward with helm-swoop for a nicer experience.
 
 #+BEGIN_NOTES
 Quite usefully, using prefix arguments expands the lines of context
@@ -130,10 +130,19 @@ shown around the search results.
 
 #+name: packages
 #+BEGIN_SRC emacs-lisp
-  (use-package swiper-helm
+  (use-package helm-swoop
     :ensure t
-    :commands (swiper-helm)
-    :bind (("C-s" . swiper-helm)))
+    :commands (helm-swoop)
+    :bind (("C-s" . helm-swoop))
+    :config
+    ;; Defaults to (lambda () (thing-at-point 'symbol)).
+    ;; Setting it to return nil, as I find it tends to be more annoying than useful.
+    (setq helm-swoop-pre-input-function (lambda () nil))
+    ;; Enable syntax highlighting. It makes it easier for my eyes to
+    ;; parse the results, and doesn't seem to slow things down
+    ;; measurably.
+    (setq helm-swoop-speed-or-color t)
+    )
 #+END_SRC
 ** Undo-Tree
 
