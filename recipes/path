@@ -1,0 +1,18 @@
+#!/bin/bash
+set +e
+
+function _path_low {
+    PATH="$1:$PATH"
+    test -r ~/.bash_profile && echo "export PATH='$1'":'"$PATH"' >>~/.bash_profile
+    echo "export PATH='$1'":'"$PATH"' >>~/.profile
+}
+
+function _path_high {
+    PATH="$PATH:$1"
+    test -r ~/.bash_profile && echo 'export PATH="$PATH"':"'$PATH'" >>~/.bash_profile
+    echo "export PATH='$1'":'"$PATH"' >>~/.profile
+}
+
+function _path {
+    _path_low $@
+}

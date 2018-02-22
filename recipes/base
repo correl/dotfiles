@@ -4,3 +4,4 @@ set +e
 _recipe brew
 _recipe git
 _recipe zsh
+_recipe bin

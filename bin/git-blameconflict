@@ -1,0 +1,3 @@
+#!/bin/bash
+
+for f in $(git status --porcelain|grep '^UU'|awk '{print $2}'); do echo "$f"; git --no-pager blame -L '/^<<<</,/^>>>>/' -- $f; echo; done;
