@@ -1,6 +1,38 @@
 #!/bin/bash
 set +e
 
+RECIPE_PATH=${HOME}/dotfiles/recipes
+RECIPES=$(ls $RECIPE_PATH|grep -v '^_')
+INSTALL=(base)
+
+POSITIONAL=()
+while [[ $# -gt 0 ]]; do
+    case $1 in
+        -D|--debug)
+            DEBUG=1
+            shift
+            ;;
+        -l|--list)
+            echo Available recipes:
+            for recipe in $RECIPES; do
+                echo "  $recipe"
+            done
+            exit
+            ;;
+        -A|--all)
+            INSTALL=($RECIPES)
+            shift
+            ;;
+        *)
+            INSTALL+=("$1")
+            shift
+    esac
+done
+
+INSTALL=($(for recipe in "${INSTALL[@]}"; do
+               echo $recipe
+           done |sort | uniq))
+
 function _run {
     local msg=$1
     shift
@@ -21,7 +53,7 @@ function _recipe {
 USER=${USER:-$(whoami)}
 _PLATFORM=$(uname -s | awk '{print tolower($1)}')
 
-for recipe in base $@; do
+for recipe in "${INSTALL[@]}"; do
     _recipe $recipe
 done
 

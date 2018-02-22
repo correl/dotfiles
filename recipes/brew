@@ -7,7 +7,7 @@ function __install_brew {
             /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
             ;;
         *)
-            _recipe apt
+            _recipe _apt
 
             for pkg in build-essential curl file git python-setuptools; do
                 _apt $pkg
