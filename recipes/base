@@ -1,0 +1,6 @@
+#!/bin/bash
+set +e
+
+_recipe brew
+_recipe git
+_recipe zsh

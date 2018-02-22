@@ -1,0 +1,35 @@
+#!/bin/bash
+set +e
+
+function __install_brew {
+    case "$(uname -s)" in
+        Darwin)
+            /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
+            ;;
+        *)
+            _recipe apt
+
+            for pkg in build-essential curl file git python-setuptools; do
+                _apt $pkg
+            done
+            [ -d ~/.linuxbrew ] || git clone -q https://github.com/Linuxbrew/brew.git ~/.linuxbrew
+            PATH="$HOME/.linuxbrew/bin:$HOME/.linuxbrew/sbin:$PATH"
+            test -r ~/.bash_profile && echo "export PATH='$(brew --prefix)/bin:$(brew --prefix)/sbin'":'"$PATH"' >>~/.bash_profile
+            echo "export PATH='$(brew --prefix)/bin:$(brew --prefix)/sbin'":'"$PATH"' >>~/.profile
+            ;;
+    esac
+}
+
+function _brew {
+    local pkg=$1
+    if ! brew ls $pkg >/dev/null 2>&1; then
+        _run "[brew] Install $pkg" brew install $@
+    else
+        echo "[brew] $pkg is already installed, skipping."
+    fi
+}
+
+
+if ! which brew >/dev/null; then
+    _run "Install brew" __install_brew
+fi

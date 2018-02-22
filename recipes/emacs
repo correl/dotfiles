@@ -1,0 +1,13 @@
+#!/bin/bash
+set +e
+
+_recipe brew
+
+case $_PLATFORM in
+    darwin)
+        _brew emacs --with-cocoa --with-librsvg --with-imagemagick@6
+        ;;
+    linux)
+        _brew emacs --with-librsvg --with-imagemagick@6
+        ;;
+esac

@@ -1,0 +1,5 @@
+#!/bin/bash
+
+_recipe nvm
+_npm elm-oracle
+_npm elm-format

@@ -1,0 +1,22 @@
+#!/bin/bash
+set +e
+
+function __install_nvm {
+    curl -s -o- https://raw.githubusercontent.com/creationix/nvm/v0.33.8/install.sh >/dev/null | bash
+    source ~/.nvm/nvm.sh
+    nvm install node 2>/dev/null
+    nvm alias default node
+}
+
+function _npm {
+    local pkg=$1
+    if ! npm list -g $pkg >/dev/null; then
+        _run "[npm] Install $pkg" npm install --no-progress -g $@
+    else
+        echo "[npm] $pkg is already installed, skipping."
+    fi
+}
+
+if ! [ -f ~/.nvm/nvm.sh ]; then
+    _run "Install nvm" __install_nvm
+fi

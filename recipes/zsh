@@ -1,0 +1,29 @@
+#!/bin/bash
+set +e
+
+_recipe brew
+_brew zsh
+
+__zsh_bin="$(which zsh)"
+__zsh_files=(.zshrc)
+
+if ! grep "^$__zsh_bin\$" /etc/shells >/dev/null; then
+    sudo sh -c "echo $__zsh_bin >> /etc/shells"
+fi
+case "$(uname -s)" in
+    Darwin)
+        __shell=$(dscl . -read /Users/${USER} UserShell | awk '{print $2}')
+        ;;
+    *)
+        __shell=$(getent passwd $USER | cut -d: -f7)
+        ;;
+esac
+if [ "$__shell" != "$__zsh_bin" ]; then
+    echo "Install $__zsh_bin as default shell (currently $__shell)"
+    sudo chsh -s $__zsh_bin ${USER}
+fi
+export SHELL=$__zsh_bin
+
+if ! [ -f ${HOME}/.zshrc ]; then
+    _run "Install .zshrc" ln -s ${HOME}/dotfiles/.zshrc ${HOME}/.zshrc
+fi
