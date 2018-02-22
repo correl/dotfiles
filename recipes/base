@@ -2,6 +2,7 @@
 set +e
 
 _recipe brew
+_recipe shell-utils
 _recipe git
 _recipe zsh
 _recipe bin

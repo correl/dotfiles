@@ -1,0 +1,6 @@
+#!/bin/bash
+set +e
+
+_recipe brew
+_brew swi-prolog
+

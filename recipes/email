@@ -1,0 +1,11 @@
+#!/bin/bash
+set +e
+
+_recipe brew
+_brew isync
+
+_recipe emacs
+EMACS=$(which emacs) _brew mu --with-emacs --HEAD
+
+_recipe nvm
+_npm imapnotify

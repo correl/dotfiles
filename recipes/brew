@@ -28,7 +28,6 @@ function _brew {
     fi
 }
 
-
 if ! which brew >/dev/null; then
     _run "Install brew" __install_brew
 fi

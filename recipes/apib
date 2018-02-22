@@ -1,0 +1,6 @@
+#!/bin/bash
+set +e
+
+_recipe nvm
+_npm drafter
+_npm aglio

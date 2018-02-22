@@ -1,0 +1,12 @@
+#!/bin/bash
+set +e
+
+case "$(uname -s)" in
+    Darwin)
+        _recipe brew
+        brew cask install mactex
+        ;;
+    *)
+        _recipe _apt
+        _apt texlive-full
+esac

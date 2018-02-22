@@ -1,0 +1,33 @@
+#!/bin/bash
+set +e
+
+_recipe brew
+
+case "$(uname -s)" in
+    Darwin)
+        _brew binutils
+        _brew coreutils
+        _brew findutils --with-default-names
+        _brew gawk
+        _brew gnu-indent --with-default-names
+        _brew gnu-sed --with-default-names
+        _brew gnu-tar --with-default-names
+        _brew gnu-which --with-default-names
+        ;;
+esac
+
+# File browsing
+_brew tree
+_brew ncdu
+
+# File compression
+_brew p7zip
+_brew unrar
+
+
+# Misc
+_brew htop
+_brew tig
+_brew lnav
+_brew tmux
+_brew jq
