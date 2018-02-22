@@ -11,3 +11,7 @@ case $_PLATFORM in
         _brew emacs --with-librsvg --with-imagemagick@6
         ;;
 esac
+
+if ! [ -d ${HOME}/.emacs.d ]; then
+    _run "Install .emacs.d" ln -s ${HOME}/dotfiles/.emacs.d ${HOME}/.emacs.d
+fi
