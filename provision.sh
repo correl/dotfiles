@@ -5,7 +5,6 @@ RECIPE_PATH=${HOME}/dotfiles/recipes
 RECIPES=$(ls $RECIPE_PATH|grep -v '^_')
 INSTALL=(base)
 
-POSITIONAL=()
 while [[ $# -gt 0 ]]; do
     case $1 in
         -D|--debug)
