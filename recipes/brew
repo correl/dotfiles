@@ -34,7 +34,7 @@ case "$(uname -s)" in
         done
         if ! [ -d ~/.linuxbrew ]; then
             _run "Install brew" git clone -q https://github.com/Linuxbrew/brew.git ~/.linuxbrew
-            _path "$HOME/.linuxbrew/bin:$HOME/.linuxbrew/sbin"
         fi
+        _path "$HOME/.linuxbrew/bin:$HOME/.linuxbrew/sbin"
         ;;
 esac
