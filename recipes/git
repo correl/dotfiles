@@ -1,5 +1,14 @@
 #!/bin/bash
 set +e
 
-_recipe brew
-_brew git
+case $_PLATFORM in
+    darwin)
+        _recipe brew
+        _brew git
+        ;;
+    *)
+        _recipe _apt
+        _ppa git-core/ppa
+        _apt git
+        ;;
+esac
