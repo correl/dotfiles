@@ -4,7 +4,7 @@ set +e
 case "$(uname -s)" in
     Darwin)
         _recipe brew
-        brew cask install mactex
+        _brew_cask mactex
         ;;
     *)
         _recipe _apt
