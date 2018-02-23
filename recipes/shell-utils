@@ -21,6 +21,13 @@ case $_PLATFORM in
         # File compression
         _brew p7zip
         _brew unrar
+
+        # Misc
+        _brew htop
+        _brew jq
+        _brew lnav
+        _brew tig
+        _brew tmux
         ;;
     *)
         _recipe _apt
@@ -32,12 +39,12 @@ case $_PLATFORM in
         # File compression
         _apt p7zip
         _apt unrar
+
+        # Misc
+        _apt htop
+        _apt jq
+        _apt lnav
+        _apt tig
+        _apt tmux
         ;;
 esac
-
-# Misc
-_brew htop
-_brew tig
-_brew lnav
-_brew tmux
-_brew jq
