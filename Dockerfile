@@ -11,4 +11,4 @@ USER correl
 WORKDIR /home/correl
 COPY . /home/correl/dotfiles
 RUN DEBUG=1 /home/correl/dotfiles/provision.sh
-CMD ["/bin/bash", "/home/correl/dotfiles/provision.sh"]
+CMD ["/usr/bin/zsh"]
