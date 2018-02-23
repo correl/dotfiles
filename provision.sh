@@ -1,5 +1,6 @@
 #!/bin/bash
 set +e
+trap 'exit' INT
 
 RECIPE_PATH=${HOME}/dotfiles/recipes
 RECIPES=$(ls $RECIPE_PATH|grep -v '^_')
