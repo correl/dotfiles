@@ -1,24 +1,6 @@
 #!/bin/bash
 set +e
 
-function __install_brew {
-    case "$(uname -s)" in
-        Darwin)
-            /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
-            ;;
-        *)
-            _recipe _apt
-            _recipe _path
-
-            for pkg in build-essential curl file git python-setuptools; do
-                _apt $pkg
-            done
-            [ -d ~/.linuxbrew ] || git clone -q https://github.com/Linuxbrew/brew.git ~/.linuxbrew
-            _path "$HOME/.linuxbrew/bin:$HOME/.linuxbrew/sbin"
-            ;;
-    esac
-}
-
 function _brew {
     local pkg=$1
     if ! brew ls $pkg >/dev/null 2>&1; then
@@ -28,6 +10,22 @@ function _brew {
     fi
 }
 
-if ! which brew >/dev/null; then
-    _run "Install brew" __install_brew
-fi
+case "$(uname -s)" in
+    Darwin)
+        if ! which brew >/dev/null; then
+            _run "Install brew" /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
+        fi
+        ;;
+    *)
+        _recipe _apt
+        _recipe _path
+
+        for pkg in build-essential curl file gawk git python-setuptools; do
+            _apt $pkg
+        done
+        if ! [ -d ~/.linuxbrew ]; then
+            _run "Install brew" git clone -q https://github.com/Linuxbrew/brew.git ~/.linuxbrew
+            _path "$HOME/.linuxbrew/bin:$HOME/.linuxbrew/sbin"
+        fi
+        ;;
+esac
