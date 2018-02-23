@@ -1,8 +1,16 @@
 #!/bin/bash
 set +e
 
-_recipe brew
-_brew zsh
+case $_PLATFORM in
+    darwin)
+        _recipe brew
+        _brew zsh
+        ;;
+    *)
+        _recipe _apt
+        _apt zsh
+        ;;
+esac
 
 __zsh_bin="$(which zsh)"
 __zsh_files=(.zshrc)
@@ -10,8 +18,8 @@ __zsh_files=(.zshrc)
 if ! grep "^$__zsh_bin\$" /etc/shells >/dev/null; then
     sudo sh -c "echo $__zsh_bin >> /etc/shells"
 fi
-case "$(uname -s)" in
-    Darwin)
+case $_PLATFORM in
+    darwin)
         __shell=$(dscl . -read /Users/${USER} UserShell | awk '{print $2}')
         ;;
     *)
