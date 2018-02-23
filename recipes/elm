@@ -1,4 +1,5 @@
 #!/bin/bash
+set +e
 
 _recipe nvm
 _npm elm-oracle
