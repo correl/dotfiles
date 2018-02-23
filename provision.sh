@@ -3,7 +3,8 @@ set +e
 
 RECIPE_PATH=${HOME}/dotfiles/recipes
 RECIPES=$(ls $RECIPE_PATH|grep -v '^_')
-INSTALL=(base)
+INSTALL=()
+STACK=()
 
 while [[ $# -gt 0 ]]; do
     case $1 in
@@ -46,12 +47,22 @@ function _run {
 }
 
 function _recipe {
+    STACK+=("$1")
+    echo "-- Recipe '${STACK[@]}' --"
     source ${HOME}/dotfiles/recipes/$1
+    unset STACK[${#STACK[@]}-1]
+    echo "-- Recipe '${STACK[@]}' --"
 }
 
 USER=${USER:-$(whoami)}
 _PLATFORM=$(uname -s | awk '{print tolower($1)}')
 
+if [ -z "${INSTALL[@]}" ]; then
+    INSTALL=(base)
+fi
+
+
+echo "-- Provisioning [${INSTALL[@]}] --"
 for recipe in "${INSTALL[@]}"; do
     _recipe $recipe
 done
