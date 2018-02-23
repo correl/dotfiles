@@ -2,7 +2,7 @@
 set +e
 
 function __install_nvm {
-    curl -s -o- https://raw.githubusercontent.com/creationix/nvm/v0.33.8/install.sh >/dev/null | bash
+    curl -s -o- https://raw.githubusercontent.com/creationix/nvm/v0.33.8/install.sh | bash
     source ~/.nvm/nvm.sh
     nvm install node 2>/dev/null
     nvm alias default node
