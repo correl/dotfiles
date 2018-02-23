@@ -5,7 +5,15 @@ _recipe brew
 _brew isync
 
 _recipe emacs
-EMACS=$(which emacs) _brew mu --with-emacs --HEAD
+case $_PLATFORM in
+    darwin)
+        EMACS=$(which emacs) _brew mu --with-emacs --HEAD
+        ;;
+    *)
+        _recipe apt
+        _apt maildir-utils
+        ;;
+esac
 
 _recipe nvm
 _npm imapnotify

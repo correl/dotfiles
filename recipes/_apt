@@ -1,4 +1,5 @@
 #!/bin/bash
+set +e
 
 if [ -z "$__apt_updated" ]; then
     _run "Update APT cache" sudo apt-get update
@@ -12,4 +13,10 @@ function _apt {
     else
         echo "[apt] $pkg is already installed, skipping."
     fi
+}
+
+_apt software-properties-common
+
+function _ppa {
+    _run "[apt] Add PPA: $1" sudo add-apt-repository -u -y ppa:$1
 }

@@ -8,7 +8,9 @@ case $_PLATFORM in
         _brew emacs --with-cocoa --with-librsvg --with-imagemagick@6
         ;;
     linux)
-        _brew emacs --with-librsvg --with-imagemagick@6
+        _recipe _apt
+        _ppa ubuntu-elisp/ppa
+        _apt emacs25
         ;;
 esac
 
