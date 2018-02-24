@@ -6,3 +6,4 @@ _recipe shell-utils
 _recipe git
 _recipe zsh
 _recipe bin
+_recipe emacs
