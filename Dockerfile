@@ -10,5 +10,6 @@ RUN localedef -i en_US -f UTF-8 en_US.UTF-8 \
 USER correl
 WORKDIR /home/correl
 COPY . /home/correl/dotfiles
-RUN DEBUG=1 /home/correl/dotfiles/provision.sh
+RUN sudo chown -R correl:correl . \
+    && /home/correl/dotfiles/provision.sh -D
 CMD ["/usr/bin/zsh"]
