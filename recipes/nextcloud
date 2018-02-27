@@ -1,0 +1,12 @@
+#!/bin/bash
+set -e
+
+case $_PLATFORM in
+    darwin)
+        ;;
+    *)
+        _recipe _apt
+        _ppa nextcloud-devs/client
+        _apt nextcloud-client
+        ;;
+esac
