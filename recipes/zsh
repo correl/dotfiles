@@ -29,9 +29,11 @@ esac
 if [ "$__shell" != "$__zsh_bin" ]; then
     echo "Install $__zsh_bin as default shell (currently $__shell)"
     sudo chsh -s $__zsh_bin ${USER}
+    export SHELL=$__zsh_bin
+    RESTART_SHELL=1
 fi
-export SHELL=$__zsh_bin
 
 if ! [ -f ${HOME}/.zshrc ]; then
     _run "Install .zshrc" ln -s ${HOME}/dotfiles/.zshrc ${HOME}/.zshrc
+    RESTART_SHELL=1
 fi

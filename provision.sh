@@ -24,6 +24,10 @@ while [[ $# -gt 0 ]]; do
             INSTALL=($RECIPES)
             shift
             ;;
+        -r|--restart)
+            RESTART_SHELL=1
+            shift
+            ;;
         *)
             INSTALL+=("$1")
             shift
@@ -68,5 +72,8 @@ for recipe in "${INSTALL[@]}"; do
     _recipe $recipe
 done
 
-echo "Finished, restarting shell."
-exec $SHELL
+echo "Finished"
+if [ -n "$RESTART_SHELL" ]; then
+    echo "Restarting shell."
+    exec $SHELL
+fi
