@@ -1,5 +1,5 @@
 #!/bin/bash
-set +e
+set -e
 
 _recipe _path
 _run "Add dotfiles/bin to PATH" _path_high ${HOME}/dotfiles/bin

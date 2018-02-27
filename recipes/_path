@@ -1,5 +1,5 @@
 #!/bin/bash
-set +e
+set -e
 
 function __addline {
     local filename=$1
