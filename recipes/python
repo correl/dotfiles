@@ -32,7 +32,3 @@ if ! [ -d ~/.pyenv/versions/${__PYTHON_VERSION} ]; then
      _run "Install python ${__PYTHON_VERSION}" pyenv install ${__PYTHON_VERSION}
 fi
 pyenv global ${__PYTHON_VERSION}
-
-if ! [ -d ${HOME}/.pip ]; then
-    _run "Install .pip" ln -s ${HOME}/dotfiles/.pip ${HOME}/.pip
-fi
