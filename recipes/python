@@ -1,0 +1,36 @@
+#!/bin/bash
+set -e
+
+__PYTHON_VERSION=3.6.4
+
+case $_PLATFORM in
+    darwin)
+        _recipe brew
+        _brew pyenv
+        _brew pyenv-virtualenv
+        ;;
+    *)
+        _recipe _apt
+        for dep in make build-essential libssl-dev zlib1g-dev libbz2-dev \
+                        libreadline-dev libsqlite3-dev wget curl llvm  \
+                        libncurses5-dev libncursesw5-dev xz-utils tk-dev; do
+            _apt $dep
+        done
+        if [ ! -d ~/.pyenv ]; then
+            _run "Install pyenv" bash <(curl -L https://github.com/pyenv/pyenv-installer/raw/master/bin/pyenv-installer)
+        fi
+        _recipe _path
+        _path "${HOME}/.pyenv/bin"
+        _profile 'eval "$(pyenv init -)"'
+        _profile 'eval "$(pyenv virtualenv-init -)"'
+        ;;
+esac
+
+if ! [ -d ~/.pyenv/versions/${__PYTHON_VERSION} ]; then
+     _run "Install python ${__PYTHON_VERSION}" pyenv install ${__PYTHON_VERSION}
+fi
+pyenv global ${__PYTHON_VERSION}
+
+if ! [ -d ${HOME}/.pip ]; then
+    _run "Install .pip" ln -s ${HOME}/dotfiles/.pip ${HOME}/.pip
+fi

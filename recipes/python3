@@ -1,6 +1,0 @@
-#!/bin/bash
-set -e
-
-_recipe brew
-_brew python3
-_brew mypy
