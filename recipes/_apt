@@ -1,14 +1,13 @@
 #!/bin/bash
 set -e
 
-if [ -z "$__apt_updated" ]; then
-    _run "Update APT cache" sudo apt-get update
-    __apt_updated=yes
-fi
-
 function _apt {
     local pkg=$1
     if ! dpkg -s $pkg >/dev/null 2>&1; then
+        if [ -z "$__apt_updated" ]; then
+            _run "Update APT cache" sudo apt-get update
+            __apt_updated=yes
+        fi
         _run "[apt] Install $pkg" sudo apt-get install -y $1
     else
         echo "[apt] $pkg is already installed, skipping."
