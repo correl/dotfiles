@@ -52,11 +52,24 @@ function _run {
 }
 
 function _recipe {
+    local recipe
+    local path
+    if [ -f "$1" ]; then
+        recipe="$(basename $1)"
+        path=$(dirname "$1")
+    elif [ -f "${RECIPE_PATH}/$1" ]; then
+        recipe="$1"
+        path="${RECIPE_PATH}"
+    else
+        echo "Could not load recipe '$1'" >&2
+        exit 1
+    fi
     STACK+=("$1")
+    pushd "$path"
     echo "-- Recipe '${STACK[@]}' --"
-    source ${HOME}/dotfiles/recipes/$1
-    unset STACK[${#STACK[@]}-1]
+    source "./${recipe}"
     echo "-- Recipe '${STACK[@]}' --"
+    popd
 }
 
 USER=${USER:-$(whoami)}
