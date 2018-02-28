@@ -6,21 +6,23 @@ function __addline {
     shift
     local line="$@"
 
-    grep "^$line\$" $filename || echo $line >> $filename
+    grep "^$line\$" $filename >/dev/null || echo $line >> $filename
+}
+
+function _profile {
+    [ -w ~/.bash_profile ] && __addline ~/.bash_profile $@
+    __addline ~/.profile "$@"
+    __addline ~/.zshenv "$@"
 }
 
 function _path_low {
     PATH="$1:$PATH"
-    test -r ~/.bash_profile && __addline ~/.bash_profile "export PATH='$1'":'"$PATH"'
-    __addline ~/.profile "export PATH='$1'":'"$PATH"'
-    __addline ~/.zshenv "export PATH='$1'":'"$PATH"'
+    _profile "export PATH='$1'":'"$PATH"'
 }
 
 function _path_high {
     PATH="$PATH:$1"
-    test -r ~/.bash_profile && __addline ~/.bash_profile 'export PATH="$PATH"':"'$PATH'"
-    __addline ~/.profile "export PATH='$1'":'"$PATH"'
-    __addline ~/.zshenv "export PATH='$1'":'"$PATH"'
+    _profile 'export PATH="$PATH"':"'$1'"
 }
 
 function _path {
