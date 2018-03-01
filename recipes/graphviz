@@ -1,0 +1,13 @@
+#!/bin/bash
+set -e
+
+case $_PLATFORM in
+    darwin)
+        _recipe brew
+        _brew graphviz
+        ;;
+    *)
+        _recipe _apt
+        _apt graphviz
+        ;;
+esac
