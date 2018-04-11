@@ -10,8 +10,36 @@ case $_PLATFORM in
         EMACS=$(which emacs) _brew mu --with-emacs --HEAD
         ;;
     *)
-        _recipe apt
-        _apt maildir-utils
+        _recipe _apt
+        for dep in \
+            build-essential \
+                autoconf \
+                automake \
+                libtool \
+                texinfo \
+                libgmime-2.6-dev \
+                libxapian-dev \
+                guile-2.0-dev \
+                html2text \
+                xdg-utils \
+                libwebkit-dev
+        do
+            _apt $dep
+        done
+        dir=`mktemp -d` && \
+            pushd $dir >/dev/null
+        echo "[tgz] Fetching mu"
+        curl -sL https://github.com/djcb/mu/archive/master.tar.gz \
+            | tar xz --strip 1 && \
+            echo "[tgz] Configuring mu" && \
+            ./autogen.sh >/dev/null 2>&1 && \
+            ./configure >/dev/null 2>&1 && \
+            echo "[tgz] Building mu" && \
+            make >/dev/null 2>&1 && \
+            echo "[tgz] Installing mu" && \
+            sudo make install >/dev/null 2>&1
+        popd >/dev/null
+        rm -rf "$dir"
         ;;
 esac
 
