@@ -23,9 +23,11 @@ case $_PLATFORM in
         _brew unrar
 
         # Misc
+        _brew entr
         _brew htop
         _brew jq
         _brew lnav
+        _brew the_silver_searcher
         _brew tig
         _brew tmux
         ;;
@@ -41,9 +43,11 @@ case $_PLATFORM in
         _apt unrar
 
         # Misc
+        _apt entr
         _apt htop
         _apt jq
         _apt lnav
+        _apt silversearcher-ag
         _apt tig
         _apt tmux
         ;;
