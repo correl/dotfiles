@@ -28,6 +28,26 @@ while [[ $# -gt 0 ]]; do
             RESTART_SHELL=1
             shift
             ;;
+        -h|--help)
+            cat <<EOF
+Usage: $(basename $0) [OPTION]... [RECIPE]...
+
+Provision one or more dotfiles RECIPEs
+
+Options:
+  -A, --all         Install all available recipes.
+  -D, --debug       Enable debug logging, including command output for each
+                    step.
+  -h, --help        Display this help text and exit.
+  -l, --list        Display all available recipes and exit.
+  -r, --restart     Restart the shell upon completion.
+
+If no RECIPE is provided (and the -A/--all flag is not set), the
+'base' recipe will be provisioned.
+
+EOF
+            exit
+            ;;
         *)
             INSTALL+=("$1")
             shift
