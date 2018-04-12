@@ -1,4 +1,5 @@
 #!/bin/bash
+# Description: The Erlang programming language
 set -e
 
 _recipe brew

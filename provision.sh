@@ -3,7 +3,7 @@ set +e
 trap 'exit' INT
 
 RECIPE_PATH=${HOME}/dotfiles/recipes
-RECIPES=$(ls $RECIPE_PATH|grep -v '^_')
+RECIPES=$(ls $RECIPE_PATH|grep -v '^_' | sort)
 INSTALL=()
 STACK=()
 
@@ -16,7 +16,9 @@ while [[ $# -gt 0 ]]; do
         -l|--list)
             echo Available recipes:
             for recipe in $RECIPES; do
-                echo "  $recipe"
+                description=$(grep '^# Description: ' "${RECIPE_PATH}/$recipe" \
+                                  | cut -d' ' -f 3-)
+                printf "%15s   %s\n" "$recipe" "$description"
             done
             exit
             ;;

@@ -1,4 +1,5 @@
 #!/bin/bash
+# Description: Package manager - Homebrew on OSX, Linuxbrew on Linux
 set -e
 
 function _brew {

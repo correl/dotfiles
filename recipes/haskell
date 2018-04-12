@@ -1,4 +1,5 @@
 #!/bin/bash
+# Description: The Haskell programming language
 set -e
 
 _brew haskell-stack

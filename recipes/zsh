@@ -1,4 +1,5 @@
 #!/bin/bash
+# Description: Feature-rich interactive shell with plugins
 set -e
 
 case $_PLATFORM in

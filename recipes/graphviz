@@ -1,4 +1,5 @@
 #!/bin/bash
+# Description: Graph visualization software
 set -e
 
 case $_PLATFORM in

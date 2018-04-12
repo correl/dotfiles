@@ -1,4 +1,5 @@
 #!/bin/bash
+# Description: Email syncing tools plus the mu4e client
 set -e
 
 _recipe brew

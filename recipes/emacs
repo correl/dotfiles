@@ -1,4 +1,5 @@
 #!/bin/bash
+# Description: GNU Emacs
 set -e
 
 _recipe brew

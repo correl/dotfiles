@@ -1,4 +1,5 @@
 #!/bin/bash
+# Description: File syncing
 set -e
 
 case $_PLATFORM in

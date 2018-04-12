@@ -1,4 +1,5 @@
 #!/bin/bash
+# Description: The (SWI) Prolog programming language
 set -e
 
 _recipe brew

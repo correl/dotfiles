@@ -1,4 +1,5 @@
 #!/bin/bash
+# Description: The Elm programming language
 set -e
 
 _recipe nvm

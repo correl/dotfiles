@@ -1,4 +1,5 @@
 #!/bin/bash
+# Description: Javascript version management
 set -e
 
 function __install_nvm {
