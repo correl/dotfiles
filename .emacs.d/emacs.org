@@ -443,7 +443,9 @@ Configure jedi and company-mode to provide auto-completion for python.
 #+BEGIN_SRC emacs-lisp
   (use-package graphviz-dot-mode
     :ensure t
-    :mode "\.dot$")
+    :mode "\.dot$"
+    :config
+    (setq graphviz-dot-indent-width 2))
 #+END_SRC
 *** Gnuplot
 #+name: programming
