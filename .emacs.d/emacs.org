@@ -377,7 +377,7 @@ installed:
 #+BEGIN_SRC emacs-lisp
   (use-package elpy
     :ensure t
-    :after python-mode
+    :after python
     :config (elpy-enable))
 #+END_SRC
 **** Cython
