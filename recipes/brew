@@ -20,6 +20,15 @@ function _brew_cask {
     fi
 }
 
+function _brew_tap {
+    local tap=$1
+    if ! brew tap | grep "^$tap$" >/dev/null 2>&1; then
+        _run "[brew tap] Tap repository $tap" brew tap $@
+    else
+        echo "[brew tap] $tap is already present, skipping."
+    fi
+}
+
 case "$(uname -s)" in
     Darwin)
         if ! which brew >/dev/null; then

@@ -6,7 +6,8 @@ _recipe brew
 
 case $_PLATFORM in
     darwin)
-        _brew emacs --with-cocoa --with-librsvg --with-imagemagick@6
+        _brew_tap railwaycat/emacsmacport
+        _brew emacs-mac --with-modern-icon
         ;;
     linux)
         _recipe _apt
