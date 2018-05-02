@@ -65,7 +65,7 @@ function _run {
     shift
     if [ -z "$DEBUG" ]; then
         echo -n "$msg..."
-        $@ 2>&1 >/dev/null
+        $@ >/dev/null 2>&1
     else
         echo "$msg..."
         $@
