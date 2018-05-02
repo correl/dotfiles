@@ -11,3 +11,22 @@ case "$(uname -s)" in
         _recipe _apt
         _apt texlive-full
 esac
+
+tlmgr init-usertree 2>/dev/null || true
+
+function _tex {
+    local pkg=$1
+    if ! tlmgr --usermode info --only-installed $pkg | grep -i '^installed:.*Yes$' >/dev/null 2>&1; then
+        _run "[tex] Install $pkg" tlmgr --usermode install $@
+    else
+        echo "[tex] $pkg is already installed, skipping."
+    fi
+}
+
+_tex labbook
+_tex mdframed
+_tex microtype
+_tex minted
+_tex moderncv
+_tex soul
+_tex tufte-latex
