@@ -60,6 +60,7 @@ Display major-mode names as icons in the mode line when possible.
 #+BEGIN_SRC emacs-lisp
   (use-package mode-icons
     :ensure t
+    :defer 5
     :config (mode-icons-mode))
 #+END_SRC
 ** Which-Key
@@ -266,10 +267,12 @@ Ruby-flavoured Erlang.
     :mode "\\.exs?$")
 
   (use-package alchemist
-    :ensure t)
+    :ensure t
+    :after elixir-mode)
 
   (use-package ob-elixir
-    :ensure t)
+    :ensure t
+    :after ob)
 #+END_SRC
 *** Haskell
 A strongly typed, pure functional language.
@@ -485,13 +488,15 @@ Editor-agnostic coding style configuration.
 #+BEGIN_SRC emacs-lisp
   (use-package projectile
     :ensure t
+    :defer t
     :diminish " 📁"
-    :init
-    (use-package helm-projectile
-      :ensure t
-      :config (helm-projectile-on))
     :config
     (projectile-mode t))
+
+  (use-package helm-projectile
+    :ensure t
+    :after (helm projectile)
+    :config (helm-projectile-on))
 #+END_SRC
 *** Autocomplete
 **** Company
@@ -561,6 +566,7 @@ Live web development in Emacs.
 #+BEGIN_SRC emacs-lisp
   (use-package yasnippet
     :ensure t
+    :defer t
     :diminish yas-minor-mode
     :config (yas-global-mode 1))
 #+END_SRC
@@ -680,7 +686,7 @@ names.
 #+begin_src emacs-lisp
   (use-package ob-http
     :ensure t
-    :defer t)
+    :after ob)
 #+end_src
 ***** Language evaluation
 
