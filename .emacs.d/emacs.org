@@ -7,7 +7,24 @@
 #+BEGIN_SRC emacs-lisp
   (setq inhibit-startup-screen +1)
 #+END_SRC
+* Custom settings
+Store options set via =customize-*= in a separate file (Emacs stores
+them in =init.el= by default).
+
+#+name: custom-settings
+#+BEGIN_SRC emacs-lisp
+  (setq custom-file "~/.emacs.d/custom.el")
+  (if (file-exists-p custom-file)
+      (load custom-file))
+
+  (setf custom-safe-themes t)
+#+END_SRC
 * UI
+** Highlight the current line
+#+name: look-and-feel
+#+BEGIN_SRC emacs-lisp
+  (global-hl-line-mode +1)
+#+END_SRC
 ** Powerline
 Make the mode line prettier.
 #+name: look-and-feel
@@ -31,11 +48,13 @@ Visualize the current position within the buffer in the modeline with nyancat!
 ** Display Time & Battery Status
 #+name: look-and-feel
 #+BEGIN_SRC emacs-lisp
-  (setq battery-mode-line-format
-        "[%b%p%%%% (%t)]")
-
-  (display-battery-mode t)
+  (setq display-time-24hr-format t)
+  (setq display-time-load-average-threshold 0.9)
   (display-time-mode t)
+
+  (setq battery-mode-line-format
+        "[🔋%b%p%%%% (%t)]")
+  (display-battery-mode t)
 #+END_SRC
 ** Theme
 #+name: look-and-feel
@@ -50,8 +69,8 @@ Visualize the current position within the buffer in the modeline with nyancat!
 
     (setq moe-theme-highlight-buffer-id t)
     (moe-theme-set-color 'cyan)
-    (powerline-moe-theme)
-    (moe-light))
+    ;; (powerline-moe-theme)
+    (moe-dark))
 
 #+END_SRC
 ** Major mode icons
@@ -632,6 +651,15 @@ Lazy sequences in Emacs (compatible with seq.el).
 #+END_SRC
 ** Formats
 *** Org
+**** Pretty bullets
+#+name: packages
+#+BEGIN_SRC emacs-lisp
+  (use-package org-bullets
+    :ensure t
+    :after org
+    :config
+    (org-bullets-mode))
+#+END_SRC
 **** Modules
 #+name: org-module-table
 | org-habit |
@@ -1204,6 +1232,14 @@ Taken from http://groups.google.com/group/gnu.emacs.gnus/browse_thread/thread/a6
 #+BEGIN_SRC emacs-lisp
   (setq-default indent-tabs-mode nil)
 #+END_SRC
+** Prefer encrypted auth sources
+New credentials will be stored in the gpg-encrypted authinfo by
+default.
+
+#+name: other
+#+BEGIN_SRC emacs-lisp
+  (setq auth-sources '("~/.authinfo.gpg" "~/.authinfo" "~/.netrc"))
+#+END_SRC
 ** Rename file and buffer
 Taken from [[http://emacsredux.com/blog/2013/05/04/rename-file-and-buffer/][Emacs Redux]]
 #+name: other
@@ -1403,16 +1439,6 @@ is a nice thing to do in other environments, as well).
     ;; binding)
     (setq ns-command-modifier 'meta))
 #+END_SRC
-* Custom settings
-Store options set via =customize-*= in a separate file (Emacs stores
-them in =init.el= by default).
-
-#+name: custom-settings
-#+BEGIN_SRC emacs-lisp
-  (setq custom-file "~/.emacs.d/custom.el")
-  (if (file-exists-p custom-file)
-      (load custom-file))
-#+END_SRC
 * Auto-loading elisp files
 Any elisp files dropped into =~/.emacs.local.d/= will be
 automatically loaded.
@@ -1443,11 +1469,11 @@ this org file.
   ;;;;
 
   <<startup>>
+  <<custom-settings>>
   <<look-and-feel>>
   <<packages>>
   <<programming>>
   <<autocomplete>>
   <<other>>
   <<auto-load>>
-  <<custom-settings>>
 #+END_SRC
