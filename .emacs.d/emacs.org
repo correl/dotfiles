@@ -69,7 +69,7 @@ Visualize the current position within the buffer in the modeline with nyancat!
 
     (setq moe-theme-highlight-buffer-id t)
     (moe-theme-set-color 'cyan)
-    ;; (powerline-moe-theme)
+    (powerline-moe-theme)
     (moe-dark))
 
 #+END_SRC
