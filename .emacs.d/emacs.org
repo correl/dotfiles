@@ -656,9 +656,7 @@ Lazy sequences in Emacs (compatible with seq.el).
 #+BEGIN_SRC emacs-lisp
   (use-package org-bullets
     :ensure t
-    :after org
-    :config
-    (org-bullets-mode))
+    :hook (org-mode . org-bullets-mode))
 #+END_SRC
 **** Modules
 #+name: org-module-table
