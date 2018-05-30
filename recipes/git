@@ -13,3 +13,13 @@ case $_PLATFORM in
         _apt git
         ;;
 esac
+
+function _git {
+    local repo=$1
+    local dest=$2
+    if ! test -d "$dest"; then
+        _run "[git] Clone $repo to $dest" git clone --recursive $1 $2
+    else
+        echo "[git] $dest already exists, skipping."
+    fi
+}

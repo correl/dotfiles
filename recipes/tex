@@ -23,6 +23,12 @@ function _tex {
     fi
 }
 
+function _tex_git {
+    local pkg=$1
+    local repo=$2
+    _git $2 "$(kpsewhich -var-value TEXMFHOME)/tex/latex/${pkg}"
+}
+
 _tex labbook
 _tex mdframed
 _tex microtype
@@ -30,3 +36,6 @@ _tex minted
 _tex moderncv
 _tex soul
 _tex tufte-latex
+
+_recipe git
+_tex_git dnd https://github.com/evanbergeron/DND-5e-LaTeX-Template.git
