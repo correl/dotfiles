@@ -31,6 +31,9 @@ case $_PLATFORM in
         _brew the_silver_searcher
         _brew tig
         _brew tmux
+
+        _brew rename
+        _brew watch
         ;;
     *)
         _recipe _apt
