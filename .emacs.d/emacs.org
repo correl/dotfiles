@@ -1100,6 +1100,13 @@ breaks.
                    org-mode-hook)))
 
 #+END_SRC
+*** Define Word
+#+name: packages
+#+BEGIN_SRC emacs-lisp
+  (use-package define-word
+    :ensure t
+    :bind ("C-c d" . define-word-at-point))
+#+END_SRC
 * Finances
 ** Ledger
 
