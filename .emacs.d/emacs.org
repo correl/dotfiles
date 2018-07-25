@@ -264,6 +264,10 @@ Communicates with the clojure REPL.
   (use-package hy-mode
     :ensure t
     :mode "\\.hy$")
+
+  (use-package ob-hy
+    :ensure t
+    :defer t)
 #+END_SRC
 *** Erlang
 A distributed, fault-tolerant functional language.
@@ -732,6 +736,7 @@ languages. Setting ~Confirm Evaluation~ to ~No~ disables the
 | mscgen       |       | No                  | Message sequence charts         |
 | haskell      |       | Yes                 | A pure, functional language     |
 | python       |       | Yes                 | A dynamic, all-purpose language |
+| hy           |       | Yes                 | Python Lisp dialect             |
 | ruby         |       | Yes                 | A dynamic, all-purpose language |
 | shell        |       | Yes                 | Shell scripts                   |
 | http         |       | No                  | HTTP requests                   |
