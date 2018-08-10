@@ -1,0 +1,18 @@
+#!/bin/bash
+set -e
+
+_recipe _link
+
+_launchd() {
+    local service=$1
+    local filename="${service}.plist"
+    local source=${HOME}/dotfiles/Library/LaunchAgents/${filename}
+    local target=${HOME}/Library/LaunchAgents/${filename}
+    if launchctl list $service >/dev/null 2>&1; then
+        echo "[launchd] $service already installed, skipping."
+    else
+        mkdir -p ${HOME}/Library/LaunchAgents
+        _link $source $target
+        _run "[launchd] Install $service" launchctl load $target
+    fi
+}
