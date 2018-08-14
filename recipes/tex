@@ -9,7 +9,10 @@ case "$(uname -s)" in
         ;;
     *)
         _recipe _apt
+        _ppa jonathonf/texlive
         _apt texlive-full
+        # xzdec is required by tlmgr
+        _apt xzdec
 esac
 
 tlmgr init-usertree 2>/dev/null || true
