@@ -37,11 +37,11 @@ chunkc set global_desktop_mode           bsp
 # chunkc set 2_desktop_mode                monocle
 # chunkc set 5_desktop_mode                float
 
-chunkc set global_desktop_offset_top     20
-chunkc set global_desktop_offset_bottom  20
-chunkc set global_desktop_offset_left    20
-chunkc set global_desktop_offset_right   20
-chunkc set global_desktop_offset_gap     15
+chunkc set global_desktop_offset_top     40
+chunkc set global_desktop_offset_bottom  40
+chunkc set global_desktop_offset_left    40
+chunkc set global_desktop_offset_right   40
+chunkc set global_desktop_offset_gap     25
 
 # chunkc set 3_desktop_offset_top          190
 # chunkc set 3_desktop_offset_bottom       190
@@ -101,7 +101,7 @@ chunkc set focused_border_skip_floating  0
 
 chunkc core::load border.so
 chunkc core::load tiling.so
-chunkc core::load ffm.so
+# chunkc core::load ffm.so
 
 #
 # NOTE: shell commands require escaped quotes
