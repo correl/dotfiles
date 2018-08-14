@@ -1,0 +1,50 @@
+#!/bin/bash
+# Description: Tiling window manager for Linux
+#
+# Info on using bspwm with xfce:
+#   https://github.com/bgdawes/bspwm-xfce-dotfiles/wiki
+set -e
+
+_recipe git
+_recipe _link
+
+_deps=(
+    xcb
+    libxcb-util0-dev
+    libxcb-ewmh-dev
+    libxcb-randr0-dev
+    libxcb-icccm4-dev
+    libxcb-keysyms1-dev
+    libxcb-xinerama0-dev
+    libasound2-dev
+    gcc
+    make
+    libxcb-xtest0-dev
+    libxft-dev
+    libx11-xcb-dev
+    compton
+)
+
+for dep in ${_deps[@]}; do
+    _apt $dep
+done
+
+if [ ! -x /usr/local/bin/bspwm ]; then
+    _git git@github.com:baskerville/bspwm.git $HOME/.bspwm
+    _run "[make] bspwm" make -C $HOME/.bspwm
+    _run "[make install] bspwm" sudo make -C $HOME/.bspwm install
+else
+    echo "[make install] bspwm is already installed, skipping."
+fi
+if [ ! -x /usr/local/bin/sxhkd ]; then
+    _git git@github.com:baskerville/sxhkd.git $HOME/.sxhkd
+    _run "[make] sxhkd" make -C $HOME/.sxhkd
+    _run "[make install] sxhkd" sudo make -C $HOME/.sxhkd install
+else
+    echo "[make install] sxhkd is already installed, skipping."
+fi
+
+_link ${HOME}/dotfiles/.config/bspwm/bspwmrc \
+      ${HOME}/.config/bspwm/bspwmrc
+_link ${HOME}/dotfiles/.config/sxhkd/sxhkdrc \
+      ${HOME}/.config/sxhkd/sxhkdrc

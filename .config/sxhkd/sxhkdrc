@@ -1,0 +1,14 @@
+{alt,shift + alt} + {j,k}
+    bspc node {-f,-n} {next,prev}
+alt + Return
+    bspc node -n biggest
+shift + alt + Return
+    xfce4-terminal
+{shift + ctrl,shift + alt + ctrl} + space
+    state={fullscreen,floating}; \
+    bspc query -N -n "focused.$\{state\}" && state=tiled; \
+    bspc node -t "$state"
+{alt,shift + alt} + {w,e}
+    bspc monitor {-f,-m} {west,east}
+{alt,shift + alt} + {1-9}
+    bspc {desktop -f,node -d} ^{1-9}
