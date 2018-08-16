@@ -1,5 +1,5 @@
 {alt,shift + alt} + {j,k}
-    bspc node {-f,-n} {next,prev}
+    bspc node {-f,-n} {next,prev}.active
 alt + Return
     bspc node -n biggest
 shift + alt + Return
@@ -8,6 +8,10 @@ shift + alt + Return
     state={fullscreen,floating}; \
     bspc query -N -n "focused.$\{state\}" && state=tiled; \
     bspc node -t "$state"
+shift + alt + space
+    bspc desktop -l next
+shift + ctrl + r
+    ~/.config/bspwm/bspwmrc
 {alt,shift + alt} + {w,e}
     bspc monitor {-f,-m} {west,east}
 {alt,shift + alt} + {1-9}

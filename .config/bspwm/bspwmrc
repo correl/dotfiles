@@ -1,6 +1,8 @@
 #! /bin/sh
 
-sxhkd &
+pgrep -x sxhkd >/dev/null \
+    && pkill -x -SIGUSR1 sxhkd \
+    || sxhkd &
 
 bspc monitor -d I II III IV V VI VII VIII IX
 
@@ -9,9 +11,10 @@ bspc config window_gap          12
 bspc config bottom_padding      30
 
 bspc config split_ratio          0.52
-bspc config borderless_monocle   true
-bspc config gapless_monocle      true
+bspc config borderless_monocle   false
+bspc config gapless_monocle      false
 
+bspc rule -r '*'
 bspc rule -a Gimp desktop='^8' state=floating follow=on
 bspc rule -a Chromium desktop='^2'
 bspc rule -a mplayer2 state=floating
