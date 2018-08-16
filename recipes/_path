@@ -12,7 +12,7 @@ function __addline {
 function _profile {
     [ -w ~/.bash_profile ] && __addline ~/.bash_profile $@
     __addline ~/.profile "$@"
-    __addline ~/.zshenv "$@"
+    __addline ~/.zprofile "$@"
 }
 
 function _path_low {
