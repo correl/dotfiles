@@ -70,47 +70,18 @@
 # default, test < cmd - return : open -na /Applications/Terminal.app
 
 # open terminal
-alt - return : open -na /Applications/iTerm.app
+shift + alt - return : open -na /Applications/iTerm.app
 
-alt - j : chunkc tiling::window --focus prev
-alt - k : chunkc tiling::window --focus next
+alt - j : chunkc tiling::window --focus next
+alt - k : chunkc tiling::window --focus prev
 
-shift + alt - j : chunkc tiling:window --warp prev
-shift + alt - k : chunkc tiling:window --warp next
+shift + alt - j : chunkc tiling::window --warp next
+shift + alt - k : chunkc tiling::window --warp prev
+
+alt - return : chunkc tiling::window --swap biggest
 
 # equalize size of windows
 shift + alt - 0 : chunkc tiling::desktop --equalize
-
-# make floating window fill screen
-shift + alt - up     : chunkc tiling::window --grid-layout 1:1:0:0:1:1
-
-# make floating window fill left-half of screen X
-shift + alt - left   : chunkc tiling::window --grid-layout 1:2:0:0:1:1
-
-# make floating window fill right-half of screen
-shift + alt - right  : chunkc tiling::window --grid-layout 1:2:1:0:1:1
-
-alt - 1 : chunkc tiling::desktop --focus 1
-alt - 2 : chunkc tiling::desktop --focus 2
-alt - 3 : chunkc tiling::desktop --focus 3
-alt - 4 : chunkc tiling::desktop --focus 4
-alt - 5 : chunkc tiling::desktop --focus 5
-alt - 6 : chunkc tiling::desktop --focus 6
-alt - 7 : chunkc tiling::desktop --focus 7
-shift + alt - 1 : chunkc tiling::window --send-to-desktop 1; \
-                  chunkc tiling::desktop --focus 1
-shift + alt - 2 : chunkc tiling::window --send-to-desktop 2; \
-                  chunkc tiling::desktop --focus 2
-shift + alt - 3 : chunkc tiling::window --send-to-desktop 3; \
-                  chunkc tiling::desktop --focus 3
-shift + alt - 4 : chunkc tiling::window --send-to-desktop 4; \
-                  chunkc tiling::desktop --focus 4
-shift + alt - 5 : chunkc tiling::window --send-to-desktop 5; \
-                  chunkc tiling::desktop --focus 5
-shift + alt - 6 : chunkc tiling::window --send-to-desktop 6; \
-                  chunkc tiling::desktop --focus 6
-shift + alt - 7 : chunkc tiling::window --send-to-desktop 7; \
-                  chunkc tiling::desktop --focus 7
 
 cmd - w : chunkc tiling::monitor -f prev
 cmd - e : chunkc tiling::monitor -f next
