@@ -45,10 +45,6 @@ export ALTERNATE_EDITOR=""
 
 alias erl='rlwrap -a erl'
 
-if which virtualenvwrapper.sh >/dev/null; then
-    source virtualenvwrapper.sh
-fi
-
 if [ -d ${HOME}/.cabal/bin ]; then
     export PATH="${HOME}/.cabal/bin:$PATH"
 fi
