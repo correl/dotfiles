@@ -28,6 +28,8 @@ esac
 
 _profile 'eval "$(pyenv init -)"'
 _profile 'eval "$(pyenv virtualenv-init -)"'
+_profile 'pyenv global $(pyenv versions --bare --skip-aliases | egrep "^(\.?[[:digit:]]+)+$" | sort -rV)'
+
 
 if ! [ -d ~/.pyenv/versions/${__PYTHON_VERSION} ]; then
      _run "Install python ${__PYTHON_VERSION}" pyenv install ${__PYTHON_VERSION}
