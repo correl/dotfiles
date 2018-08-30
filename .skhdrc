@@ -78,7 +78,10 @@ alt - k : chunkc tiling::window --focus prev
 shift + alt - j : chunkc tiling::window --warp next
 shift + alt - k : chunkc tiling::window --warp prev
 
-alt - return : chunkc tiling::window --swap biggest
+alt - r : chunkc tiling::desktop --rotate 90
+shift + alt -r : chunkc tiling::desktop --rotate 270
+
+cmd - return : chunkc tiling::window --swap biggest
 
 # equalize size of windows
 shift + alt - 0 : chunkc tiling::desktop --equalize
