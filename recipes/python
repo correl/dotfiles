@@ -2,9 +2,10 @@
 # Description: The Python programming language
 set -e
 
-__PYTHON_VERSION=3.6.4
+__PYTHON_VERSION=3.7.0
 
 _recipe _path
+_recipe git
 
 case $_PLATFORM in
     darwin)
@@ -20,7 +21,9 @@ case $_PLATFORM in
             _apt $dep
         done
         if [ ! -d ~/.pyenv ]; then
-            _run "Install pyenv" bash <(curl -L https://github.com/pyenv/pyenv-installer/raw/master/bin/pyenv-installer)
+            _run "[git] Install pyenv" bash <(curl -L https://github.com/pyenv/pyenv-installer/raw/master/bin/pyenv-installer)
+        else
+            _run "[git] Upgrade pyenv" git -C $(pyenv root) pull
         fi
         _path "${HOME}/.pyenv/bin"
         ;;
@@ -32,6 +35,6 @@ _profile 'pyenv global $(pyenv versions --bare --skip-aliases | egrep "^(\.?[[:d
 
 
 if ! [ -d ~/.pyenv/versions/${__PYTHON_VERSION} ]; then
-     _run "Install python ${__PYTHON_VERSION}" pyenv install ${__PYTHON_VERSION}
+     _run "[pyenv] Install python ${__PYTHON_VERSION}" pyenv install ${__PYTHON_VERSION}
 fi
 pyenv global ${__PYTHON_VERSION}
