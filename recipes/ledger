@@ -2,5 +2,14 @@
 # Description: Command-line double-entry accounting
 set -e
 
-_recipe brew
-_brew ledger
+case $_PLATFORM in
+    darwin)
+        _recipe brew
+        _brew ledger
+        ;;
+    *)
+        _recipe _apt
+        _ppa mbudde/ledger
+        _apt ledger
+        ;;
+esac
