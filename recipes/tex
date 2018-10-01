@@ -29,7 +29,15 @@ function _tex {
 function _tex_git {
     local pkg=$1
     local repo=$2
-    _git $2 "$(kpsewhich -var-value TEXMFHOME)/tex/latex/${pkg}"
+    local repo_path=$3
+    local clone_path="$(kpsewhich -var-value TEXMFHOME)/git/latex/${pkg}"
+    local install_path="$(kpsewhich -var-value TEXMFHOME)/tex/latex/${pkg}"
+    if [[ ! -d "${install_path}" ]]; then
+        _git $2 "$(kpsewhich -var-value TEXMFHOME)/git/latex/${pkg}"
+        _run "[tex] Install $pkg" ln -s "${clone_path}/${repo_path}" "${install_path}"
+    else
+        echo "[tex] $pkg is already installed, skipping."
+    fi
 }
 
 _tex labbook
@@ -42,3 +50,4 @@ _tex tufte-latex
 
 _recipe git
 _tex_git dnd https://github.com/evanbergeron/DND-5e-LaTeX-Template.git
+_tex_git trek https://github.com/lancelet/beamer-trek.git theme
