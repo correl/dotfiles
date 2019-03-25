@@ -3,7 +3,7 @@
 
 * Startup
 ** Disable the emacs startup screen.
-#+name: startup
+#+HEADER: :noweb-ref startup
 #+BEGIN_SRC emacs-lisp
   (setq inhibit-startup-screen +1)
 #+END_SRC
@@ -11,7 +11,7 @@
 Store options set via =customize-*= in a separate file (Emacs stores
 them in =init.el= by default).
 
-#+name: custom-settings
+#+HEADER: :noweb-ref custom-settings
 #+BEGIN_SRC emacs-lisp
   (setq custom-file "~/.emacs.d/custom.el")
   (if (file-exists-p custom-file)
@@ -21,13 +21,13 @@ them in =init.el= by default).
 #+END_SRC
 * UI
 ** Highlight the current line
-#+name: look-and-feel
+#+HEADER: :noweb-ref look-and-feel
 #+BEGIN_SRC emacs-lisp
   (global-hl-line-mode +1)
 #+END_SRC
 ** Powerline
 Make the mode line prettier.
-#+name: look-and-feel
+#+HEADER: :noweb-ref look-and-feel
 #+BEGIN_SRC emacs-lisp
   (use-package powerline
     :ensure t
@@ -37,7 +37,7 @@ Make the mode line prettier.
 #+END_SRC
 ** Nyan-mode
 Visualize the current position within the buffer in the modeline with nyancat!
-#+name: look-and-feel
+#+HEADER: :noweb-ref look-and-feel
 #+BEGIN_SRC emacs-lisp
   (use-package nyan-mode
     :ensure t
@@ -46,7 +46,7 @@ Visualize the current position within the buffer in the modeline with nyancat!
     (nyan-start-animation))
 #+END_SRC
 ** Display Time & Battery Status
-#+name: look-and-feel
+#+HEADER: :noweb-ref look-and-feel
 #+BEGIN_SRC emacs-lisp
   (setq display-time-24hr-format t)
   (setq display-time-load-average-threshold 0.9)
@@ -57,7 +57,7 @@ Visualize the current position within the buffer in the modeline with nyancat!
   (display-battery-mode t)
 #+END_SRC
 ** Theme
-#+name: look-and-feel
+#+HEADER: :noweb-ref look-and-feel
 #+BEGIN_SRC emacs-lisp
   (use-package moe-theme
     :ensure t
@@ -75,7 +75,7 @@ Visualize the current position within the buffer in the modeline with nyancat!
 #+END_SRC
 ** Major mode icons
 Display major-mode names as icons in the mode line when possible.
-#+name: look-and-feel
+#+HEADER: :noweb-ref look-and-feel
 #+BEGIN_SRC emacs-lisp
   (use-package mode-icons
     :ensure t
@@ -84,7 +84,7 @@ Display major-mode names as icons in the mode line when possible.
 #+END_SRC
 ** Which-Key
 Display key binding completions after a delay.
-#+name: look-and-feel
+#+HEADER: :noweb-ref look-and-feel
 #+BEGIN_SRC emacs-lisp
   (use-package which-key
     :ensure t
@@ -94,7 +94,7 @@ Display key binding completions after a delay.
     (which-key-mode))
 #+END_SRC
 ** Helm
-#+name: packages
+#+HEADER: :noweb-ref packages
 #+BEGIN_SRC emacs-lisp
   (use-package helm
     :ensure t
@@ -115,7 +115,7 @@ Display key binding completions after a delay.
                           (define-key eshell-mode-map (kbd "C-c C-l") 'helm-eshell-history)))))
 #+END_SRC
 *** helm-descbinds
-#+name: packages
+#+HEADER: :noweb-ref packages
 #+BEGIN_SRC emacs-lisp
   (use-package helm-descbinds
     :ensure t
@@ -124,14 +124,14 @@ Display key binding completions after a delay.
 #+END_SRC
 *** helm-ag
 Helm search plugin for [[Ag%20(The%20Silver%20Searcher)][Ag (The Silver Searcher)]]
-#+name: packages
+#+HEADER: :noweb-ref packages
 #+BEGIN_SRC emacs-lisp
   (use-package helm-ag
     :ensure t
     :commands (helm-ag))
 #+END_SRC
 *** helm-flyspell
-#+name: packages
+#+HEADER: :noweb-ref packages
 #+begin_src emacs-lisp
   (use-package helm-flyspell
     :ensure t
@@ -148,7 +148,7 @@ Quite usefully, using prefix arguments expands the lines of context
 shown around the search results.
 #+END_NOTES
 
-#+name: packages
+#+HEADER: :noweb-ref packages
 #+BEGIN_SRC emacs-lisp
   (use-package helm-swoop
     :ensure t
@@ -168,7 +168,7 @@ shown around the search results.
 
 Visualize and traverse undo history as a directed graph.
 
-#+name: packages
+#+HEADER: :noweb-ref packages
 #+BEGIN_SRC emacs-lisp
   (use-package undo-tree
     :ensure t
@@ -176,7 +176,7 @@ Visualize and traverse undo history as a directed graph.
     :config (global-undo-tree-mode))
 #+END_SRC
 ** Multiple Cursors
-#+name: look-and-feel
+#+HEADER: :noweb-ref look-and-feel
 #+BEGIN_SRC emacs-lisp
   (use-package multiple-cursors
     :bind (("C-S-c C-S-c" . mc/edit-lines)
@@ -188,7 +188,7 @@ Visualize and traverse undo history as a directed graph.
 * Coding
 ** Languages
 *** Lisps
-#+name: lisps
+#+NAME: lisps
 | Mode       | Description               |
 |------------+---------------------------|
 | lisp       | Common Lisp               |
@@ -198,7 +198,7 @@ Visualize and traverse undo history as a directed graph.
 | clojure    | Clojure                   |
 | hy         | Hy (Lisp-flavored Python) |
 
-#+name: programming
+#+HEADER: :noweb-ref programming
 #+BEGIN_SRC emacs-lisp :noweb yes
   ;; SLIME
   (if (file-exists-p "~/quicklisp/slime-helper.el")
@@ -235,14 +235,14 @@ Visualize and traverse undo history as a directed graph.
                 lisp-mode-hooks)))
 #+END_SRC
 **** Lisp-Flavored Erlang
-#+name: programming
+#+HEADER: :noweb-ref programming
 #+BEGIN_SRC emacs-lisp
   (use-package lfe-mode
     :ensure t
     :mode "\\.lfe$")
 #+END_SRC
 **** Clojure
-#+name: programming
+#+HEADER: :noweb-ref programming
 #+BEGIN_SRC emacs-lisp
   (use-package clojure-mode
     :ensure t
@@ -251,7 +251,7 @@ Visualize and traverse undo history as a directed graph.
 #+END_SRC
 ***** Cider
 Communicates with the clojure REPL.
-#+name: programming
+#+HEADER: :noweb-ref programming
 #+BEGIN_SRC emacs-lisp
   (use-package cider
     :ensure t
@@ -259,7 +259,7 @@ Communicates with the clojure REPL.
     :config (setq org-babel-clojure-backend 'cider))
 #+END_SRC
 **** Hy
-#+name: programming
+#+HEADER: :noweb-ref programming
 #+BEGIN_SRC emacs-lisp
   (use-package hy-mode
     :ensure t
@@ -271,7 +271,7 @@ Communicates with the clojure REPL.
 #+END_SRC
 *** Erlang
 A distributed, fault-tolerant functional language.
-#+name: programming
+#+HEADER: :noweb-ref programming
 #+BEGIN_SRC emacs-lisp
     (use-package erlang
       :ensure t
@@ -283,7 +283,7 @@ A distributed, fault-tolerant functional language.
 #+END_SRC
 *** Elixir
 Ruby-flavoured Erlang.
-#+name: programming
+#+HEADER: :noweb-ref programming
 #+BEGIN_SRC emacs-lisp
   (use-package elixir-mode
     :ensure t
@@ -299,7 +299,7 @@ Ruby-flavoured Erlang.
 #+END_SRC
 *** Haskell
 A strongly typed, pure functional language.
-#+name: programming
+#+HEADER: :noweb-ref programming
 #+BEGIN_SRC emacs-lisp
   (use-package haskell-mode
     :ensure t
@@ -314,7 +314,7 @@ A strongly typed, pure functional language.
 A functional, reactive language for the web that compiles to
 JavaScript.
 
-#+name: programming
+#+HEADER: :noweb-ref programming
 #+BEGIN_SRC emacs-lisp
   (use-package elm-mode
     :ensure t
@@ -328,7 +328,7 @@ JavaScript.
 
 A functional language with dependent types.
 
-#+name: programming
+#+HEADER: :noweb-ref programming
 #+BEGIN_SRC emacs-lisp
   (use-package idris-mode
     :ensure t
@@ -336,14 +336,14 @@ A functional language with dependent types.
 #+END_SRC
 *** Web
 **** HTML
-#+name: programming
+#+HEADER: :noweb-ref programming
 #+BEGIN_SRC emacs-lisp
   (use-package web-mode
     :ensure t
     :mode "\\.html?$")
 #+END_SRC
 **** SCSS
-#+name: programming
+#+HEADER: :noweb-ref programming
 #+BEGIN_SRC emacs-lisp
   (use-package scss-mode
     :ensure t
@@ -354,14 +354,14 @@ A functional language with dependent types.
                         (setq css-indent-offset 2))))
 #+END_SRC
 *** JavaScript
-#+name: programming
+#+HEADER: :noweb-ref programming
 #+BEGIN_SRC emacs-lisp
   (use-package js2-mode
     :ensure t
     :mode ".js$")
 #+END_SRC
 *** PHP
-#+name: programming
+#+HEADER: :noweb-ref programming
 #+BEGIN_SRC emacs-lisp
   (use-package php-mode
     :ensure t
@@ -374,7 +374,7 @@ A functional language with dependent types.
                                        (c-set-offset 'case-label '+))))
 #+END_SRC
 *** Python
-#+name: programming
+#+HEADER: :noweb-ref programming
 #+BEGIN_SRC emacs-lisp
   (use-package python-mode
     :ensure t
@@ -399,7 +399,7 @@ installed:
   pip install yapf
 #+END_SRC
 
-#+name: programming
+#+HEADER: :noweb-ref programming
 #+BEGIN_SRC emacs-lisp
   (use-package elpy
     :ensure t
@@ -407,7 +407,7 @@ installed:
     :config (elpy-enable))
 #+END_SRC
 **** Cython
-#+name: programming
+#+HEADER: :noweb-ref programming
 #+BEGIN_SRC emacs-lisp
   (use-package cython-mode
     :ensure t
@@ -415,7 +415,7 @@ installed:
 #+END_SRC
 **** Company-Jedi
 Configure jedi and company-mode to provide auto-completion for python.
-#+name: programming
+#+HEADER: :noweb-ref programming
 #+begin_src emacs-lisp
   (use-package jedi
     :ensure t
@@ -443,7 +443,7 @@ Configure jedi and company-mode to provide auto-completion for python.
 #+end_src
 
 *** Ruby
-#+name: programming
+#+HEADER: :noweb-ref programming
 #+BEGIN_SRC emacs-lisp
   (use-package rvm
     :ensure t
@@ -451,21 +451,21 @@ Configure jedi and company-mode to provide auto-completion for python.
                rvm-use-default))
 #+END_SRC
 *** Yaml
-#+name: programming
+#+HEADER: :noweb-ref programming
 #+BEGIN_SRC emacs-lisp
   (use-package yaml-mode
     :ensure t
     :mode "\.yml$")
 #+END_SRC
 *** Docker
-#+name: programming
+#+HEADER: :noweb-ref programming
 #+BEGIN_SRC emacs-lisp
   (use-package dockerfile-mode
     :ensure t
     :mode "^Dockerfile$")
 #+END_SRC
 *** Graphviz
-#+name: programming
+#+HEADER: :noweb-ref programming
 #+BEGIN_SRC emacs-lisp
   (use-package graphviz-dot-mode
     :ensure t
@@ -474,14 +474,14 @@ Configure jedi and company-mode to provide auto-completion for python.
     (setq graphviz-dot-indent-width 2))
 #+END_SRC
 *** Gnuplot
-#+name: programming
+#+HEADER: :noweb-ref programming
 #+BEGIN_SRC emacs-lisp
   (use-package gnuplot
     :ensure t)
 #+END_SRC
 *** PlantUML
 
-#+name: programming
+#+HEADER: :noweb-ref programming
 #+BEGIN_SRC emacs-lisp
   (use-package plantuml-mode
     :ensure t
@@ -497,7 +497,7 @@ system.
 
 Editor-agnostic coding style configuration.
 
-#+name: packages
+#+HEADER: :noweb-ref packages
 #+BEGIN_SRC emacs-lisp
   (use-package editorconfig
     :ensure t
@@ -507,7 +507,7 @@ Editor-agnostic coding style configuration.
 #+END_SRC
 
 *** Projectile
-#+name: packages
+#+HEADER: :noweb-ref packages
 #+BEGIN_SRC emacs-lisp
   (use-package projectile
     :ensure t
@@ -527,7 +527,7 @@ Editor-agnostic coding style configuration.
 
 Install and configure Company for auto-completion.
 
-#+name: autocomplete
+#+HEADER: :noweb-ref autocomplete
 #+BEGIN_SRC emacs-lisp
   (use-package company
     :ensure t
@@ -543,7 +543,7 @@ Install and configure Company for auto-completion.
 Not using this for auto-completion anymore, but several packages
 require it.
 
-#+name: autocomplete
+#+HEADER: :noweb-ref autocomplete
 #+begin_src emacs-lisp
   (use-package auto-complete
     :ensure t
@@ -551,7 +551,7 @@ require it.
 #+end_src
 
 *** Flycheck
-#+name: packages
+#+HEADER: :noweb-ref packages
 #+BEGIN_SRC emacs-lisp
   (use-package flycheck
     :ensure t
@@ -560,7 +560,7 @@ require it.
     (add-hook 'after-init-hook #'global-flycheck-mode))
 #+END_SRC
 *** Web Mode
-#+name: packages
+#+HEADER: :noweb-ref packages
 #+BEGIN_SRC emacs-lisp
   (use-package web-mode
     :ensure t
@@ -573,7 +573,7 @@ require it.
 *** Skewer
 Live web development in Emacs.
 
-#+name: packages
+#+HEADER: :noweb-ref packages
 #+BEGIN_SRC emacs-lisp
   (use-package skewer-mode
     :ensure t
@@ -586,7 +586,7 @@ Live web development in Emacs.
                  (add-hook 'html-mode-hook 'skewer-html-mode)))
 #+END_SRC
 *** Yasnippet
-#+name: packages
+#+HEADER: :noweb-ref packages
 #+BEGIN_SRC emacs-lisp
   (use-package yasnippet
     :ensure t
@@ -598,7 +598,7 @@ Live web development in Emacs.
 This is a code searching tool that replaces =ack=, and is an order of
 magnitude faster.
 
-#+name: packages
+#+HEADER: :noweb-ref packages
 #+BEGIN_SRC emacs-lisp
   (use-package ag
     :ensure t
@@ -607,7 +607,7 @@ magnitude faster.
 *** Expand Region
 Increase selected region by semantic units.
 
-#+name: packages
+#+HEADER: :noweb-ref packages
 #+BEGIN_SRC emacs-lisp
   (use-package expand-region
     :ensure t
@@ -630,7 +630,7 @@ Hide package namespaces in emacs-lisp code.
 *** Dash
 A modern list api for Emacs. No 'cl required.
 
-#+name: programming
+#+HEADER: :noweb-ref programming
 #+BEGIN_SRC emacs-lisp
   (use-package dash
     :ensure t
@@ -640,7 +640,7 @@ A modern list api for Emacs. No 'cl required.
 
 Lazy sequences in Emacs (compatible with seq.el).
 
-#+name: programming
+#+HEADER: :noweb-ref programming
 #+BEGIN_SRC emacs-lisp
   (use-package stream
     :ensure t
@@ -650,24 +650,24 @@ Lazy sequences in Emacs (compatible with seq.el).
 * Writing
 ** Style
 *** End sentences with a single space
-#+name: packages
+#+HEADER: :noweb-ref packages
 #+BEGIN_SRC emacs-lisp
   (setq sentence-end-double-space nil)
 #+END_SRC
 ** Formats
 *** Org
 **** Pretty bullets
-#+name: packages
+#+HEADER: :noweb-ref packages
 #+BEGIN_SRC emacs-lisp
   (use-package org-bullets
     :ensure t
     :hook (org-mode . org-bullets-mode))
 #+END_SRC
 **** Modules
-#+name: org-module-table
+#+NAME: org-module-table
 | org-habit |
 
-#+name: packages
+#+HEADER: :noweb-ref packages
 #+BEGIN_SRC emacs-lisp :noweb yes
   (let ((modules (mapcar (lambda (m) (intern (car m)))
                          '<<org-module-table()>>)))
@@ -685,19 +685,19 @@ be marked done.
    org-enforce-todo-checkbox-dependencies t)
 #+END_SRC
 ***** Keep logs in their own drawer
-#+name: packages
+#+HEADER: :noweb-ref packages
 #+BEGIN_SRC emacs-lisp
   (setq org-log-into-drawer t)
 #+END_SRC
 ***** Log completion
-#+name: packages
+#+HEADER: :noweb-ref packages
 #+BEGIN_SRC emacs-lisp
   (setq org-log-done 'time)
 #+END_SRC
 ***** Habits
 Shift the consistency graph over a bit to make room for task
 names.
-#+name: packages
+#+HEADER: :noweb-ref packages
 #+BEGIN_SRC emacs-lisp
   (setq org-habit-graph-column 70)
   (setq org-habit-show-habits-only-for-today nil)
@@ -708,12 +708,12 @@ names.
 #+END_SRC
 **** Babel
 ***** Syntax highlighting
-#+name: packages
+#+HEADER: :noweb-ref packages
 #+BEGIN_SRC emacs-lisp
   (setq-default org-src-fontify-natively t)
 #+END_SRC
 ***** HTTP
-#+name: packages
+#+HEADER: :noweb-ref packages
 #+begin_src emacs-lisp
   (use-package ob-http
     :ensure t
@@ -725,7 +725,7 @@ Org-babel evaluation will be turned on for the following
 languages. Setting ~Confirm Evaluation~ to ~No~ disables the
 [[http://orgmode.org/manual/Code-evaluation-security.html][security prompt]] for that language.
 
-#+name: org-babel-languages
+#+NAME: org-babel-languages
 | Language     | Alias | Confirm Evaluation? | Description                     |
 |--------------+-------+---------------------+---------------------------------|
 | emacs-lisp   |       | Yes                 | Emacs Lisp                      |
@@ -743,7 +743,7 @@ languages. Setting ~Confirm Evaluation~ to ~No~ disables the
 | sql          |       | No                  | SQL Queries                     |
 | ledger       |       | No                  | Double-Entry Accounting         |
 
-#+name: packages
+#+HEADER: :noweb-ref packages
 #+BEGIN_SRC emacs-lisp :noweb yes
   (defvar my/org-babel-evaluated-languages ())
   (defvar my/org-src-lang-modes ())
@@ -779,7 +779,7 @@ languages. Setting ~Confirm Evaluation~ to ~No~ disables the
   (setq org-confirm-babel-evaluate 'my/org-confirm-babel-evaluate)
 #+END_SRC
 ***** Reload images on source execution
-#+name: packages
+#+HEADER: :noweb-ref packages
 #+begin_src emacs-lisp
   (defun my/redisplay-org-images ()
     (when org-inline-image-overlays
@@ -792,7 +792,7 @@ languages. Setting ~Confirm Evaluation~ to ~No~ disables the
 A useful snippet for marking a region and wrapping it in an org block.
 
 Taken from [[http://pragmaticemacs.com/emacs/wrap-text-in-an-org-mode-block/][Pragmatic Emacs]]
-#+name: packages
+#+HEADER: :noweb-ref packages
 #+BEGIN_SRC emacs-lisp
   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
   ;; function to wrap blocks of text in org templates                       ;;
@@ -843,7 +843,7 @@ Taken from [[http://pragmaticemacs.com/emacs/wrap-text-in-an-org-mode-block/][Pr
 **** Complete keywords with Company
 Taken from https://emacs.stackexchange.com/a/30691.
 
-#+name: packages
+#+HEADER: :noweb-ref packages
 #+BEGIN_SRC emacs-lisp
   (defun org-keyword-backend (command &optional arg &rest ignored)
     (interactive (list 'interactive))
@@ -866,7 +866,7 @@ Taken from https://emacs.stackexchange.com/a/30691.
 #+END_SRC
 **** Exporting
 ***** LaTeX
-#+name: packages
+#+HEADER: :noweb-ref packages
 #+BEGIN_SRC emacs-lisp :noweb yes
   (use-package ox-latex
     :defer t
@@ -884,7 +884,7 @@ including:
 - [[https://ctan.org/pkg/tufte-latex?lang=en][Tufte]]
 - [[https://ctan.org/pkg/labbook?lang=en][Labbook]] (based on KOMA-Script)
 
-#+name: configure-ox-latex
+#+HEADER: :noweb-ref configure-ox-latex
 #+BEGIN_SRC emacs-lisp
   (seq-map (apply-partially #'add-to-list 'org-latex-classes)
            '(("koma-letter"
@@ -990,7 +990,7 @@ Configure org-mode LaTeX export to use minted for syntax highlighting.
 Some languages / markups I use aren't supported by minted, so I map
 them here so they don't fail.
 
-#+name: ox-latex-minted-mappings
+#+NAME: ox-latex-minted-mappings
 #+CAPTION: Minted language mappings
 | Language | Mapping      |
 |----------+--------------|
@@ -1001,7 +1001,7 @@ them here so they don't fail.
 | csv      | text         |
 | conf     | linux-config |
 
-#+name: configure-ox-latex
+#+HEADER: :noweb-ref configure-ox-latex
 #+BEGIN_SRC emacs-lisp :noweb yes
   (setq org-latex-listings 'minted)
   (setq org-latex-minted-options
@@ -1024,7 +1024,7 @@ override the latex compiler using the file-level =LATEX_COMPILER=
 directive.
 #+END_NOTES
 
-#+name: configure-ox-latex
+#+HEADER: :noweb-ref configure-ox-latex
 #+BEGIN_SRC emacs-lisp
   (setq org-latex-pdf-process
         (-repeat 3 "%latex -shell-escape -interaction nonstopmode -output-directory %o %f"))
@@ -1035,14 +1035,14 @@ directive.
 #+END_SRC
 *** LaTeX
 **** AUCTeX
-#+name: packages
+#+HEADER: :noweb-ref packages
 #+BEGIN_SRC emacs-lisp
   (use-package tex-site
     :ensure auctex
     :mode ("\\.tex$" . TeX-latex-mode))
 #+END_SRC
 **** LaTeX-Extra
-#+name: packages
+#+HEADER: :noweb-ref packages
 #+BEGIN_SRC emacs-lisp
   (use-package latex-extra
     :ensure t
@@ -1051,7 +1051,7 @@ directive.
     :init (add-hook 'LaTeX-mode-hook #'latex-extra-mode))
 #+END_SRC
 *** Markdown
-#+name: packages
+#+HEADER: :noweb-ref packages
 #+begin_src emacs-lisp
   (use-package markdown-mode
     :ensure t
@@ -1059,7 +1059,7 @@ directive.
 #+end_src
 ** Tools
 *** Flyspell
-#+name: packages
+#+HEADER: :noweb-ref packages
 #+BEGIN_SRC emacs-lisp
   (use-package flyspell
     :ensure t
@@ -1073,7 +1073,7 @@ directive.
 *** Auto-Fill
 Automatically wrap paragraphs while writing in text modes.
 
-#+name: packages
+#+HEADER: :noweb-ref packages
 #+BEGIN_SRC emacs-lisp
   (mapcar (lambda (mode-hook)
             (add-hook mode-hook #'auto-fill-mode))
@@ -1085,7 +1085,7 @@ Re-flowing paragraphs with =fill-paragraph= is nice, but there are
 occasions when it's useful to do the inverse, and get rid of the line
 breaks.
 
-#+name: packages
+#+HEADER: :noweb-ref packages
 #+BEGIN_SRC emacs-lisp
   (use-package unfill
     :ensure t
@@ -1094,7 +1094,7 @@ breaks.
     :bind ("M-Q" . unfill-paragraph))
 #+END_SRC
 *** Writegood
-#+name: packages
+#+HEADER: :noweb-ref packages
 #+BEGIN_SRC emacs-lisp
   (use-package writegood-mode
    :ensure t
@@ -1107,7 +1107,7 @@ breaks.
 
 #+END_SRC
 *** Define Word
-#+name: packages
+#+HEADER: :noweb-ref packages
 #+BEGIN_SRC emacs-lisp
   (use-package define-word
     :ensure t
@@ -1119,7 +1119,7 @@ breaks.
 Command-line double-entry accounting system.
 https://www.ledger-cli.org/
 
-#+name: packages
+#+HEADER: :noweb-ref packages
 #+BEGIN_SRC emacs-lisp
   (use-package ledger-mode
     :ensure t
@@ -1128,7 +1128,7 @@ https://www.ledger-cli.org/
 #+END_SRC
 * Mail
 ** Gnus
-#+name: packages
+#+HEADER: :noweb-ref packages
 #+BEGIN_SRC emacs-lisp
   (use-package gnus
     :commands gnus
@@ -1138,14 +1138,14 @@ https://www.ledger-cli.org/
                    (setq gnus-before-startup-hook 'my/configure-gnus)))
 #+END_SRC
 *** Avoid rich-text messages
-#+name: gnus
+#+HEADER: :noweb-ref gnus
 #+BEGIN_SRC emacs-lisp
   (setq mm-discouraged-alternatives '("text/html" "text/richtext"))
 #+END_SRC
 *** Summary view formatting
 Taken from http://groups.google.com/group/gnu.emacs.gnus/browse_thread/thread/a673a74356e7141f
 
-#+name: gnus
+#+HEADER: :noweb-ref gnus
 #+BEGIN_SRC emacs-lisp
   (when window-system
     (setq gnus-sum-thread-tree-indent "  ")
@@ -1169,7 +1169,7 @@ Taken from http://groups.google.com/group/gnu.emacs.gnus/browse_thread/thread/a6
   (setq gnus-summary-display-arrow t)
 #+END_SRC
 *** Inline images
-#+name: gnus
+#+HEADER: :noweb-ref gnus
 #+BEGIN_SRC emacs-lisp
   (require 'mm-decode)
 
@@ -1178,7 +1178,7 @@ Taken from http://groups.google.com/group/gnu.emacs.gnus/browse_thread/thread/a6
 #+END_SRC
 * Publishing
 ** Htmlize
-#+name: packages
+#+HEADER: :noweb-ref packages
 #+BEGIN_SRC emacs-lisp
   (use-package htmlize
     :ensure t
@@ -1186,7 +1186,7 @@ Taken from http://groups.google.com/group/gnu.emacs.gnus/browse_thread/thread/a6
 #+END_SRC
 * Source Control
 ** Git-Gutter
-#+name: packages
+#+HEADER: :noweb-ref packages
 #+BEGIN_SRC emacs-lisp
   (use-package git-gutter
     :ensure t
@@ -1207,7 +1207,7 @@ Taken from http://groups.google.com/group/gnu.emacs.gnus/browse_thread/thread/a6
                    (global-git-gutter-mode t)))))
 #+END_SRC
 ** Magit
-#+name: packages
+#+HEADER: :noweb-ref packages
 #+BEGIN_SRC emacs-lisp
   (use-package magit
     :ensure t
@@ -1239,7 +1239,7 @@ Taken from http://groups.google.com/group/gnu.emacs.gnus/browse_thread/thread/a6
 #+END_SRC
 * Other functionality
 ** Disable tab indenting by default
-#+name: other
+#+HEADER: :noweb-ref other
 #+BEGIN_SRC emacs-lisp
   (setq-default indent-tabs-mode nil)
 #+END_SRC
@@ -1247,13 +1247,13 @@ Taken from http://groups.google.com/group/gnu.emacs.gnus/browse_thread/thread/a6
 New credentials will be stored in the gpg-encrypted authinfo by
 default.
 
-#+name: other
+#+HEADER: :noweb-ref other
 #+BEGIN_SRC emacs-lisp
   (setq auth-sources '("~/.authinfo.gpg" "~/.authinfo" "~/.netrc"))
 #+END_SRC
 ** Rename file and buffer
 Taken from [[http://emacsredux.com/blog/2013/05/04/rename-file-and-buffer/][Emacs Redux]]
-#+name: other
+#+HEADER: :noweb-ref other
 #+BEGIN_SRC emacs-lisp
   ;; emacsredux.com
   (defun rename-file-and-buffer ()
@@ -1273,7 +1273,7 @@ Taken from [[http://emacsredux.com/blog/2013/05/04/rename-file-and-buffer/][Emac
 #+END_SRC
 ** Eval and Replace
 Taken from [[http://emacsredux.com/blog/2013/06/21/eval-and-replace/][Emacs Redux]]
-#+name: other
+#+HEADER: :noweb-ref other
 #+BEGIN_SRC emacs-lisp
   (defun eval-and-replace ()
     "Replace the preceding sexp with its value."
@@ -1289,7 +1289,7 @@ Taken from [[http://emacsredux.com/blog/2013/06/21/eval-and-replace/][Emacs Redu
 #+END_SRC
 ** Smarter navigation to the beginning of a line
 Taken from [[http://emacsredux.com/blog/2013/05/22/smarter-navigation-to-the-beginning-of-a-line/][Emacs Redux]]
-#+name: other
+#+HEADER: :noweb-ref other
 #+BEGIN_SRC emacs-lisp
   (defun smarter-move-beginning-of-line (arg)
     "Move point back to indentation of beginning of line.
@@ -1320,7 +1320,7 @@ Taken from [[http://emacsredux.com/blog/2013/05/22/smarter-navigation-to-the-beg
 #+END_SRC
 ** Edit file with sudo
 Taken from [[http://www.emacswiki.org/TrampMode#toc32][EmacsWiki]]
-#+name: other
+#+HEADER: :noweb-ref other
 #+BEGIN_SRC emacs-lisp
   (require 'dired)
   (defun sudo-edit-current-file ()
@@ -1359,14 +1359,14 @@ https://github.com/sachac/.emacs.d/
 
 This is one of the things people usually want to change right away. By default, Emacs saves backup files in the current directory. These are the files ending in =~= that are cluttering up your directory lists. The following code stashes them all in =~/.emacs.d/backups=, where I can find them with =C-x C-f= (=find-file=) if I really need to.
 
-#+name: other
+#+HEADER: :noweb-ref other
 #+begin_src emacs-lisp
   (setq backup-directory-alist '(("." . "~/.emacs.d/backups")))
 #+end_src
 
 Disk space is cheap. Save lots.
 
-#+name: other
+#+HEADER: :noweb-ref other
 #+begin_src emacs-lisp
   (setq delete-old-versions -1)
   (setq version-control t)
@@ -1376,14 +1376,14 @@ Disk space is cheap. Save lots.
 ** Disable lock files
 Lock files have only ever gotten in my way.
 
-#+name: other
+#+HEADER: :noweb-ref other
 #+BEGIN_SRC emacs-lisp
   (setq create-lockfiles nil)
 #+END_SRC
 ** History
 From http://www.wisdomandwonder.com/wordpress/wp-content/uploads/2014/03/C3F.html
 
-#+name: other
+#+HEADER: :noweb-ref other
 #+begin_src emacs-lisp
   (setq savehist-file "~/.emacs.d/savehist")
   (savehist-mode 1)
@@ -1400,7 +1400,7 @@ From http://www.wisdomandwonder.com/wordpress/wp-content/uploads/2014/03/C3F.htm
 http://emacsredux.com/blog/2013/03/27/copy-filename-to-the-clipboard/
 https://github.com/bbatsov/prelude
 
-#+name: other
+#+HEADER: :noweb-ref other
 #+begin_src emacs-lisp
   (defun prelude-copy-file-name-to-clipboard ()
     "Copy the current buffer file name to the clipboard."
@@ -1415,7 +1415,7 @@ https://github.com/bbatsov/prelude
 ** Prompt for 'y or n' instead of 'yes or no'
 Because typing out "yes" and "no" is irritating.
 
-#+name: other
+#+HEADER: :noweb-ref other
 #+BEGIN_SRC emacs-lisp
   (defalias 'yes-or-no-p #'y-or-n-p)
 #+END_SRC
@@ -1423,7 +1423,7 @@ Because typing out "yes" and "no" is irritating.
 
 http://stackoverflow.com/a/13408008
 
-#+name: other
+#+HEADER: :noweb-ref other
 #+BEGIN_SRC emacs-lisp
   (require 'ansi-color)
   (defun colorize-compilation-buffer ()
@@ -1442,7 +1442,7 @@ The control keys are typically pretty terrible, too, but I find it
 easier to rebind Caps Lock to Control in the system preferences (which
 is a nice thing to do in other environments, as well).
 
-#+name: other
+#+HEADER: :noweb-ref other
 #+BEGIN_SRC emacs-lisp
   (when (equal 'darwin system-type)
     ;; Command as meta, because alt/option's placement is terrible on
@@ -1457,7 +1457,7 @@ automatically loaded.
 I usually use this is a testing ground for new configuration before
 adding it here, and also for any personal / sensitive configuration.
 
-#+name: auto-load
+#+HEADER: :noweb-ref auto-load
 #+BEGIN_SRC emacs-lisp
   (defun my/load-elisp-directory (path)
     (let ((file-pattern "\\.elc?$"))
