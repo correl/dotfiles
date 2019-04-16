@@ -1,0 +1,28 @@
+#!/bin/bash
+# Description: A browser plugin for the pass password store
+set -e
+
+function _browserpass {
+    local browser=$1
+    local _prefix=/usr/lib/browserpass
+    case $_PLATFORM in
+        darwin)
+            _prefix=/usr/local/opt/browserpass
+            ;;
+    esac
+    _run "[browserpass] Installing native messaging host to $browser" \
+         make PREFIX=$_prefix hosts-$browser-user \
+         -f $_prefix/lib/browserpass/Makefile
+}
+
+case $_PLATFORM in
+    darwin)
+        _recipe brew
+
+        _brew_tap amar1729/formulae
+        _brew browserpass
+
+        test -e /Applications/Google\ Chrome.app && _browserpass chrome
+        test -e /Applications/Firefox.app && _browserpass firefox
+        ;;
+esac
