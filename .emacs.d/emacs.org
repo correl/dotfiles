@@ -413,35 +413,6 @@ installed:
     :ensure t
     :mode "\.pyx$")
 #+END_SRC
-**** Company-Jedi
-Configure jedi and company-mode to provide auto-completion for python.
-#+HEADER: :noweb-ref programming
-#+begin_src emacs-lisp
-  (use-package jedi
-    :ensure t
-    :commands jedi:setup
-    :config (progn
-              (setq jedi:use-shortcuts t)
-              (jedi:install-server)))
-
-  (use-package pungi
-    :ensure t
-    :commands pungi:setup-jedi
-    :init (add-hook #'python-mode-hook
-                    (lambda ()
-                      (when buffer-file-name
-                        #'pungi:setup-jedi))))
-
-  (use-package company-jedi
-    :ensure t
-    :config (progn
-              (defun my/enable-company-jedi ()
-                (when buffer-file-name
-                  (add-to-list 'company-backends 'company-jedi)))
-              (add-hook #'python-mode-hook
-                        #'my/enable-company-jedi)))
-#+end_src
-
 *** Ruby
 #+HEADER: :noweb-ref programming
 #+BEGIN_SRC emacs-lisp
@@ -626,6 +597,49 @@ Hide package namespaces in emacs-lisp code.
     :config
     (setq nameless-private-prefix t))
 #+END_SRC
+*** Language Server Protocol
+IDE-level integration supporting multiple languages.
+
+#+HEADER: :noweb-ref packages
+#+begin_src emacs-lisp
+  (use-package lsp-mode
+    :ensure t
+    :init (setq lsp-auto-guess-root t
+                lsp-keep-workspace-alive nil
+                lsp-enable-xref t
+                lsp-prefer-flymake nil
+                lsp-auto-configure t
+                lsp-response-timeout 3)
+    :hook ((prog-mode . lsp-mode)))
+#+end_src
+
+#+CAPTION: Language server implementations
+| Language      | Server                                     | Installation                              |
+|---------------+--------------------------------------------+-------------------------------------------|
+| PHP           | [[https://www.npmjs.com/package/intelephense][Intelephense]]                               | =npm i intelephense=                      |
+| Python        | [[https://github.com/palantir/python-language-server][Python Language Server]]                     | =pip install python-language-server[all]= |
+| Python (Mypy) | [[https://github.com/tomv564/pyls-mypy][Mypy plugin for the Python Language Server]] | =pip install pyls-mypy=                   |
+**** Company integration
+#+HEADER: :noweb-ref packages
+#+begin_src emacs-lisp
+  (use-package company-lsp
+    :ensure t
+    :init (setq company-lsp-async t)
+    :hook ((python-mode . (lambda ()
+                              (add-to-list 'company-backends 'company-lsp)))
+             (js2-mode . (lambda ()
+                           (add-to-list 'company-backends 'company-lsp)))))
+#+end_src
+**** Fancy UI
+#+HEADER: :noweb-ref packages
+#+begin_src emacs-lisp
+  (use-package lsp-ui
+    :ensure t
+    :hook (lsp-mode . lsp-ui-mode)
+    :config
+    ;; Disable eldoc-mode
+    (global-eldoc-mode -1))
+#+end_src
 ** Libraries
 *** Dash
 A modern list api for Emacs. No 'cl required.
