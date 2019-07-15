@@ -2,18 +2,19 @@
 # Description: Useful command-line utilities
 set -e
 
+_recipe _path
 _recipe brew
 
 case $_PLATFORM in
     darwin)
         _brew binutils
         _brew coreutils
-        _brew findutils --with-default-names
+        _brew findutils
         _brew gawk
-        _brew gnu-indent --with-default-names
-        _brew gnu-sed --with-default-names
-        _brew gnu-tar --with-default-names
-        _brew gnu-which --with-default-names
+        _brew gnu-indent
+        _brew gnu-sed
+        _brew gnu-tar
+        _brew gnu-which
 
         # File browsing
         _brew tree
@@ -34,6 +35,11 @@ case $_PLATFORM in
 
         _brew rename
         _brew watch
+
+        # Override BSD tools with GNU variants
+        for path in $(gfind /usr/local/Cellar -type d -name gnubin); do
+            _path $path \;
+        done
         ;;
     *)
         _recipe _apt
