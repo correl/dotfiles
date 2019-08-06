@@ -8,7 +8,7 @@ _brew isync
 _recipe emacs
 case $_PLATFORM in
     darwin)
-        EMACS=$(which emacs) _brew mu --with-emacs --HEAD
+        EMACS=$(which emacs) _brew mu --HEAD
         ;;
     *)
         _recipe _apt
