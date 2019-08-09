@@ -29,6 +29,15 @@
   (defvar use-package-verbose t)
   (require 'use-package))
 
+(use-package quelpa
+  :ensure t)
+
+(quelpa
+ '(quelpa-use-package
+   :fetcher git
+   :url "https://framagit.org/steckerhalter/quelpa-use-package.git"))
+(require 'quelpa-use-package)
+
 (use-package org
   :ensure org-plus-contrib)
 
