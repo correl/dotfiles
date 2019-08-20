@@ -4,7 +4,7 @@ set -e
 
 function _browserpass {
     local browser=$1
-    local _prefix=/usr/lib/browserpass
+    local _prefix=$HOME/.local
     case $_PLATFORM in
         darwin)
             _prefix=/usr/local/opt/browserpass
@@ -25,4 +25,17 @@ case $_PLATFORM in
         test -e /Applications/Google\ Chrome.app && _browserpass chrome
         test -e /Applications/Firefox.app && _browserpass firefox
         ;;
+    *)
+        if ! test -d ~/.local/lib/browserpass; then
+            echo "[curl] Downloading browserpass native"
+            local tempdir=$(mktemp -d)
+            curl -sL https://github.com/browserpass/browserpass-native/releases/download/3.0.6/browserpass-linux64-3.0.6.tar.gz \
+                | tar xz -C "$tempdir" --strip-components=1
+            pushd "$tempdir" >/dev/null
+            _run "[make] Install browserpass" make PREFIX=$HOME/.local BIN=browserpass-linux64 configure install
+            popd >/dev/null
+            rm -rf "$tempdir"
+        fi
+        which google-chrome 2>&1 >/dev/null && _browserpass chrome
+        which firefox 2>&1 >/dev/null && _browserpass
 esac
