@@ -1,0 +1,22 @@
+#!/bin/bash
+# Description: The Rust programming language
+set -e
+
+case $_PLATFORM in
+    darwin)
+        _recipe brew
+        _recipe _path
+
+        _brew rust
+        _path "$HOME/.cargo/bin"
+        ;;
+esac
+
+function _cargo {
+    local pkg=$1
+    if ! cargo install --list | grep "^$pkg " >/dev/null; then
+        _run "[cargo] Install $pkg" cargo install $pkg
+    else
+        echo "[cargo] $pkg is already installed, skipping."
+    fi
+}

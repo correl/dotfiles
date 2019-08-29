@@ -1,0 +1,6 @@
+#!/bin/bash
+# Description: A CLI utility to generate, analyze, convert, and manipulate colors
+set -e
+
+_recipe rust
+_cargo pastel
