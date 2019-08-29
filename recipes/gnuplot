@@ -1,0 +1,14 @@
+#!/bin/bash
+# Description: Graphing tool
+set -e
+
+case $_PLATFORM in
+    darwin)
+        _recipe brew
+        _brew gnuplot
+        ;;
+    *)
+        _recipe _apt
+        _apt gnuplot
+        ;;
+esac
