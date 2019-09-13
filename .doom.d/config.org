@@ -27,6 +27,87 @@ setup.
   (remove-hook! 'org-load-hook
     #'(+org-init-centralized-attachments-h))
 #+end_src
+** Agenda
+#+begin_src emacs-lisp
+  (after! org-agenda
+    (require 'f)
+
+    (setq my/agenda-files '((personal . ("~/Dropbox/org/personal.org"))
+                            (work . ("~/Dropbox/org/aweber.org")))
+
+          org-agenda-files (-filter #'f-exists?
+                                    (-concat
+                                     (if (string-equal (system-name) "s1118ofclair.local")
+                                         (cdr (assoc 'work my/agenda-files))
+                                       (cdr (assoc 'personal my/agenda-files))))))
+
+    (setq org-agenda-files (-flatten (-map #'cdr my/agenda-files)))
+
+    (setq org-stuck-projects
+          '("+LEVEL=1/-DONE" ("TODO" "NEXT" "NEXTACTION") nil ""))
+
+    ;; https://www.tompurl.com/2015-12-29-emacs-eisenhower-matrix.html
+    (setq org-tag-alist '(("important" . ?i)
+                          ("urgent" . ?u)))
+
+    (setq org-agenda-custom-commands
+          '(("n" "Agenda and all TODOs"
+             ((agenda "")
+              (tags-todo "DEADLINE<=\"<+7d>\""
+                         ((org-agenda-overriding-header "Due soon")))
+
+              ;; Eisenhower Matrix quadrants
+              (tags-todo "+important+urgent"
+                         ((org-agenda-overriding-header "Do")))
+              (tags-todo "+important-urgent"
+                         ((org-agenda-overriding-header "Decide")))
+              (tags-todo "-important+urgent"
+                         ((org-agenda-overriding-header "Delegate")))
+              (tags-todo "-important-urgent"
+                         ((org-agenda-overriding-header "Delete"))))
+             ((org-agenda-start-with-log-mode t)
+              (org-agenda-span 'day)
+              (org-agenda-log-mode-items '(clock state closed)))
+             ("~/Public/agenda.html"
+              "~/Public/agenda.ics"))
+            ("l" "Log"
+             agenda ""
+             ((org-agenda-span 'fortnight)
+              (org-agenda-start-day "-1w")
+              (org-agenda-start-with-log-mode t)
+              (org-agenda-log-mode-items '(clock state closed))
+              (org-agenda-include-deadlines nil)
+              (org-agenda-skip-scheduled-delay-if-deadline t))
+             ("~/Public/agenda-log.html"))
+            ("e" "Eisenhower Matrix"
+             ((tags-todo "+important+urgent"
+                         ((org-agenda-overriding-header "Do")))
+              (tags-todo "+important-urgent"
+                         ((org-agenda-overriding-header "Decide")))
+              (tags-todo "-important+urgent"
+                         ((org-agenda-overriding-header "Delegate")))
+              (tags-todo "-important-urgent"
+                         ((org-agenda-overriding-header "Delete"))))
+             ((org-agenda-start-with-log-mode t)
+              (org-agenda-span 'day)
+              (org-agenda-log-mode-items '(clock state closed))))))
+
+    (defun my/org-agenda-timeline ()
+      (interactive)
+      (let ((org-agenda-files (list (buffer-file-name))))
+        (org-agenda)))
+
+    (setq org-agenda-start-on-weekday nil)
+    (setq org-agenda-span 'fortnight)
+    (setq org-agenda-todo-ignore-scheduled 'future)
+    (setq org-agenda-tags-todo-honor-ignore-options t)
+    (setq org-agenda-skip-deadline-prewarning-if-scheduled t)
+    (add-hook 'org-agenda-finalize-hook (lambda () (hl-line-mode)))
+
+    (setq
+     org-icalendar-use-scheduled '(todo-start event-if-todo)
+     org-icalendar-combined-agenda-file (expand-file-name "~/Documents/org.ics")))
+#+end_src
 ** LaTeX Export
 *** Document Classes
 #+BEGIN_SRC emacs-lisp
