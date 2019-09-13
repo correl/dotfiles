@@ -507,3 +507,129 @@ be based on their headings.
     :commands ox-confluence-en-export-as-confluence)
 #+end_src
 * MU4E
+#+begin_src emacs-lisp
+  (use-package! mu4e
+    :bind (("<f9>" . mu4e))
+    :config
+    (setq mu4e-maildir "~/Mail")
+
+    (setq user-full-name "Correl Roush")
+    (setq mu4e-contexts
+          (list (make-mu4e-context
+                 :name "work"
+                 :vars `((user-mail-address . "correlr@aweber.com")
+                         (mu4e-drafts-folder . "/Work/[Gmail].Drafts")
+                         (mu4e-sent-folder . "/Work/[Gmail].Sent Mail")
+                         (mu4e-trash-folder . "/Work/[Gmail].Trash")
+                         (mu4e-maildir-shortcuts . (("/Work/INBOX" . ?i)
+                                                    ("/Work/[Gmail].All Mail" . ?a)
+                                                    ("/Work/[Gmail].Starred" . ?S)
+                                                    ("/Work/[Gmail].Sent Mail" . ?s)
+                                                    ("/Work/[Gmail].Trash" . ?t)))
+                         (mu4e-compose-signature . ,(with-temp-buffer
+                                                      (insert-file-contents "~/.signature-aweber")
+                                                      (buffer-string)))))))
+    (when (f-exists?
+           (f-join mu4e-maildir "Personal"))
+      (add-to-list
+       'mu4e-contexts
+       (make-mu4e-context
+        :name "personal"
+        :vars `((user-mail-address . "correl@gmail.com")
+                (mu4e-drafts-folder . "/Personal/[Gmail].Drafts")
+                (mu4e-sent-folder . "/Personal/[Gmail].Sent Mail")
+                (mu4e-trash-folder . "/Personal/[Gmail].Trash")
+                (mu4e-maildir-shortcuts . (("/Personal/INBOX" . ?i)
+                                           ("/Personal/[Gmail].All Mail" . ?a)
+                                           ("/Personal/[Gmail].Starred" . ?S)
+                                           ("/Personal/[Gmail].Sent Mail" . ?s)
+                                           ("/Personal/[Gmail].Trash" . ?t)))
+                (mu4e-compose-signature . ,(with-temp-buffer
+                                             (insert-file-contents "~/.signature")
+                                             (buffer-string)))))))
+    (setq mu4e-context-policy 'pick-first)
+    (setq mu4e-compose-dont-reply-to-self t)
+    (setq mu4e-user-mail-address-list '("correlr@aweber.com"
+                                        "correl@gmail.com")))
+#+end_src
+* Prodigy
+Manage background services
+#+begin_src emacs-lisp
+  (use-package! prodigy
+    :defer 2
+    :config
+
+    (global-set-key (kbd "<f7>") 'prodigy)
+
+    (prodigy-define-tag
+     :name 'work)
+    (prodigy-define-tag
+     :name 'personal)
+
+    ;; https://martinralbrecht.wordpress.com/2016/05/30/handling-email-with-emacs/
+    (when (executable-find "imapnotify")
+      (prodigy-define-tag
+        :name 'email
+        :ready-message "Checking Email using IMAP IDLE. Ctrl-C to shutdown.")
+      (prodigy-define-service
+        :name "imapnotify-work"
+        :command "imapnotify"
+        :args (list "-c" (expand-file-name "~/.config/imap_inotify/work.js"))
+        :tags '(email work autostart)
+        :kill-signal 'sigkill)
+      (unless (string-equal "croush" (user-login-name))
+        (prodigy-define-service
+          :name "imapnotify-personal"
+          :command "imapnotify"
+          :args (list "-c" (expand-file-name "~/.config/imap_inotify/personal.js"))
+          :tags '(email personal autostart)
+          :kill-signal 'sigkill)))
+    (when (f-exists? (expand-file-name "~/code/elm-dashboard"))
+      (prodigy-define-service
+        :name "elm-dashboard"
+        :command "python"
+        :args '("-m" "SimpleHTTPServer" "3000")
+        :cwd (expand-file-name "~/code/elm-dashboard")
+        :tags '(personal elm)
+        :stop-signal 'sigkill
+        :kill-process-buffer-on-stop t))
+    (when (f-exists? (expand-file-name "~/git/www"))
+      (prodigy-define-service
+        :name "AWeber WWW"
+        :command "npm"
+        :args '("start")
+        :cwd (expand-file-name "~/git/www")
+        :tags '(work)))
+    (when (f-exists? (expand-file-name "~/Public/org"))
+      (prodigy-define-service
+        :name "Org Documents"
+        :command "python"
+        :args '("-m" "http.server" "3001")
+        :cwd (expand-file-name "~/Public/org")
+        :tags '(work autostart)
+        :kill-signal 'sigkill))
+    (mapcar
+     #'prodigy-start-service
+     (-concat (prodigy-services-tagged-with 'autostart))))
+#+end_src
+* Projectile
+#+begin_src emacs-lisp
+  (after! projectile
+    (setq projectile-switch-project-action #'magit-status)
+
+    (let ((project-directories (-filter #'f-directory?
+                                        '("~/code"
+                                          "~/git"))))
+      (-map
+       (lambda (directory)
+         (-map (lambda (project)
+                 (-> (concat  project "/") ;; Projectile likes trailing slashes
+                     (projectile-add-known-project)))
+               (-filter (lambda (f) (and (not (s-ends-with? "." f))
+                                         (f-directory? f)))
+                        (-map (lambda (f) (concat directory "/" f))
+                              (directory-files directory)))))
+       project-directories))
+
+    (projectile-cleanup-known-projects))
+#+end_src
