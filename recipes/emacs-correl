@@ -1,0 +1,7 @@
+#!/bin/bash
+# Description: My Emacs configuration
+set -e
+
+if ! [ -d ${HOME}/.emacs.d ]; then
+    _run "Install .emacs.d" ln -s ${HOME}/dotfiles/.emacs.d ${HOME}/.emacs.d
+fi

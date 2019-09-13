@@ -11,11 +11,7 @@ case $_PLATFORM in
         ;;
     linux)
         _recipe _apt
-        _ppa ubuntu-elisp/ppa
-        _apt emacs25
+        _ppa kelleyk/emacs
+        _apt emacs26
         ;;
 esac
-
-if ! [ -d ${HOME}/.emacs.d ]; then
-    _run "Install .emacs.d" ln -s ${HOME}/dotfiles/.emacs.d ${HOME}/.emacs.d
-fi
