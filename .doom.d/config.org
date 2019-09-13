@@ -129,20 +129,381 @@ setup.
               ("\\paragraph{%s}" . "\\paragraph*{%s}")
               ("\\subparagraph{%s}" . "\\subparagraph*{%s}")))))
 #+END_SRC
-* Auto-loading elisp files
-Any elisp files dropped into =~/.doom.local.d/= will be
-automatically loaded.
+** Capture templates
+#+begin_src emacs-lisp
+  (setq org-capture-templates
+        `(
+          ;; Personal
+          ("j" "Journal Entry" plain
+           (file+datetree "~/org/journal.org")
+           "%U\n\n%?" :empty-lines-before 1)
+          ("t" "TODO" entry
+           (file+headline "~/Dropbox/org/personal.org" "Unsorted")
+           "* TODO %^{Description}\n%?")
+          ("n" "Note" entry
+           (file+headline "~/Dropbox/org/personal.org" "Notes")
+           "* %^{Description}\n%U\n\n%?")
+          ;; Org-Protocol
+          ("b" "Bookmark" entry
+           (file+headline "~/org/bookmarks.org" "Unsorted")
+           "* %^{Title}\n\n Source: %u, %c\n\n %i")
+          ("p" "Webpage" entry
+           (file "~/org/articles.org")
+           "* %a\n\n%U %?\n\n%:initial")
 
-I usually use this is a testing ground for new configuration before
-adding it here, and also for any personal / sensitive configuration.
+          ;; Email
+          ;; https://martinralbrecht.wordpress.com/2016/05/30/handling-email-with-emacs/
+          ("r" "respond to email (mu4e)"
+           entry (file+headline "~/org/todo.org" "Email")
+           "* REPLY to [[mailto:%:fromaddress][%:fromname]] on %a\nDEADLINE: %(org-insert-time-stamp (org-read-date nil t \"+1d\"))\n%U\n\n"
+           :immediate-finish t
+           :prepend t)
 
-#+BEGIN_SRC emacs-lisp
-  (defun my/load-elisp-directory (path)
-    (let ((file-pattern "\\.elc?$"))
-      (when (file-directory-p path)
-        (mapcar (lambda (lisp-file)
-                  (load-file lisp-file))
-                (directory-files (expand-file-name path) t file-pattern)))))
+          ;; Work
+          ("w" "Work")
+          ("wt" "Work TODO" entry
+           (file+headline "~/Dropbox/org/aweber.org" "Unsorted")
+           "* TODO %^{Description}\n%?")
+          ("wl" "Log Work Task" entry
+           (file+datetree "~/org-aweber/worklog.org")
+           "* %^{Description}  %^g\nAdded: %U\n\n%?"
+           :clock-in t
+           :clock-keep t)
+          ("wL" "Log Work Task (no clock)" entry
+           (file+datetree "~/org-aweber/worklog.org")
+           "* %^{Description}  %^g\nAdded: %U\n\n%?")
+          ("wj" "Log work on JIRA issue" entry
+           (file+datetree "~/org-aweber/worklog.org")
+           ,(concat
+             "* %?\n"
+             ":PROPERTIES:\n"
+             ":JIRA_ID: %^{JIRA_ID}\n"
+             ":END:\n"
+             "Added: %U\n\n"
+             "[[jira:%\\1][%\\1]]")
+           :clock-in t
+           :clock-keep t)
+          ("wr" "respond to email (mu4e)"
+           entry (file+headline "~/Dropbox/org/aweber.org" "Unsorted")
+           "* REPLY to [[mailto:%:fromaddress][%:fromname]] on %a\nDEADLINE: %(org-insert-time-stamp (org-read-date nil t \"+1d\"))\n%U\n\n"
+           :immediate-finish t
+           :prepend t)))
+#+end_src
+** Custom ID generation
+Because I'm all kinds of crazy, I like the custom IDs of my work log entries to
+be based on their headings.
 
-  (my/load-elisp-directory "~/.doom.local.d")
-#+END_SRC
+#+begin_src emacs-lisp
+  (use-package! org-id
+    :after org
+    :config
+
+    ;; https://writequit.org/articles/emacs-org-mode-generate-ids.html#automating-id-creation
+    (defun eos/org-custom-id-get (&optional pom create prefix)
+      "Get the CUSTOM_ID property of the entry at point-or-marker POM.
+     If POM is nil, refer to the entry at point. If the entry does
+     not have an CUSTOM_ID, the function returns nil. However, when
+     CREATE is non nil, create a CUSTOM_ID if none is present
+     already. PREFIX will be passed through to `org-id-new'. In any
+     case, the CUSTOM_ID of the entry is returned."
+      (interactive)
+      (org-with-point-at pom
+        (let ((id (org-entry-get nil "CUSTOM_ID")))
+          (cond
+           ((and id (stringp id) (string-match "\\S-" id))
+            id)
+           (create
+            (setq id (org-id-new (concat prefix "h")))
+            (org-entry-put pom "CUSTOM_ID" id)
+            (org-id-add-location id (buffer-file-name (buffer-base-buffer)))
+            id)))))
+
+    (defun eos/org-add-ids-to-headlines-in-file ()
+      "Add CUSTOM_ID properties to all headlines in the current
+     file which do not already have one. Only adds ids if the
+     `auto-id' option is set to `t' in the file somewhere. ie,
+     ,#+OPTIONS: auto-id:t"
+      (interactive)
+      (save-excursion
+        (widen)
+        (goto-char (point-min))
+        (when (re-search-forward "^#\\+OPTIONS:.*auto-id:t" (point-max) t)
+          (org-map-entries (lambda () (eos/org-id-get (point) 'create)))))
+      (save-excursion
+        (widen)
+        (goto-char (point-min))
+        (when (re-search-forward "^#\\+OPTIONS:.*auto-id:worklog" (point-max) t)
+          (let ((my/org-worklog-id-depth 2))
+            (org-map-entries (lambda () (my/org-worklog-id-get (point) 'create))))))
+      (save-excursion
+        (widen)
+        (goto-char (point-min))
+        (when (re-search-forward "^#\\+OPTIONS:.*auto-id:readable" (point-max) t)
+          (let ((my/org-worklog-id-depth 0))
+            (org-map-entries (lambda () (my/org-worklog-id-get (point) 'create)))))))
+
+    ;; automatically add ids to saved org-mode headlines
+    (add-hook 'org-mode-hook
+              (lambda ()
+                (add-hook 'before-save-hook
+                          (lambda ()
+                            (when (and (eq major-mode 'org-mode)
+                                       (eq buffer-read-only nil))
+                              (eos/org-add-ids-to-headlines-in-file))))))
+
+    (defun my/org-remove-all-ids ()
+      (interactive)
+      (save-excursion
+        (widen)
+        (goto-char (point-min))
+        (org-map-entries (lambda () (org-entry-delete (point) "CUSTOM_ID")))))
+
+    (defvar my/org-worklog-id-depth 2)
+    (defun my/org-worklog-id-new (&optional prefix)
+      (let ((path (or (-drop my/org-worklog-id-depth (org-get-outline-path t))
+                      (last (org-get-outline-path t)))))
+        (mapconcat
+         (lambda (s)
+           (->> s
+                (s-downcase)
+                (s-replace-regexp "[^[:alnum:]]+" "-")))
+         path
+         "-")))
+
+    (defun my/org-worklog-id-get (&optional pom create prefix)
+      (interactive)
+      (org-with-point-at pom
+        (let ((id (org-entry-get nil "CUSTOM_ID")))
+          (cond
+           ((and id (stringp id) (string-match "\\S-" id))
+            id)
+           (create
+            (setq id (my/org-worklog-id-new prefix))
+            (org-entry-put pom "CUSTOM_ID" id)
+            id))))))
+
+#+end_src
+** Publish projects
+#+begin_src emacs-lisp
+  (setq org-html-mathjax-options
+        '((path "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-AMS-MML_HTMLorMML")))
+
+  (setq org-reveal-root "https://cdn.jsdelivr.net/reveal.js/3.0.0/")
+
+  (defun my/org-work-publish-to-html (plist filename pub-dir)
+    (message "Publishing %s" filename)
+    (cond ((string-match-p "slides.org$" filename)
+           (org-reveal-publish-to-reveal plist filename pub-dir))
+          (t (let ((org-html-head
+                    (concat
+                        ;; Tufte
+                        ;; "<link rel=\"stylesheet\" href=\"" my/org-base-url "styles/tufte-css/tufte.css\"/>"
+                        ;; "<link rel=\"stylesheet\" href=\"" my/org-base-url "styles/tufte-css/latex.css\"/>"
+
+                        ;; Org-Spec
+                        ;; "<link href=\"https://fonts.googleapis.com/css?family=Roboto+Slab:400,700|Inconsolata:400,700\" rel=\"stylesheet\" type=\"text/css\" />"
+                        ;; "<link rel=\"stylesheet\" href=\"" my/org-base-url "styles/org-spec/style.css\"/>"
+
+                        ;; "<link rel=\"stylesheet\" type=\"text/css\" href=\"" my/org-base-url "css/info.css\" />"
+
+                        ;; ReadTheOrg
+                        "<link rel=\"stylesheet\" type=\"text/css\" href=\"" my/org-base-url "styles/readtheorg/css/htmlize.css\"/>"
+                        "<link rel=\"stylesheet\" type=\"text/css\" href=\"" my/org-base-url "styles/readtheorg/css/readtheorg.css\"/>"
+                        "<link rel=\"stylesheet\" type=\"text/css\" href=\"" my/org-base-url "css/info.css\" />"
+                        "<script src=\"https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js\"></script>"
+                        "<script src=\"https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js\"></script>"
+                        "<script type=\"text/javascript\" src=\"" my/org-base-url "styles/lib/js/jquery.stickytableheaders.min.js\"></script>"
+                        "<script type=\"text/javascript\" src=\"" my/org-base-url "styles/readtheorg/js/readtheorg.js\"></script>"
+
+                        ;; Bigblow
+                        ;; "<link rel=\"stylesheet\" type=\"text/css\" href=\"" my/org-base-url "styles/bigblow/css/htmlize.css\"/>"
+                        ;; "<link rel=\"stylesheet\" type=\"text/css\" href=\"" my/org-base-url "styles/bigblow/css/bigblow.css\"/>"
+                        ;; "<link rel=\"stylesheet\" type=\"text/css\" href=\"" my/org-base-url "styles/bigblow/css/hideshow.css\"/>"
+                        ;; "<script type=\"text/javascript\" src=\"" my/org-base-url "styles/bigblow/js/jquery-1.11.0.min.js\"></script>"
+                        ;; "<script type=\"text/javascript\" src=\"" my/org-base-url "styles/bigblow/js/jquery-ui-1.10.2.min.js\"></script>"
+                        ;; "<script type=\"text/javascript\" src=\"" my/org-base-url "styles/bigblow/js/jquery.localscroll-min.js\"></script>"
+                        ;; "<script type=\"text/javascript\" src=\"" my/org-base-url "styles/bigblow/js/jquery.scrollTo-1.4.3.1-min.js\"></script>"
+                        ;; "<script type=\"text/javascript\" src=\"" my/org-base-url "styles/bigblow/js/jquery.zclip.min.js\"></script>"
+                        ;; "<script type=\"text/javascript\" src=\"" my/org-base-url "styles/bigblow/js/bigblow.js\"></script>"
+                        ;; "<script type=\"text/javascript\" src=\"" my/org-base-url "styles/bigblow/js/hideshow.js\"></script>"
+                        ;; "<script type=\"text/javascript\" src=\"" my/org-base-url "styles/lib/js/jquery.stickytableheaders.min.js\"></script>"
+                        )))
+               (save-excursion
+                 (save-restriction
+                   (org-html-publish-to-html plist filename pub-dir)))))))
+
+  ;; (setq my/org-base-url (concat "/~" (getenv "USER") "/org/"))
+  (setq my/org-base-url "/")
+  (setq my/org-base-url "https://github.aweber.io/pages/correlr/org/")
+
+  (setq org-publish-project-alist
+        `(
+          ;; ("work-common"
+          ;;  :base-directory "~/org/common"
+          ;;  :publishing-directory "~/Public/org"
+          ;;  :base-extension "css\\|gif\\|jpe?g\\|png\\|svg"
+          ;;  :recursive t
+          ;;  :publishing-function org-publish-attachment)
+          ("work-themes"
+           :base-directory "~/.emacs.local.d/org-html-themes/styles"
+           :publishing-directory "~/Public/org/styles"
+           :base-extension "js\\|css\\|gif\\|jpe?g\\|png\\|svg\\|ogv"
+           :recursive t
+           :publishing-function org-publish-attachment)
+          ("work-html"
+           :base-directory "~/org-aweber"
+           :base-extension "org"
+           ;; :exclude "\\(^knowledge-transfer.org$\\|-archive.org$\\)"
+           :exclude "\\(^README.org$\\)"
+           :publishing-directory "~/Public/org"
+           :publishing-function (my/org-work-publish-to-html
+                                 org-org-publish-to-org
+                                 org-babel-tangle-publish
+                                 )
+           :htmlized-source t
+           ;; :html-head "<link rel=\"stylesheet\" type=\"text/css\" href=\"http://thomasf.github.io/solarized-css/solarized-dark.min.css\" />"
+           ;; :html-head-extra "<link rel=\"stylesheet\" type=\"text/css\" href=\"/~croush/org/css/org.css\" />"
+           ;; :setup-file "~/.emacs.local.d/org-html-themes/setup/theme-readtheorg-local.setup"
+           :html-link-home ,my/org-base-url
+           :html-doctype "html5"
+           :html-html5-fancy t
+           :with-sub-superscript nil
+           ;; :infojs-opt "path:http://thomasf.github.io/solarized-css/org-info.min.js view:showall"
+           :auto-sitemap t
+           :sitemap-filename "index.org"
+           :sitemap-title "Correl Roush's Org Documents"
+           :sitemap-sort-folders last
+           :recursive t)
+          ("work-assets"
+           :base-directory "~/org-aweber"
+           :base-extension "css\\|gif\\|jpe?g\\|png\\|svg\\|pdf\\|ogv\\|py\\|html\\|ya?ml"
+           :include (".gitlab-ci.yml")
+           :publishing-directory "~/Public/org"
+           :publishing-function org-publish-attachment
+           :recursive t)
+          ("work" :components ("work-html" "work-assets" "work-themes"))
+
+          ("dotfiles-common"
+           :base-directory "~/dotfiles"
+           :publishing-directory "~/Public/dotfiles"
+           :base-extension "css\\|gif\\|jpe?g\\|png\\|svg"
+           :recursive t
+           :publishing-function org-publish-attachment)
+          ("dotfiles-html"
+           :base-directory "~/dotfiles"
+           :base-extension "org"
+           :publishing-directory "~/Public/dotfiles"
+           :publishing-function (org-html-publish-to-html
+                                 org-babel-tangle-publish)
+           :htmlized-source t
+           :html-head "<link rel=\"stylesheet\" type=\"text/css\" href=\"http://thomasf.github.io/solarized-css/solarized-dark.min.css\" />"
+           :html-head-extra "<link rel=\"stylesheet\" type=\"text/css\" href=\"/~croush/org/css/org.css\" />"
+           :html-link-home "/~croush/dotfiles/"
+           :html-doctype "html5"
+           :html-html5-fancy t
+           :with-sub-superscript nil
+           :infojs-opt "path:http://thomasf.github.io/solarized-css/org-info.min.js view:showall"
+           :auto-sitemap t
+           :sitemap-filename "index.org"
+           :sitemap-title "Correl Roush's Dotfiles"
+           :sitemap-sort-folders last
+           :recursive t)
+          ("dotfiles-assets"
+           :base-directory "~/dotfiles"
+           :base-extension "css\\|gif\\|jpe?g\\|png\\|svg"
+           :publishing-directory "~/Public/dotfiles"
+           :publishing-function org-publish-attachment
+           :recursive t)
+          ("dotfiles" :components ("dotfiles-common" "dotfiles-html" "dotfiles-assets"))
+
+          ("personal-themes"
+           :base-directory "~/.emacs.local.d/org-html-themes/styles"
+           :publishing-directory "~/Public/personal/styles"
+           :base-extension "js\\|css\\|gif\\|jpe?g\\|png\\|svg"
+           :recursive t
+           :publishing-function org-publish-attachment)
+          ("personal-html"
+           :base-directory "~/org"
+           :base-extension "org"
+           :publishing-directory "~/Public/personal"
+           :recursive t
+           :with-toc t
+           :auto-sitemap t
+           :sitemap-title "Correl Roush's Org Files"
+           :sitemap-filename "index.org"
+           :publishing-function org-html-publish-to-tufte-html
+           :html-head ,(concat
+                        ;; Tufte
+                        "<link rel=\"stylesheet\" href=\"" my/org-base-url "styles/tufte-css/tufte.css\"/>"
+                        "<link rel=\"stylesheet\" href=\"" my/org-base-url "styles/tufte-css/latex.css\"/>"
+                        ;; Org-Spec
+                        ;; "<link href=\"http://fonts.googleapis.com/css?family=Roboto+Slab:400,700|Inconsolata:400,700\" rel=\"stylesheet\" type=\"text/css\" />"
+                        ;; "<link href=\"http://demo.thi.ng/org-spec/css/style.css\" rel=\"stylesheet\" type=\"text/css\" />"
+                        ))
+          ("personal-files"
+           :base-directory "~/org"
+           :base-extension "css\\|gif\\|jpe?g\\|png\\|svg"
+           :publishing-directory "~/Public/personal"
+           :recursive t
+           :publishing-function org-publish-attachment)
+          ("personal-assets"
+           :base-directory "~/org"
+           :base-extension "css\\|gif\\|jpe?g\\|png\\|svg\\|pdf"
+           :publishing-directory "~/Public/personal"
+           :publishing-function org-publish-attachment
+           :recursive t)
+          ("personal" :components ("personal-themes" "personal-html" "personal-files" "personal-assets"))
+
+          ("journal"
+           :base-directory "~/org"
+           :exclude ".*"
+           :include ("journal.org")
+           :publishing-directory "~/journal"
+           :publishing-function (org-html-publish-to-html
+                                 org-latex-export-to-pdf))
+
+          ("sicp-html"
+           :base-directory "~/code/sicp"
+           :base-extension "org"
+           :publishing-directory "~/Public/sicp"
+           :publishing-function (org-html-publish-to-html
+                                 org-org-publish-to-org
+                                 org-babel-tangle-publish)
+           :htmlized-source t
+           :html-head "<link rel=\"stylesheet\" type=\"text/css\" href=\"http://thomasf.github.io/solarized-css/solarized-light.min.css\" />"
+           :html-link-home "/"
+           :html-doctype "html5"
+           :html-html5-fancy t
+           :with-sub-superscript nil
+           :auto-sitemap t
+           :sitemap-filename "index.org"
+           :sitemap-title "SICP Exercises and Notes"
+           :sitemap-sort-folders last
+           :recursive t)
+          ("sicp-assets"
+           :base-directory "~/code/sicp"
+           :base-extension "css\\|gif\\|jpe?g\\|png\\|svg\\|scheme\\|pl"
+           :publishing-directory "~/Public/sicp"
+           :publishing-function org-publish-attachment
+           :recursive t)
+          ("sicp" :components ("sicp-html" "sicp-assets"))
+
+          ))
+
+  ;; Don't prompt for babel evaluation, ever.
+  (setq org-confirm-babel-evaluate nil)
+
+  (require 'ox-confluence)(defun my/org-publish ()
+    (interactive)
+    (org-publish "work")
+    (shell-command "org-publish"))
+
+  (bind-key "C-c o p" #'my/org-publish)
+#+end_src
+** Enhanced Confluence export
+#+begin_src emacs-lisp
+  (use-package! ox-confluence-en
+    :after ox
+    :commands ox-confluence-en-export-as-confluence)
+#+end_src
+* MU4E
