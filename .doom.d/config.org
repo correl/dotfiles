@@ -66,6 +66,7 @@ setup.
               (tags-todo "-important-urgent"
                          ((org-agenda-overriding-header "Delete"))))
              ((org-agenda-start-with-log-mode t)
+              (org-agenda-start-day nil)
               (org-agenda-span 'day)
               (org-agenda-log-mode-items '(clock state closed)))
              ("~/Public/agenda.html"
