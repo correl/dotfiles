@@ -1,0 +1,148 @@
+#+TITLE: DOOM Emacs Configuration
+#+STARTUP: indent
+#+PROPERTY: header-args :tangle yes
+
+* Org
+:PROPERTIES:
+:header-args: :tangle no :noweb-ref org
+:END:
+
+#+begin_src emacs-lisp :noweb yes :tangle yes :noweb-ref org-all
+  (when (featurep! :lang org)
+    <<org>>)
+#+end_src
+
+** Override DOOM indentation behavior
+#+begin_src emacs-lisp
+  (defun my/org-init-babel ()
+    (setq org-src-preserve-indentation nil))
+
+  (add-hook! 'org-mode-hook #'my/org-init-babel)
+#+end_src
+** Disable DOOM's centralized attachment system
+It's incompatible with all of the org files I already have using the standard
+setup.
+#+begin_src emacs-lisp
+  (setq org-attach-directory "data/")
+  (remove-hook! 'org-load-hook
+    #'(+org-init-centralized-attachments-h))
+#+end_src
+** LaTeX Export
+*** Document Classes
+#+BEGIN_SRC emacs-lisp
+  (use-package! ox-latex
+    :config
+    (seq-map (apply-partially #'add-to-list 'org-latex-classes)
+           '(("koma-letter"
+              "\\documentclass{scrlttr2}"
+              ("\\section{%s}" . "\\section*{%s}")
+              ("\\subsection{%s}" . "\\subsection*{%s}")
+              ("\\subsubsection{%s}" . "\\subsubsection*{%s}")
+              ("\\paragraph{%s}" . "\\paragraph*{%s}")
+              ("\\subparagraph{%s}" . "\\subparagraph*{%s}"))
+             ("koma-article"
+              "\\documentclass{scrartcl}"
+              ("\\section{%s}" . "\\section*{%s}")
+              ("\\subsection{%s}" . "\\subsection*{%s}")
+              ("\\subsubsection{%s}" . "\\subsubsection*{%s}")
+              ("\\paragraph{%s}" . "\\paragraph*{%s}")
+              ("\\subparagraph{%s}" . "\\subparagraph*{%s}"))
+             ("koma-book"
+              "\\documentclass{scrbook}"
+              ("\\section{%s}" . "\\section*{%s}")
+              ("\\subsection{%s}" . "\\subsection*{%s}")
+              ("\\subsubsection{%s}" . "\\subsubsection*{%s}")
+              ("\\paragraph{%s}" . "\\paragraph*{%s}")
+              ("\\subparagraph{%s}" . "\\subparagraph*{%s}"))
+             ("koma-book-chapters"
+              "\\documentclass{scrbook}"
+              ("\\chapter{%s}" . "\\chapter*{%s}")
+              ("\\section{%s}" . "\\section*{%s}")
+              ("\\subsection{%s}" . "\\subsection*{%s}")
+              ("\\subsubsection{%s}" . "\\subsubsection*{%s}")
+              ("\\paragraph{%s}" . "\\paragraph*{%s}")
+              ("\\subparagraph{%s}" . "\\subparagraph*{%s}"))
+             ("koma-report"
+              "\\documentclass{scrreprt}"
+              ("\\chapter{%s}" . "\\chapter*{%s}")
+              ("\\section{%s}" . "\\section*{%s}")
+              ("\\subsection{%s}" . "\\subsection*{%s}")
+              ("\\subsubsection{%s}" . "\\subsubsection*{%s}")
+              ("\\paragraph{%s}" . "\\paragraph*{%s}")
+              ("\\subparagraph{%s}" . "\\subparagraph*{%s}"))
+             ("memoir"
+              "\\documentclass{memoir}"
+              ("\\section{%s}" . "\\section*{%s}")
+              ("\\subsection{%s}" . "\\subsection*{%s}")
+              ("\\subsubsection{%s}" . "\\subsubsection*{%s}")
+              ("\\paragraph{%s}" . "\\paragraph*{%s}")
+              ("\\subparagraph{%s}" . "\\subparagraph*{%s}"))
+             ("hitec"
+              "\\documentclass{hitec}"
+              ("\\section{%s}" . "\\section*{%s}")
+              ("\\subsection{%s}" . "\\subsection*{%s}")
+              ("\\subsubsection{%s}" . "\\subsubsection*{%s}")
+              ("\\paragraph{%s}" . "\\paragraph*{%s}")
+              ("\\subparagraph{%s}" . "\\subparagraph*{%s}"))
+             ("paper"
+              "\\documentclass{paper}"
+              ("\\section{%s}" . "\\section*{%s}")
+              ("\\subsection{%s}" . "\\subsection*{%s}")
+              ("\\subsubsection{%s}" . "\\subsubsection*{%s}")
+              ("\\paragraph{%s}" . "\\paragraph*{%s}")
+              ("\\subparagraph{%s}" . "\\subparagraph*{%s}"))
+             ("letter"
+              "\\documentclass{letter}"
+              ("\\section{%s}" . "\\section*{%s}")
+              ("\\subsection{%s}" . "\\subsection*{%s}")
+              ("\\subsubsection{%s}" . "\\subsubsection*{%s}")
+              ("\\paragraph{%s}" . "\\paragraph*{%s}")
+              ("\\subparagraph{%s}" . "\\subparagraph*{%s}"))
+             ("tufte-handout"
+              "\\documentclass{tufte-handout}"
+              ("\\section{%s}" . "\\section*{%s}")
+              ("\\subsection{%s}" . "\\subsection*{%s}")
+              ("\\subsubsection{%s}" . "\\subsubsection*{%s}")
+              ("\\paragraph{%s}" . "\\paragraph*{%s}")
+              ("\\subparagraph{%s}" . "\\subparagraph*{%s}"))
+             ("tufte-book"
+              "\\documentclass{tufte-book}"
+              ("\\section{%s}" . "\\section*{%s}")
+              ("\\subsection{%s}" . "\\subsection*{%s}")
+              ("\\subsubsection{%s}" . "\\subsubsection*{%s}")
+              ("\\paragraph{%s}" . "\\paragraph*{%s}")
+              ("\\subparagraph{%s}" . "\\subparagraph*{%s}"))
+             ("tufte-book-chapters"
+              "\\documentclass{tufte-book}"
+              ("\\chapter{%s}" . "\\chapter*{%s}")
+              ("\\section{%s}" . "\\section*{%s}")
+              ("\\subsection{%s}" . "\\subsection*{%s}")
+              ("\\subsubsection{%s}" . "\\subsubsection*{%s}")
+              ("\\paragraph{%s}" . "\\paragraph*{%s}")
+              ("\\subparagraph{%s}" . "\\subparagraph*{%s}"))
+             ("labbook"
+              "\\documentclass{labbook}"
+              ("\\chapter{%s}" . "\\chapter*{%s}")
+              ("\\section{%s}" . "\\section*{%s}")
+              ("\\subsection{%s}" . "\\labday{%s}")
+              ("\\subsubsection{%s}" . "\\experiment{%s}")
+              ("\\paragraph{%s}" . "\\paragraph*{%s}")
+              ("\\subparagraph{%s}" . "\\subparagraph*{%s}")))))
+#+END_SRC
+* Auto-loading elisp files
+Any elisp files dropped into =~/.doom.local.d/= will be
+automatically loaded.
+
+I usually use this is a testing ground for new configuration before
+adding it here, and also for any personal / sensitive configuration.
+
+#+BEGIN_SRC emacs-lisp
+  (defun my/load-elisp-directory (path)
+    (let ((file-pattern "\\.elc?$"))
+      (when (file-directory-p path)
+        (mapcar (lambda (lisp-file)
+                  (load-file lisp-file))
+                (directory-files (expand-file-name path) t file-pattern)))))
+
+  (my/load-elisp-directory "~/.doom.local.d")
+#+END_SRC
