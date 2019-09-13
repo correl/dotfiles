@@ -638,3 +638,44 @@ Manage background services
 
     (projectile-cleanup-known-projects))
 #+end_src
+* Elfeed
+#+begin_src emacs-lisp
+  (use-package! elfeed
+    :commands (elfeed my/elfeed my/elfeed-emacs my/elfeed-blogs)
+    :bind
+    (("<f2>" . elfeed)
+     ("C-c n n" . my/elfeed)
+     ("C-c n a" . my/elfeed-all)
+     ("C-c n e" . my/elfeed-emacs)
+     ("C-c n b" . my/elfeed-blogs))
+    :init
+    (global-set-key [f2] 'elfeed)
+
+    :config
+    (use-package! elfeed-org
+      :config (progn (elfeed-org)
+                     (setq rmh-elfeed-org-files '("~/org/elfeed.org"))))
+
+    (defun my/elfeed-with-filters (filters)
+      (elfeed)
+      (setq elfeed-search-filter
+            (if (listp filters) (mapconcat #'identity filters " ")
+              filters))
+      (elfeed-search-update :force))
+
+    (defun my/elfeed ()
+      (interactive)
+      (my/elfeed-with-filters "@6-months-ago +unread"))
+
+    (defun my/elfeed-all ()
+      (interactive)
+      (my/elfeed-with-filters "@6-months-ago"))
+
+    (defun my/elfeed-emacs ()
+      (interactive)
+      (my/elfeed-with-filters  "@6-months-ago +emacs +unread"))
+
+    (defun my/elfeed-blogs ()
+      (interactive)
+      (my/elfeed-with-filters  "@6-months-ago +unread +blog")))
+#+end_src
