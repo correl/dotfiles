@@ -8,7 +8,7 @@
 :END:
 
 #+begin_src emacs-lisp :noweb yes :tangle yes :noweb-ref org-all
-  (when (featurep! :lang org)
+  (after! org
     <<org>>)
 #+end_src
 
@@ -511,6 +511,9 @@ be based on their headings.
   (use-package! mu4e
     :bind (("<f9>" . mu4e))
     :config
+
+    (require 'f)
+
     (setq mu4e-maildir "~/Mail")
 
     (setq user-full-name "Correl Roush")
@@ -615,8 +618,10 @@ Manage background services
 * Projectile
 #+begin_src emacs-lisp
   (after! projectile
-    (setq projectile-switch-project-action #'magit-status)
+    (require 'dash)
+    (require 'f)
 
+    (setq projectile-switch-project-action #'magit-status)
     (let ((project-directories (-filter #'f-directory?
                                         '("~/code"
                                           "~/git"))))
