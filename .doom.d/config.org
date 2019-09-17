@@ -785,3 +785,8 @@ Manage background services
       (interactive)
       (my/elfeed-with-filters  "@6-months-ago +unread +blog")))
 #+end_src
+* Paredit
+#+begin_src emacs-lisp
+  (use-package! paredit
+    :hook ((emacs-lisp-mode . enable-paredit-mode)))
+#+end_src
