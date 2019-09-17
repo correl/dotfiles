@@ -2,6 +2,30 @@
 #+STARTUP: indent
 #+PROPERTY: header-args :tangle yes
 
+* Dashboard
+#+begin_src emacs-lisp
+    (defun my/choice (&rest things)
+      (let ((index (random (length things))))
+        (nth index things)))
+
+    (defun my/dashboard-randomize ()
+      (interactive)
+      (let ((logo (my/choice "~/Pictures/Patreon/Jon Bliss/phoenix-and-catgirl-500.png"
+                             "~/Pictures/Patreon/Jon Bliss/Bassist-final-transparent-500.png"
+                             "~/Pictures/Patreon/Jon Bliss/catgirl-final-transparent-500.png"
+                             "~/Pictures/Patreon/Jon Bliss/lapiz-final-transparent-500.png"
+                             "~/Pictures/Patreon/Jon Bliss/Poledancer-final-transparent-500.png"
+                             "~/Pictures/Patreon/Jon Bliss/Hacker-final-transparent-500.png")))
+
+        (setq fancy-splash-image logo)
+        (if (called-interactively-p)
+            (+doom-dashboard-reload))))
+
+  (my/dashboard-randomize)
+  (map!
+   :map doom-dashboard-map
+   :n "g" #'my/dashboard-randomize)
+#+end_src
 * Org
 :PROPERTIES:
 :header-args: :tangle no :noweb-ref org
