@@ -23,8 +23,8 @@
 
   (my/dashboard-randomize)
   (map!
-   :map doom-dashboard-map
-   :n "g" #'my/dashboard-randomize)
+   :map +doom-dashboard-mode-map
+   "g" #'my/dashboard-randomize)
 #+end_src
 * Org
 :PROPERTIES:
