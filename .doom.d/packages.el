@@ -8,3 +8,4 @@
 
 (package! ox-confluence-en :recipe (:host github :repo "correl/ox-confluence-en"))
 (package! paredit)
+(package! uuidgen)
