@@ -811,3 +811,10 @@ Taken from [[http://emacsredux.com/blog/2013/06/21/eval-and-replace/][Emacs Redu
 
   (global-set-key (kbd "C-)") 'eval-and-replace)
 #+end_src
+* Unfill
+#+begin_src emacs-lisp
+  (use-package! unfill
+    :commands (unfill-paragraph
+               unfill-region)
+    :bind ("M-Q" . unfill-paragraph))
+#+end_src
