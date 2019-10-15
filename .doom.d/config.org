@@ -612,6 +612,15 @@ be based on their headings.
     :after ox
     :commands ox-confluence-en-export-as-confluence)
 #+end_src
+** Reload images on source execution
+#+begin_src emacs-lisp
+  (defun my/redisplay-org-images ()
+    (when org-inline-image-overlays
+      (org-redisplay-inline-images)))
+
+  (add-hook 'org-babel-after-execute-hook
+            'my/redisplay-org-images)
+#+end_src
 * MU4E
 #+begin_src emacs-lisp
   (use-package! mu4e
