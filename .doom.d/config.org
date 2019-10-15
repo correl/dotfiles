@@ -621,6 +621,23 @@ be based on their headings.
   (add-hook 'org-babel-after-execute-hook
             'my/redisplay-org-images)
 #+end_src
+* Eshell
+** Change directory in the context of a remote host
+#+begin_src emacs-lisp
+  (defun eshell/lcd (&optional directory)
+    (interactive)
+    (if (file-remote-p default-directory)
+        (with-parsed-tramp-file-name default-directory nil
+          (eshell/cd (tramp-make-tramp-file-name
+                      (tramp-file-name-method v)
+                      (tramp-file-name-user v)
+                      (tramp-file-name-domain v)
+                      (tramp-file-name-host v)
+                      (tramp-file-name-port v)
+                      (or directory "")
+                      (tramp-file-name-hop v))))
+      (eshell/cd directory)))
+#+end_src
 * MU4E
 #+begin_src emacs-lisp
   (use-package! mu4e
