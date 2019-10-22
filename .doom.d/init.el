@@ -158,7 +158,7 @@
        ;; toward a specific purpose. They may have additional dependencies and
        ;; should be loaded late.
        :app
-       ;;calendar
+       calendar
        ;;irc               ; how neckbeards socialize
        (rss +org)        ; emacs as an RSS reader
        ;;twitter           ; twitter client https://twitter.com/vnought
