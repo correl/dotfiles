@@ -2,6 +2,17 @@
 #+STARTUP: indent
 #+PROPERTY: header-args :tangle yes
 
+* Custom settings
+Store options set via =customize-*= in a separate file (Emacs stores
+them in =init.el= by default).
+
+#+BEGIN_SRC emacs-lisp
+  (setq custom-file "~/.emacs.d/custom.el")
+  (if (file-exists-p custom-file)
+      (load custom-file))
+
+  (setf custom-safe-themes t)
+#+END_SRC
 * Dashboard
 #+begin_src emacs-lisp
     (defun my/choice (&rest things)
