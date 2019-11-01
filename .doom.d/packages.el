@@ -11,3 +11,4 @@
 (package! paredit)
 (package! uuidgen)
 (package! unfill)
+(package! emms)

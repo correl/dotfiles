@@ -855,3 +855,29 @@ Taken from [[http://emacsredux.com/blog/2013/06/21/eval-and-replace/][Emacs Redu
                unfill-region)
     :bind ("M-Q" . unfill-paragraph))
 #+end_src
+* EMMS
+#+begin_src emacs-lisp
+  (use-package! emms
+    :commands (emms
+               emms-play-file
+               emms-play-directory
+               emms-smart-browse)
+    :config
+    (let ((emms-player-base-format-list
+           ;; Add some VGM formats to the list for VLC to play
+           (append emms-player-base-format-list '("nsf" "sfc" "gym"))))
+      (require 'emms-player-vlc))
+    (require 'emms-setup)
+    (emms-all)
+    (setq emms-player-list '(emms-player-vlc))
+    ;; Use the installed VLC app if we're in OSX
+    (if (f-exists? "/Applications/VLC.app/Contents/MacOS/VLC")
+        (setq emms-player-vlc-command-name
+              "/Applications/VLC.app/Contents/MacOS/VLC")))
+
+  (map! :leader
+        (:prefix-map ("x" . "EMMS")
+          :desc "Play file" "f" #'emms-play-file
+          :desc "Play directory" "d" #'emms-play-directory
+          :desc "Smart Browser" "b" #'emms-smart-browse))
+#+end_src
