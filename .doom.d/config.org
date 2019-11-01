@@ -405,12 +405,12 @@ be based on their headings.
   (setq org-html-mathjax-options
         '((path "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-AMS-MML_HTMLorMML")))
 
-  (setq org-reveal-root "https://cdn.jsdelivr.net/reveal.js/3.0.0/")
+  (setq org-re-reveal-root "https://cdn.jsdelivr.net/reveal.js/3.0.0/")
 
   (defun my/org-work-publish-to-html (plist filename pub-dir)
     (message "Publishing %s" filename)
     (cond ((string-match-p "slides.org$" filename)
-           (org-reveal-publish-to-reveal plist filename pub-dir))
+           (org-re-reveal-publish-to-reveal plist filename pub-dir))
           (t (let ((org-html-head
                     (concat
                         ;; Tufte
@@ -451,7 +451,7 @@ be based on their headings.
 
   ;; (setq my/org-base-url (concat "/~" (getenv "USER") "/org/"))
   (setq my/org-base-url "/")
-  (setq my/org-base-url "https://github.aweber.io/pages/correlr/org/")
+  (setq my/org-base-url "https://correlr.gitlab.aweber.io/org/")
 
   (setq org-publish-project-alist
         `(
@@ -475,9 +475,9 @@ be based on their headings.
            :publishing-directory "~/Public/org"
            :publishing-function (my/org-work-publish-to-html
                                  org-org-publish-to-org
-                                 org-babel-tangle-publish
-                                 )
-           :htmlized-source t
+                                 org-babel-tangle-publish)
+
+           ;; :htmlized-source t
            ;; :html-head "<link rel=\"stylesheet\" type=\"text/css\" href=\"http://thomasf.github.io/solarized-css/solarized-dark.min.css\" />"
            ;; :html-head-extra "<link rel=\"stylesheet\" type=\"text/css\" href=\"/~croush/org/css/org.css\" />"
            ;; :setup-file "~/.emacs.local.d/org-html-themes/setup/theme-readtheorg-local.setup"
@@ -552,11 +552,11 @@ be based on their headings.
            :html-head ,(concat
                         ;; Tufte
                         "<link rel=\"stylesheet\" href=\"" my/org-base-url "styles/tufte-css/tufte.css\"/>"
-                        "<link rel=\"stylesheet\" href=\"" my/org-base-url "styles/tufte-css/latex.css\"/>"
-                        ;; Org-Spec
-                        ;; "<link href=\"http://fonts.googleapis.com/css?family=Roboto+Slab:400,700|Inconsolata:400,700\" rel=\"stylesheet\" type=\"text/css\" />"
-                        ;; "<link href=\"http://demo.thi.ng/org-spec/css/style.css\" rel=\"stylesheet\" type=\"text/css\" />"
-                        ))
+                        "<link rel=\"stylesheet\" href=\"" my/org-base-url "styles/tufte-css/latex.css\"/>"))
+          ;; Org-Spec
+          ;; "<link href=\"http://fonts.googleapis.com/css?family=Roboto+Slab:400,700|Inconsolata:400,700\" rel=\"stylesheet\" type=\"text/css\" />"
+          ;; "<link href=\"http://demo.thi.ng/org-spec/css/style.css\" rel=\"stylesheet\" type=\"text/css\" />"
+
           ("personal-files"
            :base-directory "~/org"
            :base-extension "css\\|gif\\|jpe?g\\|png\\|svg"
@@ -603,9 +603,9 @@ be based on their headings.
            :publishing-directory "~/Public/sicp"
            :publishing-function org-publish-attachment
            :recursive t)
-          ("sicp" :components ("sicp-html" "sicp-assets"))
+          ("sicp" :components ("sicp-html" "sicp-assets"))))
 
-          ))
+
 
   ;; Don't prompt for babel evaluation, ever.
   (setq org-confirm-babel-evaluate nil)
