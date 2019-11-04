@@ -865,7 +865,7 @@ Taken from [[http://emacsredux.com/blog/2013/06/21/eval-and-replace/][Emacs Redu
     :config
     (let ((emms-player-base-format-list
            ;; Add some VGM formats to the list for VLC to play
-           (append emms-player-base-format-list '("nsf" "sfc" "gym"))))
+           (append emms-player-base-format-list '("nsf" "spc" "gym"))))
       (require 'emms-player-vlc))
     (require 'emms-setup)
     (emms-all)
