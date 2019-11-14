@@ -67,8 +67,8 @@ setup.
   (after! org-agenda
     (require 'f)
 
-    (setq my/agenda-files '((personal . ("~/Dropbox/org/personal.org"))
-                            (work . ("~/Dropbox/org/aweber.org")))
+    (setq my/agenda-files '((personal . ("~/Nextcloud/org/personal.org"))
+                            (work . ("~/Nextcloud/org/aweber.org")))
 
           org-agenda-files (-filter #'f-exists?
                                     (-concat
@@ -255,10 +255,10 @@ setup.
            (file+datetree "~/org/journal.org")
            "%U\n\n%?" :empty-lines-before 1)
           ("t" "TODO" entry
-           (file+headline "~/Dropbox/org/personal.org" "Unsorted")
+           (file+headline "~/Nextcloud/org/personal.org" "Unsorted")
            "* TODO %^{Description}\n%?")
           ("n" "Note" entry
-           (file+headline "~/Dropbox/org/personal.org" "Notes")
+           (file+headline "~/Nextcloud/org/personal.org" "Notes")
            "* %^{Description}\n%U\n\n%?")
           ;; Org-Protocol
           ("b" "Bookmark" entry
@@ -279,7 +279,7 @@ setup.
           ;; Work
           ("w" "Work")
           ("wt" "Work TODO" entry
-           (file+headline "~/Dropbox/org/aweber.org" "Unsorted")
+           (file+headline "~/Nextcloud/org/aweber.org" "Unsorted")
            "* TODO %^{Description}\n%?")
           ("wl" "Log Work Task" entry
            (file+datetree "~/org-aweber/worklog.org")
@@ -301,7 +301,7 @@ setup.
            :clock-in t
            :clock-keep t)
           ("wr" "respond to email (mu4e)"
-           entry (file+headline "~/Dropbox/org/aweber.org" "Unsorted")
+           entry (file+headline "~/Nextcloud/org/aweber.org" "Unsorted")
            "* REPLY to [[mailto:%:fromaddress][%:fromname]] on %a\nDEADLINE: %(org-insert-time-stamp (org-read-date nil t \"+1d\"))\n%U\n\n"
            :immediate-finish t
            :prepend t)))
