@@ -12,3 +12,4 @@
 (package! uuidgen)
 (package! unfill)
 (package! emms)
+(package! org-sticky-header)

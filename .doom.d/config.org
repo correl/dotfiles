@@ -632,6 +632,12 @@ be based on their headings.
   (add-hook 'org-babel-after-execute-hook
             'my/redisplay-org-images)
 #+end_src
+** Sticky headers
+#+begin_src emacs-lisp
+  (use-package! org-sticky-header
+    :hook (org-mode . org-sticky-header-mode)
+    :config (setq org-sticky-header-full-path 'full))
+#+end_src
 * Eshell
 ** Change directory in the context of a remote host
 #+begin_src emacs-lisp
