@@ -890,5 +890,8 @@ Taken from [[http://emacsredux.com/blog/2013/06/21/eval-and-replace/][Emacs Redu
 * Kubernetes
 #+begin_src emacs-lisp
   (use-package! kubernetes
-    :commands (kubernetes-overview))
+    :commands (kubernetes-overview)
+    :config)
+
+  (set-popup-rule! "^\\*kubernetes" :ignore t)
 #+end_src
