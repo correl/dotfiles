@@ -887,3 +887,8 @@ Taken from [[http://emacsredux.com/blog/2013/06/21/eval-and-replace/][Emacs Redu
           :desc "Play directory" "d" #'emms-play-directory
           :desc "Smart Browser" "b" #'emms-smart-browse))
 #+end_src
+* Kubernetes
+#+begin_src emacs-lisp
+  (use-package! kubernetes
+    :commands (kubernetes-overview))
+#+end_src

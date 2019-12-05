@@ -13,3 +13,4 @@
 (package! unfill)
 (package! emms)
 (package! org-sticky-header)
+(package! kubernetes)
