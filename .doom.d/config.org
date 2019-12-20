@@ -895,3 +895,9 @@ Taken from [[http://emacsredux.com/blog/2013/06/21/eval-and-replace/][Emacs Redu
 
   (set-popup-rule! "^\\*kubernetes" :ignore t)
 #+end_src
+* Twitter
+#+begin_src emacs-lisp
+  (define-key! twittering-mode-map
+    "f" #'twittering-favorite
+    "F" #'twittering-unfavorite)
+#+end_src
