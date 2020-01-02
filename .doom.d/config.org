@@ -901,3 +901,8 @@ Taken from [[http://emacsredux.com/blog/2013/06/21/eval-and-replace/][Emacs Redu
     "f" #'twittering-favorite
     "F" #'twittering-unfavorite)
 #+end_src
+* Kerl
+#+begin_src emacs-lisp
+  (use-package! kerl
+    :commands (kerl-use))
+#+end_src
