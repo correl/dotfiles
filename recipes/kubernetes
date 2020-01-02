@@ -1,0 +1,14 @@
+#!/bin/bash
+# Description: Kubernetes
+set -e
+
+_recipe brew
+
+case $_PLATFORM in
+    darwin)
+        _brew kubernetes-cli
+        _brew kubernetes-helm
+        _brew_cask minikube
+        _brew stern
+        ;;
+esac
