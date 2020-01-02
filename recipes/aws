@@ -1,0 +1,11 @@
+#!/bin/bash
+# Description: AWS command-line utilities
+set -e
+
+_recipe brew
+_recipe python
+
+_pip awscli
+
+_brew_tap lucagrulla/tap
+_brew cw

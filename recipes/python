@@ -7,6 +7,15 @@ __PYTHON_VERSION=3.7.4
 _recipe _path
 _recipe git
 
+function _pip {
+    local pkg=$1
+    if ! pip show $pkg >/dev/null 2>&1; then
+        _run "[pip] Install $pkg" pip install $pkg
+    else
+        echo "[pip] $pkg is already installed, skiping."
+    fi
+}
+
 case $_PLATFORM in
     darwin)
         _recipe brew
