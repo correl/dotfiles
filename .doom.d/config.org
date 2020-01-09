@@ -906,3 +906,76 @@ Taken from [[http://emacsredux.com/blog/2013/06/21/eval-and-replace/][Emacs Redu
   (use-package! kerl
     :commands (kerl-use))
 #+end_src
+* Jira
+#+begin_src emacs-lisp
+  (use-package jira-api
+    :config (setq jira-api-host "jira.aweber.io"
+                  jira-api-user "correlr"))
+
+  (defun my/org-clock-last-time-in-seconds ()
+    (save-excursion
+      (let ((end (save-excursion (org-end-of-subtree))))
+        (when (re-search-forward (concat org-clock-string
+                                         ".*\\(\\[[^]]+\\]\\)--\\(\\[[^]]+\\]\\)")
+                                 end t)
+          (let* ((start (match-string 1))
+                 (end (match-string 2)))
+            (floor (- (org-time-string-to-seconds end)
+                      (org-time-string-to-seconds start))))))))
+
+  (defun my/org-jira-add-worklog-latest ()
+    (interactive)
+    (let ((jira-id (org-entry-get (point) "JIRA_ID"))
+          (seconds (my/org-clock-last-time-in-seconds)))
+      (when (and jira-id seconds)
+        (jira-api-log-work jira-id seconds)
+        (message
+         (format "Logged %d minutes to %s on JIRA"
+                 (/ seconds 60)
+                 jira-id)))))
+
+  (defun my/org-jira-add-worklog-total ()
+    (interactive)
+    (let ((jira-id (org-entry-get (point) "JIRA_ID"))
+          (seconds (* 60 (org-clock-sum-current-item))))
+      (when (and jira-id seconds)
+        (jira-api-log-work jira-id seconds)
+        (message
+         (format "Logged %d minutes to %s on JIRA"
+                 (/ seconds 60)
+                 jira-id)))))
+
+  (defun my/org-clock-add-jira-worklog-last ()
+    "Add a work log entry to a JIRA.
+  To log work to JIRA, set a property named JIRA_ID on the entry to be
+  logged to a JIRA issue ID."
+    (interactive)
+    (save-excursion
+      (save-window-excursion
+        (org-clock-goto)
+        (my/org-jira-add-worklog-latest))))
+
+  (defun my/org-jira-browse ()
+    (interactive)
+    (-if-let (jira-id (org-entry-get (point) "JIRA_ID"))
+        (let ((protocol (if jira-api-use-ssl "https" "http")))
+          (browse-url
+           (concat
+            protocol "://" jira-api-host "/browse/" jira-id)))))
+
+  (defun my/org-jira-list ()
+    (interactive)
+    (let ((buffer (generate-new-buffer "*org-jira*")))
+      (switch-to-buffer buffer)
+      (org-mode)
+      (insert "ohai")
+      (setq-local buffer-read-only t)
+      (display-buffer buffer)))
+
+  ;; (add-hook 'org-clock-out-hook 'my/org-clock-add-jira-worklog-last)
+
+  (org-defkey org-mode-map "\C-cjt" 'my/org-jira-add-worklog-total)
+  (org-defkey org-mode-map "\C-cjl" 'my/org-jira-add-worklog-latest)
+  (org-defkey org-mode-map "\C-cjb" 'my/org-jira-browse)
+  (org-defkey org-mode-map "\C-cjc" 'jira-api-create-issue-from-heading)
+#+end_src

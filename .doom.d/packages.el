@@ -8,6 +8,7 @@
 
 (package! kerl :recipe (:host github :repo "correl/kerl.el"))
 (package! ox-confluence-en :recipe (:host github :repo "correl/ox-confluence-en"))
+(package! jira-api :recipe (:host github :repo "correl/jira-api"))
 (package! ob-http)
 (package! paredit)
 (package! uuidgen)
