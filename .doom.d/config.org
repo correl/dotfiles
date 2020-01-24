@@ -992,6 +992,20 @@ Taken from [[http://emacsredux.com/blog/2013/06/21/eval-and-replace/][Emacs Redu
         "C-c j c" #'jira-api-create-issue-from-heading
         "C-c j u" #'jira-api-update-issue-from-heading)
 #+end_src
+* Kanji Mode
+Minor mode for displaying Japanese characters' stroke orders.
+
+#+begin_src emacs-lisp
+  (use-package! kanji-mode
+    :commands kanji-mode)
+#+end_src
+* Kanji Glasses Mode
+Study kanji by overlaying hiragana readings.
+
+#+begin_src emacs-lisp
+  (use-package! kanji-glasses-mode
+    :commands kanji-glasses-mode)
+#+end_src
 * Miscellaneous Nonsense
 ** BRING ON THE ...
 A silly interactive method for generating horizontal and vertical text.
@@ -1030,4 +1044,11 @@ S
         (seq-into
          (-interleave (rest upthing) (-repeat (1- (length upthing)) ?\n))
          'string)))))
+#+end_src
+** OwO Mode
+Make reading an open buffer an exercise in insanity.
+
+#+begin_src emacs-lisp
+  (use-package! owo-mode
+    :commands owo-mode)
 #+end_src
