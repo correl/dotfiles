@@ -6,6 +6,9 @@ _recipe emacs
 _recipe git
 _recipe _path
 
+# Include japanese language support utilties used by configured packages
+_recipe japanese
+
 _git "https://github.com/hlissner/doom-emacs" "$HOME/.emacs.d"
 _path "$HOME/.emacs.d/bin"
 
