@@ -1,0 +1,16 @@
+#!/bin/bash
+# Description: Japanese Language Support
+set -e
+
+case $_PLATFORM in
+    darwin)
+        _recipe brew
+        _brew kakasi
+        _brew cmigemo
+        ;;
+    linux)
+        _recipe _apt
+        _apt kakasi
+        _apt cmigemo
+        ;;
+esac
