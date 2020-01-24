@@ -974,8 +974,49 @@ Taken from [[http://emacsredux.com/blog/2013/06/21/eval-and-replace/][Emacs Redu
 
   ;; (add-hook 'org-clock-out-hook 'my/org-clock-add-jira-worklog-last)
 
-  (org-defkey org-mode-map "\C-cjt" 'my/org-jira-add-worklog-total)
-  (org-defkey org-mode-map "\C-cjl" 'my/org-jira-add-worklog-latest)
-  (org-defkey org-mode-map "\C-cjb" 'my/org-jira-browse)
-  (org-defkey org-mode-map "\C-cjc" 'jira-api-create-issue-from-heading)
+  (map! :map org-mode-map
+        "C-c j t" #'my/org-jira-add-worklog-total
+        "C-c j l" #'my/org-jira-add-worklog-latest
+        "C-c j b" #'my/org-jira-browse
+        "C-c j c" #'jira-api-create-issue-from-heading
+        "C-c j u" #'jira-api-update-issue-from-heading)
+#+end_src
+* Miscellaneous Nonsense
+** BRING ON THE ...
+A silly interactive method for generating horizontal and vertical text.
+
+#+CAPTION: M-x bring-on-the RET cats RET
+#+begin_example
+B R I N G   O N   T H E   C A T S 
+R
+I
+N
+G
+ 
+O
+N
+ 
+T
+H
+E
+ 
+C
+A
+T
+S
+#+end_example
+
+#+begin_src emacs-lisp
+  (defun bring-on-the (thing)
+    (interactive "sBring on the: ")
+    (let ((upthing (seq-into (s-upcase (s-concat "bring on the " thing)) 'list)))
+      (insert
+       (s-concat
+        (seq-into
+         (-interleave upthing (-repeat (length upthing) 32))
+         'string)
+        "\n"
+        (seq-into
+         (-interleave (rest upthing) (-repeat (1- (length upthing)) ?\n))
+         'string)))))
 #+end_src
