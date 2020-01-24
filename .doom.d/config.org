@@ -13,6 +13,17 @@ them in =init.el= by default).
 
   (setf custom-safe-themes t)
 #+END_SRC
+* UX Improvements
+** Disable C-z backgrounding when the GUI is loaded
+
+In OSX, this minimizes the window. It's incredibly annoying, and I accidentally
+hit it too much. I also can't think of any reason I'd want to background Emacs
+outside of a terminal session.
+
+#+begin_src emacs-lisp
+  (if (display-graphic-p)
+      (global-unset-key (kbd "C-z")))
+#+end_src
 * Dashboard
 #+begin_src emacs-lisp
     (defun my/choice (&rest things)
