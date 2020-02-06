@@ -19,3 +19,4 @@
 (package! emms)
 (package! org-sticky-header)
 (package! kubernetes)
+(package! mixed-pitch)

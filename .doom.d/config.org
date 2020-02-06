@@ -24,6 +24,13 @@ outside of a terminal session.
   (if (display-graphic-p)
       (global-unset-key (kbd "C-z")))
 #+end_src
+** Mixed Pitch
+Facilitates mixing monospace and proportional fonts.
+#+begin_src emacs-lisp
+  (use-package! mixed-pitch
+    :hook ((org-mode markdown-mode rst-mode) . mixed-pitch-mode))
+  (setq doom-variable-pitch-font (font-spec :family "DejaVu Serif"))
+#+end_src
 * Dashboard
 #+begin_src emacs-lisp
     (defun my/choice (&rest things)
