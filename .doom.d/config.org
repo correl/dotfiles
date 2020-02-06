@@ -25,11 +25,12 @@ outside of a terminal session.
       (global-unset-key (kbd "C-z")))
 #+end_src
 ** Mixed Pitch
-Facilitates mixing monospace and proportional fonts.
+Facilitates mixing monospace and proportional fonts. I'm using an MIT-licensed
+version of the [[https://github.com/edwardtufte/et-book][Edward Tufte book font]] because it's /gorgeous/.
 #+begin_src emacs-lisp
   (use-package! mixed-pitch
     :hook ((org-mode markdown-mode rst-mode) . mixed-pitch-mode))
-  (setq doom-variable-pitch-font (font-spec :family "DejaVu Serif"))
+  (setq doom-variable-pitch-font (font-spec :family "ETBookOT" :size 19))
 #+end_src
 * Dashboard
 #+begin_src emacs-lisp
