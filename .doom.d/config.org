@@ -657,6 +657,18 @@ be based on their headings.
     :hook (org-mode . org-sticky-header-mode)
     :config (setq org-sticky-header-full-path 'full))
 #+end_src
+** Library of Babel
+
+Load shared code snippets to be used in org documents.
+
+#+begin_src emacs-lisp
+  (let ((org-dirs '("~/org" "~/org-aweber")))
+    (seq-map #'org-babel-lob-ingest
+             (seq-filter #'f-exists?
+                         (seq-map (lambda (path) (f-join path "library-of-babel.org"))
+                                  org-dirs))))
+#+end_src
+
 * Eshell
 ** Change directory in the context of a remote host
 #+begin_src emacs-lisp
