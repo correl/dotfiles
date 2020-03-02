@@ -91,11 +91,9 @@ setup.
 
           org-agenda-files (-filter #'f-exists?
                                     (-concat
-                                     (if (string-equal (system-name) "s1118ofclair.local")
+                                     (if (string-equal (system-name) "s1069.ofc.lair")
                                          (cdr (assoc 'work my/agenda-files))
                                        (cdr (assoc 'personal my/agenda-files))))))
-
-    (setq org-agenda-files (-flatten (-map #'cdr my/agenda-files)))
 
     (setq org-stuck-projects
           '("+LEVEL=1/-DONE" ("TODO" "NEXT" "NEXTACTION") nil ""))
@@ -106,19 +104,11 @@ setup.
 
     (setq org-agenda-custom-commands
           '(("n" "Agenda and all TODOs"
-             ((agenda "")
+             ((agenda "" ((org-agenda-span 'week)))
               (tags-todo "DEADLINE<=\"<+7d>\""
                          ((org-agenda-overriding-header "Due soon")))
+              (todo ""))
 
-              ;; Eisenhower Matrix quadrants
-              (tags-todo "+important+urgent"
-                         ((org-agenda-overriding-header "Do")))
-              (tags-todo "+important-urgent"
-                         ((org-agenda-overriding-header "Decide")))
-              (tags-todo "-important+urgent"
-                         ((org-agenda-overriding-header "Delegate")))
-              (tags-todo "-important-urgent"
-                         ((org-agenda-overriding-header "Delete"))))
              ((org-agenda-start-with-log-mode t)
               (org-agenda-start-day nil)
               (org-agenda-span 'day)
