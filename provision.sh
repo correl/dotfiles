@@ -7,6 +7,17 @@ RECIPES=$(ls $RECIPE_PATH|grep -v '^_' | sort)
 INSTALL=()
 STACK=()
 
+if test -t 1; then
+    ncolors=$(tput colors)
+    if test -n "$ncolors" && test $ncolors -ge 8; then
+        bold="$(tput bold)"
+        dim="$(tput dim)"
+        normal="$(tput sgr0)"
+        red="$(tput setaf 1)"
+        green="$(tput setaf 2)"
+    fi
+fi
+
 while [[ $# -gt 0 ]]; do
     case $1 in
         -D|--debug)
@@ -70,7 +81,7 @@ function _run {
         echo "$msg..."
         $@
     fi
-    echo "done."
+    echo "${green}done.${normal}"
 }
 
 function _recipe {
@@ -83,15 +94,17 @@ function _recipe {
         recipe="$1"
         path="${RECIPE_PATH}"
     else
-        echo "Could not load recipe '$1'" >&2
+        echo "${bold}${red}Could not load recipe '$1'${normal}" >&2
         exit 1
     fi
     STACK+=("$1")
-    pushd "$path"
-    echo "-- Recipe '${STACK[@]}' --"
+    pushd "$path" >/dev/null
+    echo "${dim}-- Recipe [${STACK[@]}]'${normal}"
     source "./${recipe}"
-    echo "-- Recipe '${STACK[@]}' --"
-    popd
+    popd >/dev/null
+    unset 'STACK[-1]'
+    echo "${dim}-- Recipe [${STACK[@]}]${normal}"
+
 }
 
 USER=${USER:-$(whoami)}
@@ -102,12 +115,11 @@ if [ -z "${INSTALL[@]}" ]; then
 fi
 
 
-echo "-- Provisioning [${INSTALL[@]}] --"
 for recipe in "${INSTALL[@]}"; do
     _recipe $recipe
 done
 
-echo "Finished"
+echo "${green}Finished${normal}"
 if [ -n "$RESTART_SHELL" ]; then
     echo "Restarting shell."
     exec $SHELL
