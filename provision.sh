@@ -102,7 +102,7 @@ function _recipe {
     echo "${dim}-- Recipe [${STACK[@]}]'${normal}"
     source "./${recipe}"
     popd >/dev/null
-    unset 'STACK[-1]'
+    unset 'STACK[${#STACK[@]}-1]'
     echo "${dim}-- Recipe [${STACK[@]}]${normal}"
 
 }

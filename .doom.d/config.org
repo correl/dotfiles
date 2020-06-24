@@ -114,8 +114,8 @@ setup.
               (org-agenda-start-day nil)
               (org-agenda-span 'day)
               (org-agenda-log-mode-items '(clock state closed)))
-             ("~/Public/agenda.html"
-              "~/Public/agenda.ics"))
+             ("~/Public/org/agenda.html"
+              "~/Public/org/agenda.ics"))
             ("l" "Log"
              agenda ""
              ((org-agenda-span 'fortnight)
@@ -124,7 +124,7 @@ setup.
               (org-agenda-log-mode-items '(clock state closed))
               (org-agenda-include-deadlines nil)
               (org-agenda-skip-scheduled-delay-if-deadline t))
-             ("~/Public/agenda-log.html"))
+             ("~/Public/org/agenda-log.html"))
             ("e" "Eisenhower Matrix"
              ((tags-todo "+important+urgent"
                          ((org-agenda-overriding-header "Do")))
@@ -417,6 +417,8 @@ be based on their headings.
 #+end_src
 ** Publish projects
 #+begin_src emacs-lisp
+  (require 'org-attach)
+
   (setq org-html-mathjax-options
         '((path "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-AMS-MML_HTMLorMML")))
 
@@ -512,8 +514,18 @@ be based on their headings.
            :include (".gitlab-ci.yml")
            :publishing-directory "~/Public/org"
            :publishing-function org-publish-attachment
+           :display-custom-times t
            :recursive t)
-          ("work" :components ("work-html" "work-assets" "work-themes"))
+          ("work-todo"
+           :base-directory "~/Nextcloud/org"
+           :exclude ".*"
+           :include ("aweber.org")
+           :html-head "<link rel=\"stylesheet\" href=\"styles/tufte-css/tufte.css\"/>"
+           :html-head-extra "<link rel=\"stylesheet\" href=\"styles/tufte-css/latex.css\"/>"
+
+           :publishing-directory "~/Public/org"
+           :publishing-function org-html-publish-to-tufte-html)
+          ("work" :components ("work-html" "work-todo" "work-assets" "work-themes"))
 
           ("dotfiles-common"
            :base-directory "~/dotfiles"
@@ -625,9 +637,14 @@ be based on their headings.
   ;; Don't prompt for babel evaluation, ever.
   (setq org-confirm-babel-evaluate nil)
 
-  (require 'ox-confluence)(defun my/org-publish ()
+  (require 'ox-confluence)
+  (defun my/org-publish ()
     (interactive)
     (org-publish "work")
+    (let ((org-link-abbrev-alist (seq-concatenate 'list org-link-abbrev-alist
+                                                  '(("jira" . "https://jira.aweber.io/browse/")
+                                                    ("gitlab" . "https://gitlab.aweber.io/")))))
+      (org-store-agenda-views))
     (shell-command "org-publish"))
 
   (bind-key "C-c o p" #'my/org-publish)
@@ -664,7 +681,30 @@ Load shared code snippets to be used in org documents.
                          (seq-map (lambda (path) (f-join path "library-of-babel.org"))
                                   org-dirs))))
 #+end_src
+** Nicer looking timestamps
+#+begin_src emacs-lisp
+  (setq org-time-stamp-custom-formats '("<%A, %B %d %Y>" . "<%A, %B %d %Y %H:%M>"))
 
+  (defun org-export-filter-timestamp-remove-brackets (timestamp backend info)
+    "removes relevant brackets from a timestamp"
+    (cond
+     ((org-export-derived-backend-p backend 'latex)
+      (replace-regexp-in-string "[<>]\\|[][]" "" timestamp))
+     ((org-export-derived-backend-p backend 'ascii)
+      (replace-regexp-in-string "[<>]\\|[][]" "" timestamp))
+     ((org-export-derived-backend-p backend 'html)
+      (replace-regexp-in-string "&[lg]t;\\|[][]" "" timestamp))))
+
+  (after! ox
+    (add-to-list
+     'org-export-filter-timestamp-functions
+     'org-export-filter-timestamp-remove-brackets))
+#+end_src
+** Tufte HTML
+#+begin_src emacs-lisp
+  (use-package! ox-tufte
+    :after ox)
+#+end_src
 * Eshell
 ** Change directory in the context of a remote host
 #+begin_src emacs-lisp
