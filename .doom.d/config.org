@@ -255,6 +255,11 @@ setup.
               ("\\paragraph{%s}" . "\\paragraph*{%s}")
               ("\\subparagraph{%s}" . "\\subparagraph*{%s}")))))
 #+END_SRC
+*** DnD
+#+begin_src emacs-lisp
+  (use-package! ox-dnd
+    :after ox)
+#+end_src
 ** Capture templates
 #+begin_src emacs-lisp
   (setq org-capture-templates
