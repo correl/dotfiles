@@ -2,6 +2,9 @@
 # Description: The Git version control system
 set -e
 
+GIT_NAME="Correl Roush"
+GIT_EMAIL="correl@gmail.com"
+
 case $_PLATFORM in
     darwin)
         _recipe brew
@@ -23,3 +26,6 @@ function _git {
         echo "[git] $dest already exists, skipping."
     fi
 }
+
+git config --global user.email || _run "[git] Setting user.email to '$GIT_EMAIL'" git config --global user.email $GIT_EMAIL
+git config --global user.name || _run "[git] Setting user.name to '$GIT_NAME'" git config --global user.name $GIT_NAME
