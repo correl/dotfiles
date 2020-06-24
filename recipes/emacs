@@ -2,10 +2,9 @@
 # Description: GNU Emacs
 set -e
 
-_recipe brew
-
 case $_PLATFORM in
     darwin)
+        _recipe brew
         _brew_tap railwaycat/emacsmacport
         _brew emacs-mac --with-modern-icon
         ;;

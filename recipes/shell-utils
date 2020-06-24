@@ -3,10 +3,11 @@
 set -e
 
 _recipe _path
-_recipe brew
 
 case $_PLATFORM in
     darwin)
+        _recipe brew
+
         _brew binutils
         _brew coreutils
         _brew findutils

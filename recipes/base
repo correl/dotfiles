@@ -2,7 +2,6 @@
 # Description: Core set of frequently-used recipes
 set -e
 
-_recipe brew
 _recipe shell-utils
 _recipe git
 _recipe zsh
