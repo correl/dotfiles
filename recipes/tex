@@ -9,8 +9,12 @@ case "$(uname -s)" in
         ;;
     *)
         _recipe _apt
-        _ppa jonathonf/texlive
-        _apt texlive-full
+        # Install texlive if it isn't already available (e.g. a local or
+        # portable installation).
+        if ! command -v tlmgr >/dev/null; then
+            _ppa jonathonf/texlive
+            _apt texlive-full
+        fi
         # xzdec is required by tlmgr
         _apt xzdec
 esac
