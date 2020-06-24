@@ -1,0 +1,15 @@
+#!/bin/bash
+# Description: Terminal emulator mimicing old cathode tube screens
+set -e
+
+case "$(uname -s)" in
+    Darwin)
+        _recipe brew
+        _brew_cask cool-retro-term
+        ;;
+    *)
+        _recipe _apt
+        _ppa vantuz/cool-retro-term
+        _apt cool-retro-term
+        ;;
+esac
