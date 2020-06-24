@@ -45,7 +45,8 @@ version of the [[https://github.com/edwardtufte/et-book][Edward Tufte book font]
                              "~/Pictures/Patreon/Jon Bliss/catgirl-final-transparent-500.png"
                              "~/Pictures/Patreon/Jon Bliss/lapiz-final-transparent-500.png"
                              "~/Pictures/Patreon/Jon Bliss/Poledancer-final-transparent-500.png"
-                             "~/Pictures/Patreon/Jon Bliss/Hacker-final-transparent-500.png")))
+                             "~/Pictures/Patreon/Jon Bliss/Hacker-final-transparent-500.png"
+                             "~/Pictures/Patreon/Bee/IMG_3666_transparent_500.png")))
 
         (setq fancy-splash-image logo)
         (if (called-interactively-p)
