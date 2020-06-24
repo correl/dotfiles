@@ -1,9 +1,9 @@
 {alt,shift + alt} + {j,k}
     bspc node {-f,-n} {next,prev}.active
-alt + Return
+super + Return
     bspc node -n biggest
 shift + alt + Return
-    xfce4-terminal
+    terminology
 {shift + ctrl,shift + alt + ctrl} + space
     state={fullscreen,floating}; \
     bspc query -N -n "focused.$\{state\}" && state=tiled; \
@@ -12,7 +12,7 @@ shift + alt + space
     bspc desktop -l next
 shift + ctrl + r
     ~/.config/bspwm/bspwmrc
-{alt,shift + alt} + {w,e}
-    bspc monitor {-f,-m} {west,east}
-{alt,shift + alt} + {1-9}
-    bspc {desktop -f,node -d} ^{1-9}
+# {ctrl + alt,shift + alt} + {Left,Right}
+#     bspc {monitor -f,node -m} {west,east}
+{alt,shift + alt} + {1-4}
+    bspc {desktop -f,node -d} ^{1-4}
