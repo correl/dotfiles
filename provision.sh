@@ -76,10 +76,10 @@ function _run {
     shift
     if [ -z "$DEBUG" ]; then
         echo -n "$msg..."
-        $@ >/dev/null 2>&1
+        "$@" >/dev/null 2>&1
     else
         echo "$msg..."
-        $@
+        "$@"
     fi
     echo "${green}done.${normal}"
 }
@@ -110,10 +110,9 @@ function _recipe {
 USER=${USER:-$(whoami)}
 _PLATFORM=$(uname -s | awk '{print tolower($1)}')
 
-if [ -z "${INSTALL[@]}" ]; then
+if [ "${#INSTALL[@]}" -eq 0 ]; then
     INSTALL=(base)
 fi
-
 
 for recipe in "${INSTALL[@]}"; do
     _recipe $recipe
