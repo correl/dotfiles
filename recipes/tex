@@ -14,6 +14,8 @@ case "$(uname -s)" in
         if ! command -v tlmgr >/dev/null; then
             _ppa jonathonf/texlive
             _apt texlive-full
+        else
+            echo "[tex] Texlive appears to already be installed, skipping."
         fi
         # xzdec is required by tlmgr
         _apt xzdec
