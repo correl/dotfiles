@@ -27,5 +27,5 @@ function _git {
     fi
 }
 
-git config --global user.email || _run "[git] Setting user.email to '$GIT_EMAIL'" git config --global user.email $GIT_EMAIL
-git config --global user.name || _run "[git] Setting user.name to '$GIT_NAME'" git config --global user.name $GIT_NAME
+git config --global user.email >/dev/null || _run "[git] Setting user.email to '$GIT_EMAIL'" git config --global user.email $GIT_EMAIL
+git config --global user.name >/dev/null || _run "[git] Setting user.name to '$GIT_NAME'" git config --global user.name $GIT_NAME
