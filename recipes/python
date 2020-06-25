@@ -30,7 +30,7 @@ case $_PLATFORM in
             _apt $dep
         done
         if [ ! -d ~/.pyenv ]; then
-            _run "[git] Install pyenv" bash <(curl -L https://github.com/pyenv/pyenv-installer/raw/master/bin/pyenv-installer)
+            _run "[git] Install pyenv" bash <(curl -q -L https://github.com/pyenv/pyenv-installer/raw/master/bin/pyenv-installer)
         else
             _run "[git] Upgrade pyenv" git -C $(pyenv root) pull
         fi
