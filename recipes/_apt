@@ -5,8 +5,7 @@ function _apt {
     local pkg=$1
     if ! dpkg -s $pkg >/dev/null 2>&1; then
         if [ -z "$__apt_updated" ]; then
-            _run "Update APT cache" sudo apt-get update
-            __apt_updated=yes
+            _apt_update
         fi
         _run "[apt] Install $pkg" sudo apt-get install -y $1
     else
@@ -14,8 +13,30 @@ function _apt {
     fi
 }
 
+function _apt_update {
+    _run "Update APT cache" sudo apt-get update
+    __apt_updated=yes
+}
+
+function _apt_source {
+    _run "[apt] Add Source: $1" sudo add-apt-repository -u -y "$1"
+}
+
+function _dpkg {
+    local pkg=$1
+    local url=$2
+    if ! dpkg -s $pkg >/dev/null 2>&1; then
+        local download=$(mktemp -d)
+        _run "[dpkg] Downloading $pkg" curl -q -o "$download/$pkg.deb" "$url"
+        _run "[dpkg] Installing $pkg" sudo dpkg -i "$download/$pkg.deb"
+        rm -rf "$download"
+    else
+        echo "[dpkg] $pkg is already installed, skipping."
+    fi
+}
+
 _apt software-properties-common
 
 function _ppa {
-    _run "[apt] Add PPA: $1" sudo add-apt-repository -u -y ppa:$1
+    _apt_source ppa:$1
 }

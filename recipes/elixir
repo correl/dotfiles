@@ -1,0 +1,18 @@
+#!/bin/bash
+# Description: The Elixir programming language
+set -e
+
+case $_PLATFORM in
+    darwin)
+        _brew elixir
+        ;;
+    *)
+        _recipe _apt
+
+        _apt_source "deb https://packages.erlang-solutions.com/ubuntu $(lsb_release -cs) contrib"
+        _apt esl-erlang
+        _apt elixir
+        ;;
+esac
+
+_run "[elixir] Installing / updating hex" mix local.hex --force
