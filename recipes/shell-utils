@@ -27,7 +27,6 @@ case $_PLATFORM in
 
         # Misc
         _brew entr
-        _brew fzf
         _brew htop
         _brew jq
         _brew lnav
@@ -56,7 +55,6 @@ case $_PLATFORM in
 
         # Misc
         _apt entr
-        _apt fzf
         _apt htop
         _apt jq
         _apt lnav
