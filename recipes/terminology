@@ -1,0 +1,7 @@
+#!/bin/bash
+# Description: The Enlightenment terminal emulator
+set -e
+
+_recipe _apt
+_ppa niko2040/e19
+_apt terminology
