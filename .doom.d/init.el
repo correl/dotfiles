@@ -135,6 +135,7 @@
         +dragndrop       ; file drag & drop support
         +hugo            ; use Emacs for hugo blogging
         +ipython         ; ipython support for babel
+        +journal         ; a simple personal diary / journal
         +pandoc          ; pandoc integration into org's exporter
         ;;+pomodoro        ; be fruitful with the tomato technique
         +present         ; using Emacs for presentations

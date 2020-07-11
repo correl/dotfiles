@@ -705,6 +705,16 @@ Load shared code snippets to be used in org documents.
   (use-package! ox-tufte
     :after ox)
 #+end_src
+** Journal
+#+begin_src emacs-lisp
+  (use-package org-journal
+    :if (f-dir? "~/org-aweber")
+    :custom
+    (org-journal-date-prefix "#+title: ")
+    (org-journal-file-format "%Y-%m-%d.org")
+    (org-journal-dir "~/org-aweber")
+    (org-journal-date-format "%A, %d %B %Y"))
+#+end_src
 * Eshell
 ** Change directory in the context of a remote host
 #+begin_src emacs-lisp
