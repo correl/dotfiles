@@ -715,6 +715,38 @@ Load shared code snippets to be used in org documents.
     (org-journal-dir "~/org-aweber")
     (org-journal-date-format "%A, %d %B %Y"))
 #+end_src
+** Add backlinks to org-roam exports
+
+Adapted from https://org-roam.readthedocs.io/en/master/org_export/.
+#+begin_src emacs-lisp
+  (defun my/org-roam--backlinks-list-with-content (file)
+    (with-temp-buffer
+      (cd (f-dirname file))
+      (hack-dir-local-variables-non-file-buffer)
+      (if-let* ((backlinks (org-roam--get-backlinks file))
+                (grouped-backlinks (--group-by (nth 0 it) backlinks)))
+          (progn
+            (dolist (group grouped-backlinks)
+              (let ((file-from (car group))
+                    (bls (cdr group)))
+                (insert (format "** [[file:%s][%s]]\n"
+                                (f-relative file-from (f-dirname file))
+                                (org-roam--get-title-or-slug file-from)))
+                (dolist (backlink bls)
+                  (pcase-let ((`(,file-from _ ,props) backlink))
+                    (insert (s-trim (s-replace "\n" " " (plist-get props :content))))
+                    (insert "\n\n")))))))
+      (buffer-string)))
+
+  (defun my/org-export-preprocessor (backend)
+    (let ((links (my/org-roam--backlinks-list-with-content (buffer-file-name))))
+      (unless (string= links "")
+        (save-excursion
+          (goto-char (point-max))
+          (insert (concat "\n* Backlinks\n") links)))))
+
+  (add-hook 'org-export-before-processing-hook 'my/org-export-preprocessor)
+#+end_src
 * Eshell
 ** Change directory in the context of a remote host
 #+begin_src emacs-lisp
