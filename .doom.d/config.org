@@ -502,6 +502,7 @@ be based on their headings.
            :html-doctype "html5"
            :html-html5-fancy t
            :with-sub-superscript nil
+           :section-numbers nil
            ;; :infojs-opt "path:http://thomasf.github.io/solarized-css/org-info.min.js view:showall"
            :auto-sitemap t
            :sitemap-filename "index.org"
@@ -720,27 +721,28 @@ Load shared code snippets to be used in org documents.
 Adapted from https://org-roam.readthedocs.io/en/master/org_export/.
 #+begin_src emacs-lisp
   (defun my/org-roam--backlinks-list-with-content (file)
-    (with-temp-buffer
-      (cd (f-dirname file))
-      (hack-dir-local-variables-non-file-buffer)
-      (if-let* ((backlinks (org-roam--get-backlinks file))
-                (grouped-backlinks (--group-by (nth 0 it) backlinks)))
-          (progn
-            (dolist (group grouped-backlinks)
-              (let ((file-from (car group))
-                    (bls (cdr group)))
-                (insert (format "** [[file:%s][%s]]\n"
-                                (f-relative file-from (f-dirname file))
-                                (org-roam--get-title-or-slug file-from)))
-                (dolist (backlink bls)
-                  (pcase-let ((`(,file-from _ ,props) backlink))
-                    (insert (s-trim (s-replace "\n" " " (plist-get props :content))))
-                    (insert "\n\n")))))))
-      (buffer-string)))
+    (when (and (stringp file) (f-file? file))
+      (with-temp-buffer
+        (cd (f-dirname file))
+        (hack-dir-local-variables-non-file-buffer)
+        (if-let* ((backlinks (org-roam--get-backlinks file))
+                  (grouped-backlinks (--group-by (nth 0 it) backlinks)))
+            (progn
+              (dolist (group grouped-backlinks)
+                (let ((file-from (car group))
+                      (bls (cdr group)))
+                  (insert (format "** [[file:%s][%s]]\n"
+                                  (f-relative file-from (f-dirname file))
+                                  (org-roam--get-title-or-slug file-from)))
+                  (dolist (backlink bls)
+                    (pcase-let ((`(,file-from _ ,props) backlink))
+                      (insert (s-trim (s-replace "\n" " " (plist-get props :content))))
+                      (insert "\n\n")))))))
+        (buffer-string))))
 
   (defun my/org-export-preprocessor (backend)
     (let ((links (my/org-roam--backlinks-list-with-content (buffer-file-name))))
-      (unless (string= links "")
+      (unless (or (not (stringp links)) (string= links ""))
         (save-excursion
           (goto-char (point-max))
           (insert (concat "\n* Backlinks\n") links)))))
