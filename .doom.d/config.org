@@ -749,6 +749,11 @@ Adapted from https://org-roam.readthedocs.io/en/master/org_export/.
 
   (add-hook 'org-export-before-processing-hook 'my/org-export-preprocessor)
 #+end_src
+** Org Roam Server
+#+begin_src emacs-lisp
+  (use-package! org-roam-server
+    :commands org-roam-server-mode)
+#+end_src
 * Eshell
 ** Change directory in the context of a remote host
 #+begin_src emacs-lisp

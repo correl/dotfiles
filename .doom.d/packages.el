@@ -24,3 +24,4 @@
 (package! mixed-pitch)
 (package! ox-dnd :recipe (:host github :repo "xeals/emacs-org-dnd"))
 (package! gnuplot)
+(package! org-roam-server)
