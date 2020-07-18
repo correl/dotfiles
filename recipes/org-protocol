@@ -1,0 +1,24 @@
+#!/bin/bash
+# Description: Emacs org-protocol
+set -e
+
+__disable_chrome_external_protocol_dialog_linux () {
+    sudo mkdir -p /etc/{opt/chrome,chromium-browser}/policies/managed/
+    sudo tee /etc/{opt/chrome,chromium-browser}/policies/managed/external_protocol_dialog.json >/dev/null <<'EOF'
+{
+  "ExternalProtocolDialogShowAlwaysOpenCheckbox": true
+}
+EOF
+    sudo chmod 644 /etc/{opt/chrome,chromium-browser}/policies/managed/external_protocol_dialog.json
+}
+
+case $_PLATFORM in
+    linux)
+        _recipe _link
+        mkdir -p ~/.local/share/applications
+        _link ${HOME}/dotfiles/applications/org-protocol.desktop \
+            ${HOME}/.local/share/applications/org-protocol.desktop
+        _run "Install org-protocol handler" xdg-mime default org-protocol.desktop x-scheme-handler/org-protocol
+        _run "Disable chrome external protocol dialog" __disable_chrome_external_protocol_dialog_linux
+    ;;
+esac
