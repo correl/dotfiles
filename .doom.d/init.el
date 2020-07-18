@@ -84,7 +84,9 @@
        (eval +overlay)     ; run code, run (also, repls)
        ;;gist              ; interacting with github gists
        (lookup           ; helps you navigate your code and documentation
-        +docsets)        ; ...or in Dash docsets locally
+        +docsets         ; ...or in Dash docsets locally
+        +dictionary
+        +offline)
        lsp
        macos             ; MacOS-specific commands
        magit             ; a git porcelain for Emacs
@@ -136,6 +138,7 @@
         +hugo            ; use Emacs for hugo blogging
         +ipython         ; ipython support for babel
         +journal         ; a simple personal diary / journal
+        +noter
         +pandoc          ; pandoc integration into org's exporter
         ;;+pomodoro        ; be fruitful with the tomato technique
         +present         ; using Emacs for presentations

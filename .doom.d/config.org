@@ -57,6 +57,18 @@ version of the [[https://github.com/edwardtufte/et-book][Edward Tufte book font]
    :map +doom-dashboard-mode-map
    "g" #'my/dashboard-randomize)
 #+end_src
+* BibTeX
+#+begin_src emacs-lisp
+  (setq my/bibliographies
+        '("~/Documents/bibliography/references.bib"
+          "~/Documents/bibliography/calibre.bib"))
+#+end_src
+** Helm BibTeX
+#+begin_src emacs-lisp
+  (setq bibtex-completion-bibliography
+        my/bibliographies)
+  (setq bibtex-completion-pdf-field "File")
+#+end_src
 * Org
 :PROPERTIES:
 :header-args: :tangle no :noweb-ref org
@@ -716,7 +728,18 @@ Load shared code snippets to be used in org documents.
     (org-journal-dir "~/org-aweber")
     (org-journal-date-format "%A, %d %B %Y"))
 #+end_src
-** Add backlinks to org-roam exports
+** Ref
+#+begin_src emacs-lisp
+  (use-package! org-ref
+    :config
+    (setq reftex-default-bibliography my/bibliographies)
+    ;; see org-ref for use of these variables
+    (setq org-ref-bibliography-notes "~/Documents/bibliography/notes.org"
+          org-ref-default-bibliography my/bibliographies
+          org-ref-pdf-directory "~/Documents/bibliography/bibtex-pdfs/"))
+#+end_src
+** Roam
+*** Add backlinks to org-roam exports
 
 Adapted from https://org-roam.readthedocs.io/en/master/org_export/.
 #+begin_src emacs-lisp
@@ -749,7 +772,15 @@ Adapted from https://org-roam.readthedocs.io/en/master/org_export/.
 
   (add-hook 'org-export-before-processing-hook 'my/org-export-preprocessor)
 #+end_src
-** Org Roam Server
+*** Org Roam Bibtex
+#+begin_src emacs-lisp
+  (use-package! org-roam-bibtex
+    :after org-roam
+    :hook (org-roam . org-roam-bibtex-mode)
+    :bind (:map org-mode-map
+           (("C-c n r a" . orb-note-actions))))
+#+end_src
+*** Org Roam Server
 #+begin_src emacs-lisp
   (use-package! org-roam-server
     :commands org-roam-server-mode)
@@ -1110,6 +1141,13 @@ Study kanji by overlaying hiragana readings.
 #+begin_src emacs-lisp
   (use-package! kanji-glasses-mode
     :commands kanji-glasses-mode)
+#+end_src
+* Nov Epub reader
+#+begin_src emacs-lisp
+  (use-package! nov
+    :mode ("\\.epub\\'" . nov-mode)
+    :config
+    (setq nov-save-place-file (concat doom-cache-dir "nov-places")))
 #+end_src
 * Miscellaneous Nonsense
 ** BRING ON THE ...
