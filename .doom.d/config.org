@@ -762,7 +762,23 @@ Load shared code snippets to be used in org documents.
 
 Adapted from https://org-roam.readthedocs.io/en/master/org_export/.
 #+begin_src emacs-lisp
+  (defun my/org-roam--rewrite-backlink-content-links (path content)
+    "Re-write the links in backlink CONTENT to be relative to PATH."
+    (with-temp-buffer
+      (insert content)
+      (org-mode)
+      (let ((ast (org-element-parse-buffer)))
+        (org-element-map ast 'link
+          (lambda (link)
+            (when (string= (org-element-property :type link) "file")
+              (org-element-put-property
+               link :path
+               (f-relative (org-element-property :path link)
+                           path)))))
+        (org-no-properties (org-element-interpret-data ast)))))
+
   (defun my/org-roam--backlinks-list-with-content (file)
+    "Generate a list of backlinks for FILE with content."
     (when (and (stringp file) (f-file? file))
       (with-temp-buffer
         (cd (f-dirname file))
@@ -777,12 +793,17 @@ Adapted from https://org-roam.readthedocs.io/en/master/org_export/.
                                   (f-relative file-from (f-dirname file))
                                   (org-roam--get-title-or-slug file-from)))
                   (dolist (backlink bls)
-                    (pcase-let ((`(,file-from _ ,props) backlink))
-                      (insert (s-trim (s-replace "\n" " " (plist-get props :content))))
+                    (pcase-let* ((`(,file-from _ ,props) backlink)
+                                 (content (my/org-roam--rewrite-backlink-content-links
+                                           (f-dirname file)
+                                           (plist-get props :content))))
+                      (insert (s-trim (s-replace "\n" " " content)))
                       (insert "\n\n")))))))
         (buffer-string))))
 
   (defun my/org-export-preprocessor (backend)
+    "Append org-roam backlinks with content when applicable before
+  passing to the org export BACKEND."
     (let ((links (my/org-roam--backlinks-list-with-content (buffer-file-name))))
       (unless (or (not (stringp links)) (string= links ""))
         (save-excursion
