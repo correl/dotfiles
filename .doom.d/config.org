@@ -619,6 +619,25 @@ be based on their headings.
            :publishing-function (org-html-publish-to-html
                                  org-latex-export-to-pdf))
 
+          ("roam-html"
+           :base-directory "~/org/roam"
+           :base-extension "org"
+           :publishing-directory "~/Public/roam"
+           :recursive t
+           :with-toc nil
+           :section-numbers nil
+           :auto-sitemap nil
+           :publishing-function org-html-publish-to-html
+           :html-head "<link rel=\"stylesheet\" href=\"https://gongzhitaao.org/orgcss/org.css\"/>")
+
+          ("roam-assets"
+           :base-directory "~/org/roam"
+           :base-extension "css\\|gif\\|jpe?g\\|png\\|svg\\|pdf"
+           :publishing-directory "~/Public/roam"
+           :publishing-function org-publish-attachment
+           :recursive t)
+          ("roam" :components ("roam-html" "roam-assets"))
+
           ("sicp-html"
            :base-directory "~/code/sicp"
            :base-extension "org"
