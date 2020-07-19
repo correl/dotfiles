@@ -10,7 +10,7 @@ case $_PLATFORM in
     *)
         if ! dpkg -s pandoc >/dev/null 2>&1; then
             __pandoc_tmp="$(mktemp)"
-            _run "Download pandoc" curl -L -o "$__pandoc_tmp" "https://github.com/jgm/pandoc/releases/download/2.2/pandoc-2.2-1-amd64.deb"
+            _run "Download pandoc" curl -L -o "$__pandoc_tmp" "https://github.com/jgm/pandoc/releases/download/2.10/pandoc-2.10-1-amd64.deb"
             _run "Install pandoc" sudo dpkg -i "$__pandoc_tmp"
             rm -f "$__pandoc_tmp"
         fi
