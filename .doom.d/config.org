@@ -500,7 +500,7 @@ be based on their headings.
            :base-directory "~/org-aweber"
            :base-extension "org"
            ;; :exclude "\\(^knowledge-transfer.org$\\|-archive.org$\\)"
-           :exclude "\\(^README.org$\\)"
+           :exclude "\\(^README.org$\\|roam/.*\\)"
            :publishing-directory "~/Public/org"
            :publishing-function (my/org-work-publish-to-html
                                  org-org-publish-to-org
@@ -521,6 +521,18 @@ be based on their headings.
            :sitemap-title "Correl Roush's Org Documents"
            :sitemap-sort-folders last
            :recursive t)
+          ("work-roam-html"
+           :base-directory "~/org-aweber/roam"
+           :base-extension "org"
+           :publishing-directory "~/Public/org/roam"
+           :recursive t
+           :with-toc nil
+           :section-numbers nil
+           :auto-sitemap t
+           :sitemap-filename "index.org"
+           :sitemap-title "Correl Roush's Org Roam Notes"
+           :publishing-function org-html-publish-to-html
+           :html-head "<link rel=\"stylesheet\" href=\"https://gongzhitaao.org/orgcss/org.css\"/>")
           ("work-assets"
            :base-directory "~/org-aweber"
            :base-extension "css\\|gif\\|jpe?g\\|png\\|svg\\|pdf\\|ogv\\|py\\|html\\|ya?ml"
@@ -538,7 +550,7 @@ be based on their headings.
 
            :publishing-directory "~/Public/org"
            :publishing-function org-html-publish-to-tufte-html)
-          ("work" :components ("work-html" "work-todo" "work-assets" "work-themes"))
+          ("work" :components ("work-html" "work-roam-html" "work-todo" "work-assets" "work-themes"))
 
           ("dotfiles-common"
            :base-directory "~/dotfiles"
