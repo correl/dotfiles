@@ -21,6 +21,7 @@
 (package! emms)
 (package! org-sticky-header)
 (package! kubernetes)
+(package! kubernetes-tramp)
 (package! mixed-pitch)
 (package! ox-dnd :recipe (:host github :repo "xeals/emacs-org-dnd"))
 (package! gnuplot)

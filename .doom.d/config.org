@@ -1093,6 +1093,10 @@ Taken from [[http://emacsredux.com/blog/2013/06/21/eval-and-replace/][Emacs Redu
     :config)
 
   (set-popup-rule! "^\\*kubernetes" :ignore t)
+
+  (use-package! kubernetes-tramp
+    :config
+    (setq tramp-remote-shell-executable "sh"))
 #+end_src
 * Twitter
 #+begin_src emacs-lisp
