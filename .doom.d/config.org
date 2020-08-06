@@ -813,10 +813,28 @@ Adapted from https://org-roam.readthedocs.io/en/master/org_export/.
                       (insert "\n\n")))))))
         (buffer-string))))
 
+  (defun my/org-roam--bibtex ()
+    (if-let* ((citekey (cdr (org-roam--extract-ref)))
+              (entry (org-ref-get-bibtex-entry citekey))
+              (parsed (reftex-parse-bibtex-entry entry)))
+        (concat (org-list-to-org
+                 (list 'descriptive
+                       (list
+                        (concat "Author :: " (cdr (assoc "author" parsed))))
+                       (list
+                        (concat "Calibre :: https://calibre.phoenixinquis.is-a-geek.org/#library_id=library&panel=book_details&book_id=" (cdr (assoc "calibreid" parsed))))))
+                "\n\n")))
+
+
   (defun my/org-export-preprocessor (backend)
     "Append org-roam backlinks with content when applicable before
   passing to the org export BACKEND."
-    (let ((links (my/org-roam--backlinks-list-with-content (buffer-file-name))))
+    (let ((links (my/org-roam--backlinks-list-with-content (buffer-file-name)))
+          (bibtex (my/org-roam--bibtex)))
+      (unless (or (not (stringp bibtex)) (string= bibtex ""))
+        (save-excursion
+          (goto-char (point-max))
+          (insert (concat "\n* Bibliography\n") bibtex)))
       (unless (or (not (stringp links)) (string= links ""))
         (save-excursion
           (goto-char (point-max))
