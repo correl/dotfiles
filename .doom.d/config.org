@@ -806,35 +806,57 @@ Adapted from https://org-roam.readthedocs.io/en/master/org_export/.
                                   (org-roam--get-title-or-slug file-from)))
                   (dolist (backlink bls)
                     (pcase-let* ((`(,file-from _ ,props) backlink)
-                                 (content (my/org-roam--rewrite-backlink-content-links
+                                 (content (plist-get props :content)))
+                      (when content
+                        (let ((rewritten (my/org-roam--rewrite-backlink-content-links
                                            (f-dirname file)
                                            (plist-get props :content))))
-                      (insert (s-trim (s-replace "\n" " " content)))
+                          (insert (s-trim (s-replace "\n" " " rewritten)))))
                       (insert "\n\n")))))))
         (buffer-string))))
 
-  (defun my/org-roam--bibtex ()
-    (if-let* ((citekey (cdr (org-roam--extract-ref)))
-              (entry (org-ref-get-bibtex-entry citekey))
-              (parsed (reftex-parse-bibtex-entry entry)))
-        (concat (org-list-to-org
-                 (list 'descriptive
-                       (list
-                        (concat "Author :: " (cdr (assoc "author" parsed))))
-                       (list
-                        (concat "Calibre :: https://calibre.phoenixinquis.is-a-geek.org/#library_id=library&panel=book_details&book_id=" (cdr (assoc "calibreid" parsed))))))
-                "\n\n")))
+  (defun my/org-roam--reference-details ()
+    (let* ((citekey (cdr (org-roam--extract-ref)))
+           (bibtex (when citekey (bibtex-completion-get-entry citekey))))
+      (when citekey
+        (cond (bibtex
+               (my/org-roam--reference-details-bibtex bibtex))
+              ((s-starts-with? "http" citekey t)
+               (my/org-roam--reference-details-url citekey))
+              (t (my/org-roam--reference-details-default citekey))))))
 
+  (defun my/org-roam--reference-details-default (citekey)
+    (my/org-roam--reference-details-list
+     `(("Key" . ,(concat "=" citekey "=")))))
+
+  (defun my/org-roam--reference-details-url (url)
+    (my/org-roam--reference-details-list
+     `(("Webpage" . ,(org-link-make-string url)))))
+
+  (defun my/org-roam--reference-details-bibtex (entry)
+    (my/org-roam--reference-details-list
+     `(("Author" . ,(cdr (assoc "author" entry)))
+       ("Calibre Library" . ,(org-link-make-string (concat "https://calibre.phoenixinquis.is-a-geek.org/#library_id=library&panel=book_details&book_id=" (cdr (assoc "calibreid" entry))))))))
+
+  (defun my/org-roam--reference-details-list (details-alist)
+    (org-list-to-org
+     (cons 'descriptive
+           (mapcar
+            (lambda (pair)
+              (let ((field (car pair))
+                    (text (cdr pair)))
+                (list (concat field " :: " text))))
+            details-alist))))
 
   (defun my/org-export-preprocessor (backend)
     "Append org-roam backlinks with content when applicable before
   passing to the org export BACKEND."
     (let ((links (my/org-roam--backlinks-list-with-content (buffer-file-name)))
-          (bibtex (my/org-roam--bibtex)))
-      (unless (or (not (stringp bibtex)) (string= bibtex ""))
+          (details (my/org-roam--reference-details)))
+      (unless (or (not (stringp details)) (string= details ""))
         (save-excursion
           (goto-char (point-max))
-          (insert (concat "\n* Bibliography\n") bibtex)))
+          (insert (concat "\n* Reference Details\n") details)))
       (unless (or (not (stringp links)) (string= links ""))
         (save-excursion
           (goto-char (point-max))
