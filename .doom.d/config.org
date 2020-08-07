@@ -834,9 +834,11 @@ Adapted from https://org-roam.readthedocs.io/en/master/org_export/.
      `(("Webpage" . ,(org-link-make-string url)))))
 
   (defun my/org-roam--reference-details-bibtex (entry)
-    (my/org-roam--reference-details-list
-     `(("Author" . ,(cdr (assoc "author" entry)))
-       ("Calibre Library" . ,(org-link-make-string (concat "https://calibre.phoenixinquis.is-a-geek.org/#library_id=library&panel=book_details&book_id=" (cdr (assoc "calibreid" entry))))))))
+    (concat (cdr (assoc "note" entry))
+            "\n\n"
+            (my/org-roam--reference-details-list
+             `(("Author" . ,(cdr (assoc "author" entry)))
+               ("Calibre Library" . ,(org-link-make-string (concat "https://calibre.phoenixinquis.is-a-geek.org/#library_id=library&panel=book_details&book_id=" (cdr (assoc "calibreid" entry)))))))))
 
   (defun my/org-roam--reference-details-list (details-alist)
     (org-list-to-org
