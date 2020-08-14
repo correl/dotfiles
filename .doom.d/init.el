@@ -156,7 +156,6 @@
         ;;+pomodoro        ; be fruitful with the tomato technique
         +present         ; using Emacs for presentations
         +roam)           ; non-hierarchicial note-taking
-       perl              ; write code no one else can comprehend
        php               ; perl's insecure younger brother
        plantuml          ; diagrams for confusing people more
        ;;purescript        ; javascript, but functional
