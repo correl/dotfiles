@@ -1,0 +1,53 @@
+#!/bin/bash
+# Downloads and converts an article to EPUB
+
+ok="yes"
+if ! command -v mercury-parser >/dev/null; then
+    echo 'Could not find mercury-parser. Get it from:' >&2
+    echo '    https://mercury.postlight.com/web-parser/' >&2
+    ok="no"
+fi
+
+if ! command -v jq >/dev/null; then
+    echo 'Could not find jq. Get it from:' >&2
+    echo '    https://stedolan.github.io/jq/' >&2
+    ok="no"
+fi
+
+if ! command -v pandoc >/dev/null; then
+    echo 'Could not find pandoc. Get it from:' >&2
+    echo '    https://pandoc.org/' >&2
+    ok="no"
+fi
+
+if [ "$ok" != "yes" ]; then
+    exit 1
+fi
+
+if [ -z "$1" ]; then
+    echo 'You must specify at least one URL.' >&2
+    exit 1
+fi
+
+echo "Parsing $1" >&2
+json=$(mercury-parser $1)
+title=$(echo $json | jq -r '.title // "Untitled"')
+author=$(echo $json | jq -r '.author // "Unknown"')
+pubdate=$(echo $json | jq -r '.date_published')
+description=$(echo $json | jq -r '.excerpt // ""')
+description="${description}<br><br><a href=\"${1}\">${1}</a>"
+content=$(echo $json | jq -r .content)
+shift
+for url in "$@"; do
+    echo "Parsing and appending $url" >&2
+    content="${content}$(mercury-parser $url | jq -r .content)"
+    description="${description}<br><a href=\"${url}\">${url}</a>"
+done
+filename="${author} - ${title}.epub"
+pandoc -f html -o "${filename}" \
+    --metadata title="${title}" \
+    --metadata author="${author}" \
+    --metadata date="${pubdate}" \
+    --metadata description="${description}" \
+    <(echo $content) \
+    && echo "Wrote ${filename}" >&2
