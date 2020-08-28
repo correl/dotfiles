@@ -20,6 +20,13 @@ if ! command -v pandoc >/dev/null; then
     ok="no"
 fi
 
+if ! command -v hxcopy >/dev/null; then
+    echo 'Could not find hxcopy. Get it from:' >&2
+    echo '    brew install hxml-xml-utils' >&2
+    echo ' or apt-get install hxml-xml-utils' >&2
+    ok="no"
+fi
+
 if [ "$ok" != "yes" ]; then
     exit 1
 fi
@@ -36,7 +43,7 @@ author=$(echo $json | jq -r '.author // "Unknown"')
 pubdate=$(echo $json | jq -r '.date_published')
 description=$(echo $json | jq -r '.excerpt // ""')
 description="${description}<br><br><a href=\"${1}\">${1}</a>"
-content=$(echo $json | jq -r .content)
+content=$(echo $json | jq -r .content | hxcopy -i "$1" -o "file:///")
 shift
 for url in "$@"; do
     echo "Parsing and appending $url" >&2
