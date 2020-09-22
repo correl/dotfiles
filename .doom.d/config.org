@@ -838,7 +838,8 @@ Adapted from https://org-roam.readthedocs.io/en/master/org_export/.
             "\n\n"
             (my/org-roam--reference-details-list
              `(("Author" . ,(cdr (assoc "author" entry)))
-               ("Calibre Library" . ,(org-link-make-string (concat "https://calibre.phoenixinquis.is-a-geek.org/#library_id=library&panel=book_details&book_id=" (cdr (assoc "calibreid" entry)))))))))
+               ("Calibre Library" . ,(org-link-make-string (format "https://calibre.phoenixinquis.is-a-geek.org/book/%s"
+                                                                   (bibtex-completion-clean-string (cdr (assoc "calibreid" entry))))))))))
 
   (defun my/org-roam--reference-details-list (details-alist)
     (org-list-to-org
