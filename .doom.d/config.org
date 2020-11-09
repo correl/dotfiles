@@ -816,13 +816,16 @@ Adapted from https://org-roam.readthedocs.io/en/master/org_export/.
         (buffer-string))))
 
   (defun my/org-roam--reference-details ()
-    (let* ((citekey (cdr (org-roam--extract-ref)))
+    (let* ((key (cdr (assoc "ROAM_KEY" (org-roam--extract-global-props '("ROAM_KEY")))))
+           (ref (org-roam--extract-ref))
+           (reftype (car ref))
+           (citekey (cdr ref))
            (bibtex (when citekey (bibtex-completion-get-entry citekey))))
       (when citekey
         (cond (bibtex
                (my/org-roam--reference-details-bibtex bibtex))
-              ((s-starts-with? "http" citekey t)
-               (my/org-roam--reference-details-url citekey))
+              ((s-equals? "website" reftype)
+               (my/org-roam--reference-details-url key))
               (t (my/org-roam--reference-details-default citekey))))))
 
   (defun my/org-roam--reference-details-default (citekey)
@@ -834,12 +837,34 @@ Adapted from https://org-roam.readthedocs.io/en/master/org_export/.
      `(("Webpage" . ,(org-link-make-string url)))))
 
   (defun my/org-roam--reference-details-bibtex (entry)
-    (concat (cdr (assoc "note" entry))
-            "\n\n"
-            (my/org-roam--reference-details-list
-             `(("Author" . ,(cdr (assoc "author" entry)))
-               ("Calibre Library" . ,(org-link-make-string (format "https://calibre.phoenixinquis.is-a-geek.org/book/%s"
-                                                                   (bibtex-completion-clean-string (cdr (assoc "calibreid" entry))))))))))
+    (let* ((author (bibtex-completion-clean-string (cdr (assoc "author" entry))))
+           (calibreid (bibtex-completion-clean-string (cdr (assoc "calibreid" entry))))
+           (identifiers (seq-map (lambda (s)
+                                   (let ((pair (s-split-up-to ":" s 2)))
+                                     (cons (car pair) (cadr pair))))
+                                 (if-let ((pairs (cdr (assoc "identifiers" entry))))
+                                     (s-split "," (bibtex-completion-clean-string pairs)))))
+           (doi (cdr (assoc "doi" identifiers)))
+           (isbn (cdr (assoc "isbn" identifiers)))
+           (goodreads (cdr (assoc "goodreads" identifiers)))
+           (amazon (cdr (or (assoc "amazon" identifiers)
+                            (assoc "mobi-asin" identifiers)))))
+      (message "Identifiers: %S" identifiers)
+      (concat (cdr (assoc "note" entry))
+              "\n\n"
+              (my/org-roam--reference-details-list
+               (seq-remove
+                #'null
+                (list (cons "Author" author)
+                      (when isbn
+                        (cons "ISBN" isbn))
+                      (when doi
+                        (cons "DOI" (org-link-make-string (format "https://doi.org/%s" doi))))
+                      (when amazon
+                        (cons "Amazon" (org-link-make-string (format "https://www.amazon.com/dp/ASIN/%s" amazon))))
+                      (when goodreads
+                        (cons "Goodreads" (org-link-make-string (format "https://goodreads.com/book/show/%s" goodreads))))
+                      (cons "Calibre Library" (org-link-make-string (format "https://calibre.phoenixinquis.is-a-geek.org/book/%s" calibreid)))))))))
 
   (defun my/org-roam--reference-details-list (details-alist)
     (org-list-to-org
