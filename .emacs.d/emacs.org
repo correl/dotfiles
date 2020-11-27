@@ -413,6 +413,27 @@ installed:
     :ensure t
     :mode "\.pyx$")
 #+END_SRC
+**** Formatting (Black)
+#+begin_src python
+  (use-package! python-black
+   :commands (python-black-buffer
+              python-black-region
+              python-black-statement
+              python-black-on-save-mode))
+#+end_src
+**** Formatting (YAPF)
+#+begin_src python
+  (use-package! yapfify
+   :commands (yapfify-region
+              yapfify-buffer
+              yapfify-region-or-buffer
+              yapf-mode))
+#+end_src
+**** Poetry
+#+begin_src python
+  (use-package! poetry
+   :commands (poetry-tracking-mode))
+#+end_src
 *** Ruby
 #+HEADER: :noweb-ref programming
 #+BEGIN_SRC emacs-lisp
