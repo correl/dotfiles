@@ -26,6 +26,8 @@
 (package! ox-dnd :recipe (:host github :repo "xeals/emacs-org-dnd"))
 (package! gnuplot)
 (package! org-roam-server)
+(package! org-sidebar :recipe (:host github :repo "alphapapa/org-sidebar"))
+(package! org-transclusion :recipe (:host github :repo "nobiot/org-transclusion"))
 (package! nov)
 (package! org-ref)
 (package! python-black)

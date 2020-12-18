@@ -913,6 +913,28 @@ Adapted from https://org-roam.readthedocs.io/en/master/org_export/.
 
   (add-hook! 'org-mode-hook #'my/org-roam-writeroom)
 #+end_src
+** Sidebar
+Display a sidebar with file-local todos and scheduling.
+
+#+begin_src emacs-lisp
+  (use-package! org-sidebar
+    :bind (:map org-mode-map
+           (("C-c l v s" . org-sidebar-toggle)
+            ("C-c l v S" . org-sidebar-tree-toggle)))
+    :commands (org-sidebar
+               org-sidebar-toggle
+               org-sidebar-tree
+               org-sidebar-tree-toggle))
+#+end_src
+** Transclusion
+Show linked org document sections inline.
+
+#+begin_src emacs-lisp
+  (use-package! org-transclusion
+    :bind (:map org-mode-map
+           ("C-c l v t" . org-transclusion-mode))
+    :commands (org-transclusion-mode))
+#+end_src
 * Eshell
 ** Change directory in the context of a remote host
 #+begin_src emacs-lisp
