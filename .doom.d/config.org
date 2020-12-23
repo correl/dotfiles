@@ -32,6 +32,20 @@ version of the [[https://github.com/edwardtufte/et-book][Edward Tufte book font]
     :hook ((org-mode markdown-mode rst-mode) . mixed-pitch-mode))
   (setq doom-variable-pitch-font (font-spec :family "ETBookOT" :size 19))
 #+end_src
+** Comic Sans Mono
+Why not, it's fun 🤣
+
+https://dtinth.github.io/comic-mono-font/
+
+#+begin_src emacs-lisp
+  (defun my/buffer-face-comic-mono ()
+    (interactive)
+    (setq buffer-face-mode-face '(:family "Comic Mono"))
+    (buffer-face-mode))
+
+  (after! php-mode
+    (add-hook 'php-mode-hook #'my/buffer-face-comic-mono))
+#+end_src
 * Dashboard
 #+begin_src emacs-lisp
     (defun my/choice (&rest things)
