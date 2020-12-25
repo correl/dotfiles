@@ -922,8 +922,14 @@ Adapted from https://org-roam.readthedocs.io/en/master/org_export/.
 *** Use writeroom in org-roam buffers
 #+begin_src emacs-lisp
   (defun my/org-roam-writeroom ()
-    (when (f-child-of? (buffer-file-name) org-roam-directory)
-      (writeroom-mode t)))
+    ;; Use a buffer-local local variables hook to ensure the org-roam-directory is
+    ;; set properly
+    (add-hook 'hack-local-variables-hook
+              (lambda ()
+                (when (f-child-of? (or (buffer-file-name) default-directory)
+                                   (expand-file-name org-roam-directory))
+                  (writeroom-mode t)))
+              nil t))
 
   (add-hook! 'org-mode-hook #'my/org-roam-writeroom)
 #+end_src
