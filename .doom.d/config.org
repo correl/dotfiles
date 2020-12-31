@@ -1302,6 +1302,35 @@ Taken from [[http://emacsredux.com/blog/2013/06/21/eval-and-replace/][Emacs Redu
         "C-c j c" #'jira-api-create-issue-from-heading
         "C-c j u" #'jira-api-update-issue-from-heading)
 #+end_src
+* Weechat
+#+begin_src emacs-lisp
+  (use-package! weechat
+    :commands weechat-connect
+    :config
+    (require 'gnutls)
+
+    (setq weechat-host-default "git.phoenixinquis.net")
+    (setq weechat-port-default 9001)
+    (setq weechat-mode-default 'ssl)
+    (setq weechat-auto-monitor-buffers t)
+    (setq weechat-modules '(weechat-button
+                            weechat-complete
+                            weechat-alert
+                            weechat-tracking
+                            weechat-image
+                            weechat-speedbar))
+    (setq weechat-tracking-types
+        '(("^[[:alnum:]]+\\.#" . :highlight)
+          ("^[[:alnum:]]+\\.[^#]" . :message)))
+    (use-package! weechat-alert)
+
+
+    ;; Dangit, powerline. Adding to global-mode-string so tracking shows up
+    ;; (unless (memq 'tracking-mode-line-buffers global-mode-string)
+    ;;   (setq global-mode-string
+    ;;         (-insert-at 1 'tracking-mode-line-buffers global-mode-string)))
+    )
+#+end_src
 * Kanji Mode
 Minor mode for displaying Japanese characters' stroke orders.
 
