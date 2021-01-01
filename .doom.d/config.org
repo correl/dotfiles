@@ -817,7 +817,7 @@ Adapted from https://org-roam.readthedocs.io/en/master/org_export/.
                       (bls (cdr group)))
                   (insert (format "** [[file:%s][%s]]\n"
                                   (f-relative file-from (f-dirname file))
-                                  (org-roam--get-title-or-slug file-from)))
+                                  (org-roam-db--get-title file-from)))
                   (dolist (backlink bls)
                     (pcase-let* ((`(,file-from _ ,props) backlink)
                                  (content (plist-get props :content)))
@@ -863,7 +863,6 @@ Adapted from https://org-roam.readthedocs.io/en/master/org_export/.
            (goodreads (cdr (assoc "goodreads" identifiers)))
            (amazon (cdr (or (assoc "amazon" identifiers)
                             (assoc "mobi-asin" identifiers)))))
-      (message "Identifiers: %S" identifiers)
       (concat (cdr (assoc "note" entry))
               "\n\n"
               (my/org-roam--reference-details-list
