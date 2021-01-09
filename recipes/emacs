@@ -11,6 +11,6 @@ case $_PLATFORM in
     linux)
         _recipe _apt
         _ppa kelleyk/emacs
-        _apt emacs26
+        _apt emacs27
         ;;
 esac
