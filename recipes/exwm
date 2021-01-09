@@ -1,0 +1,10 @@
+#!/bin/bash
+# Description: Emacs X Window Manager
+set -e
+
+_recipe _apt
+_recipe emacs
+
+_apt brightnessctl
+_apt fonts-font-awesome
+_apt fonts-material-design-icons-iconfont

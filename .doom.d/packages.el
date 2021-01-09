@@ -35,6 +35,9 @@
 (package! yapfify)
 (package! weechat)
 (package! weechat-alert)
+(package! exwm)
+(package! desktop-environment)
+(package! counsel)
 
 (package! org-roam-bibtex
   :recipe (:host github :repo "org-roam/org-roam-bibtex"))
