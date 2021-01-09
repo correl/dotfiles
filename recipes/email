@@ -2,12 +2,11 @@
 # Description: Email syncing tools plus the mu4e client
 set -e
 
-_recipe brew
-_brew isync
-
 _recipe emacs
 case $_PLATFORM in
     darwin)
+        _recipe brew
+        _brew isync
         EMACS=$(which emacs) _brew mu --HEAD
         ;;
     *)
@@ -18,12 +17,13 @@ case $_PLATFORM in
                 automake \
                 libtool \
                 texinfo \
-                libgmime-2.6-dev \
+                libgmime-3.0-dev \
                 libxapian-dev \
                 guile-2.0-dev \
                 html2text \
                 xdg-utils \
-                libwebkit-dev
+                libwebkitgtk-dev \
+                isync
         do
             _apt $dep
         done
@@ -34,7 +34,7 @@ case $_PLATFORM in
             | tar xz --strip 1 && \
             echo "[tgz] Configuring mu" && \
             ./autogen.sh >/dev/null 2>&1 && \
-            ./configure >/dev/null 2>&1 && \
+            ./configure --prefix=/usr >/dev/null 2>&1 && \
             echo "[tgz] Building mu" && \
             make >/dev/null 2>&1 && \
             echo "[tgz] Installing mu" && \
