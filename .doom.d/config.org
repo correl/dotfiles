@@ -13,6 +13,12 @@ them in =init.el= by default).
 
   (setf custom-safe-themes t)
 #+END_SRC
+
+* Theme
+I'm feeling the gruvbox theme lately.
+#+begin_src emacs-lisp
+  (setq doom-theme 'doom-gruvbox)
+#+end_src
 * UX Improvements
 ** Disable C-z backgrounding when the GUI is loaded
 
