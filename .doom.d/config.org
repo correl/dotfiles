@@ -84,9 +84,24 @@ emacs -mm --debug-init -l ~/.doom.d/exwm.el
 (defun my/set-desktop-background ()
   (interactive)
   (start-process-shell-command "feh" nil "feh --bg-scale ~/Pictures/Wallpapers/1520742811045.png"))
+(defvar my/polybar-process nil
+  "Holds the process of the running Polybar instance, if any")
+(defun my/kill-panel ()
+  (interactive)
+  (when my/polybar-process
+    (ignore-errors
+      (kill-process my/polybar-process)))
+  (setq my/polybar-process nil))
+(defun my/start-panel ()
+  (interactive)
+  (my/kill-panel)
+  (setq my/polybar-process (start-process-shell-command "polybar" nil "polybar-git -c ~/.doom.d/polybar.conf panel")))
 (defun my/exwm-init-hook ()
   ;; Start on workspace1
   (exwm-workspace-switch-create 1)
+  ;; Start polybar
+  (my/start-panel)
+  ;; Start system tray applets
   (my/run-in-background "nm-applet")
   (my/run-in-background "pasystray")
   (my/run-in-background "blueman-applet")
@@ -94,11 +109,6 @@ emacs -mm --debug-init -l ~/.doom.d/exwm.el
   (my/run-in-background "compton"))
 (use-package! exwm
   :config
-  (require 'exwm-systemtray)
-  ;; (setq exwm-systemtray-height 32)
-  (exwm-systemtray-enable)
-  (display-time-mode +1)
-  (display-battery-mode +1)
   (setq exwm-input-global-keys
         `(([?\s-r] . exwm-reset)
           ([?\s-w] . exwm-workspace-switch)
@@ -122,6 +132,142 @@ emacs -mm --debug-init -l ~/.doom.d/exwm.el
   :after exwm
   :config
   (desktop-environment-mode))
+#+end_src
+* Polybar
+#+begin_src conf :tangle polybar.conf
+; Docs: https://github.com/polybar/polybar
+;==========================================================
+
+[settings]
+screenchange-reload = true
+
+[global/wm]
+margin-top = 0
+margin-bottom = 0
+
+[colors]
+background = #f0232635
+background-alt = #576075
+foreground = #A6Accd
+foreground-alt = #555
+primary = #ffb52a
+secondary = #e60053
+alert = #bd2c40
+underline-1 = #c792ea
+
+[bar/panel]
+width = 100%
+height = 20
+offset-x = 0
+offset-y = 0
+fixed-center = true
+enable-ipc = true
+
+background = ${colors.background}
+foreground = ${colors.foreground}
+
+line-size = 2
+line-color = #f00
+
+border-size = 0
+border-color = #00000000
+
+padding-top = 5
+padding-left = 1
+padding-right = 1
+
+module-margin = 1
+
+font-0 = "Cantarell:size=12:weight=bold;2"
+font-1 = "Font Awesome:size=8;2"
+font-2 = "Material Icons:size=14;5"
+font-3 = "Fira Mono:size=7;-3"
+
+modules-right = cpu temperature battery date
+
+tray-position = right
+tray-padding = 2
+tray-maxsize = 28
+
+cursor-click = pointer
+cursor-scroll = ns-resize
+
+[module/cpu]
+type = internal/cpu
+interval = 2
+format = <label> <ramp-coreload>
+format-underline = ${colors.underline-1}
+click-left = emacsclient -e "(proced)"
+label = %percentage:2%%
+ramp-coreload-spacing = 0
+ramp-coreload-0 = ▁
+ramp-coreload-0-foreground = ${colors.foreground-alt}
+ramp-coreload-1 = ▂
+ramp-coreload-2 = ▃
+ramp-coreload-3 = ▄
+ramp-coreload-4 = ▅
+ramp-coreload-5 = ▆
+ramp-coreload-6 = ▇
+
+[module/date]
+type = internal/date
+interval = 5
+
+date = "%a %b %e"
+date-alt = "%A %B %d %Y"
+
+time = %l:%M %p
+time-alt = %H:%M:%S
+
+format-prefix-foreground = ${colors.foreground-alt}
+format-underline = ${colors.underline-1}
+
+label = %date% %time%
+
+[module/battery]
+type = internal/battery
+battery = BAT0
+adapter = ADP1
+full-at = 98
+time-format = %-l:%M
+
+label-charging = %percentage%% / %time%
+format-charging = <animation-charging> <label-charging>
+format-charging-underline = ${colors.underline-1}
+
+label-discharging = %percentage%% / %time%
+format-discharging = <ramp-capacity> <label-discharging>
+format-discharging-underline = ${self.format-charging-underline}
+
+format-full = <ramp-capacity> <label-full>
+format-full-underline = ${self.format-charging-underline}
+
+ramp-capacity-0 = 
+ramp-capacity-1 = 
+ramp-capacity-2 = 
+ramp-capacity-3 = 
+ramp-capacity-4 = 
+
+animation-charging-0 = 
+animation-charging-1 = 
+animation-charging-2 = 
+animation-charging-3 = 
+animation-charging-4 = 
+animation-charging-framerate = 750
+
+[module/temperature]
+type = internal/temperature
+thermal-zone = 0
+warn-temperature = 60
+
+format = <label>
+format-underline = ${colors.underline-1}
+format-warn = <label-warn>
+format-warn-underline = ${self.format-underline}
+
+label = %temperature-c%
+label-warn = %temperature-c%!
+label-warn-foreground = ${colors.secondary}
 #+end_src
 * Dashboard
 #+begin_src emacs-lisp
