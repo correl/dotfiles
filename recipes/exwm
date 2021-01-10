@@ -4,6 +4,7 @@ set -e
 
 _recipe _apt
 _recipe emacs
+_recipe polybar
 
 _apt brightnessctl
 _apt fonts-font-awesome
