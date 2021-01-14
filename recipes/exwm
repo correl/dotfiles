@@ -4,8 +4,9 @@ set -e
 
 _recipe _apt
 _recipe emacs
-_recipe polybar
 
+
+_apt tint2
 _apt brightnessctl
 _apt fonts-font-awesome
 _apt fonts-material-design-icons-iconfont

@@ -1,6 +1,0 @@
-#!/bin/bash
-# Description: A customizeable desktop environment status bar
-set -e
-
-_recipe snap
-_snap polybar-git --edge --devmode
