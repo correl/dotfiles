@@ -44,5 +44,6 @@ case $_PLATFORM in
         ;;
 esac
 
+_run "[email] Creating mail directories" mkdir -p Mail/{Personal,Work,.attachments}
 _recipe nvm
 _npm imapnotify
