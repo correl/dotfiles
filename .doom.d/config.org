@@ -1045,7 +1045,82 @@ Show linked org document sections inline.
                       (tramp-file-name-hop v))))
       (eshell/cd directory)))
 #+end_src
-* MU4E
+* Email
+** MBSync
+:PROPERTIES:
+:header-args: :tangle no
+:header-args:conf: :tangle ~/.mbsyncrc
+:END:
+*** Building Blocks
+**** Locating the certificate file
+#+name: mbsync-certificate-file
+#+begin_src emacs-lisp :tangle no
+(require 'f)
+(seq-find #'f-exists?
+          '("/etc/ssl/certs/ca-certificates.crt"
+            "/usr/local/etc/openssl/certs/ca-certificates.crt"
+            "/usr/local/etc/openssl/cert.pem"))
+#+end_src
+*** Personal Gmail Account
+#+begin_src conf :noweb yes
+IMAPAccount personal
+Host imap.gmail.com
+User correl@gmail.com
+PassCmd "pass accounts.google.com/correl@gmail.com | grep ^isync: | awk '{print $2}'"
+AuthMechs LOGIN
+SSLType IMAPS
+SSLVersions TLSv1.2
+CertificateFile <<mbsync-certificate-file()>>
+
+IMAPStore personal-remote
+Account personal
+
+MaildirStore personal-local
+Subfolders Verbatim
+Path ~/Mail/Personal/
+Inbox ~/Mail/Personal/INBOX
+
+Channel personal
+Master :personal-remote:
+Slave :personal-local:
+MaxMessages 1000
+ExpireUnread yes
+Patterns "INBOX" "[Gmail]/Drafts" "[Gmail]/Sent Mail" "[Gmail]/Starred" "[Gmail]/All Mail" "[Gmail]/Chats" "[Gmail]/Trash"
+Create Both
+Expunge Both
+SyncState *
+#+end_src
+*** AWeber Work Account
+#+begin_src conf :noweb yes
+IMAPAccount work
+Host imap.gmail.com
+User correlr@aweber.com
+PassCmd "pass Work/aweber/accounts.google.com/correlr@aweber.com | grep ^isync: | awk '{print $2}'"
+AuthMechs LOGIN
+SSLType IMAPS
+SSLVersions TLSv1.2
+CertificateFile <<mbsync-certificate-file()>>
+
+IMAPStore work-remote
+Account work
+
+MaildirStore work-local
+Subfolders Verbatim
+Path ~/Mail/Work/
+Inbox ~/Mail/Work/INBOX
+
+Channel work
+Master :work-remote:
+Slave :work-local:
+MaxMessages 1000
+ExpireUnread yes
+Patterns "INBOX" "AWeber Times" "[Gmail]/Drafts" "[Gmail]/Sent Mail" "[Gmail]/Starred" "[Gmail]/All Mail" "[Gmail]/Chats" "[Gmail]/Trash"
+Create Both
+Expunge Both
+SyncState *
+#+end_src
+
+** MU4E
 #+begin_src emacs-lisp
   (use-package! mu4e
     :bind (("<f9>" . mu4e))
@@ -1060,17 +1135,20 @@ Show linked org document sections inline.
           (list (make-mu4e-context
                  :name "work"
                  :vars `((user-mail-address . "correlr@aweber.com")
-                         (mu4e-drafts-folder . "/Work/[Gmail].Drafts")
-                         (mu4e-sent-folder . "/Work/[Gmail].Sent Mail")
-                         (mu4e-trash-folder . "/Work/[Gmail].Trash")
+                         (mu4e-drafts-folder . "/Work/[Gmail]/Drafts")
+                         (mu4e-sent-folder . "/Work/[Gmail]/Sent Mail")
+                         (mu4e-trash-folder . "/Work/[Gmail]/Trash")
                          (mu4e-maildir-shortcuts . (("/Work/INBOX" . ?i)
-                                                    ("/Work/[Gmail].All Mail" . ?a)
-                                                    ("/Work/[Gmail].Starred" . ?S)
-                                                    ("/Work/[Gmail].Sent Mail" . ?s)
-                                                    ("/Work/[Gmail].Trash" . ?t)))
+                                                    ("/Work/[Gmail]/All Mail" . ?a)
+                                                    ("/Work/[Gmail]/Starred" . ?S)
+                                                    ("/Work/[Gmail]/Sent Mail" . ?s)
+                                                    ("/Work/[Gmail]/Trash" . ?t)))
                          (mu4e-compose-signature . ,(with-temp-buffer
                                                       (insert-file-contents "~/.signature-aweber")
-                                                      (buffer-string)))))))
+                                                      (buffer-string)))
+                         (smtpmail-smtp-server . "smtp.gmail.com")
+                         (smtpmail-smtp-service . 465)
+                         (smtpmail-stream-type . ssl)))))
     (when (f-exists?
            (f-join mu4e-maildir "Personal"))
       (add-to-list
@@ -1078,17 +1156,20 @@ Show linked org document sections inline.
        (make-mu4e-context
         :name "personal"
         :vars `((user-mail-address . "correl@gmail.com")
-                (mu4e-drafts-folder . "/Personal/[Gmail].Drafts")
-                (mu4e-sent-folder . "/Personal/[Gmail].Sent Mail")
-                (mu4e-trash-folder . "/Personal/[Gmail].Trash")
+                (mu4e-drafts-folder . "/Personal/[Gmail]/Drafts")
+                (mu4e-sent-folder . "/Personal/[Gmail]/Sent Mail")
+                (mu4e-trash-folder . "/Personal/[Gmail]/Trash")
                 (mu4e-maildir-shortcuts . (("/Personal/INBOX" . ?i)
-                                           ("/Personal/[Gmail].All Mail" . ?a)
-                                           ("/Personal/[Gmail].Starred" . ?S)
-                                           ("/Personal/[Gmail].Sent Mail" . ?s)
-                                           ("/Personal/[Gmail].Trash" . ?t)))
+                                           ("/Personal/[Gmail]/All Mail" . ?a)
+                                           ("/Personal/[Gmail]/Starred" . ?S)
+                                           ("/Personal/[Gmail]/Sent Mail" . ?s)
+                                           ("/Personal/[Gmail]/Trash" . ?t)))
                 (mu4e-compose-signature . ,(with-temp-buffer
                                              (insert-file-contents "~/.signature")
-                                             (buffer-string)))))))
+                                             (buffer-string)))
+                (smtpmail-smtp-server . "smtp.gmail.com")
+                (smtpmail-smtp-service . 465)
+                (smtpmail-stream-type . ssl)))))
     (setq mu4e-context-policy 'pick-first)
     (setq mu4e-compose-dont-reply-to-self t)
     (setq mu4e-user-mail-address-list '("correlr@aweber.com"
