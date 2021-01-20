@@ -1055,11 +1055,10 @@ Show linked org document sections inline.
 **** Locating the certificate file
 #+name: mbsync-certificate-file
 #+begin_src emacs-lisp :tangle no
-(require 'f)
-(seq-find #'f-exists?
-          '("/etc/ssl/certs/ca-certificates.crt"
-            "/usr/local/etc/openssl/certs/ca-certificates.crt"
-            "/usr/local/etc/openssl/cert.pem"))
+  (seq-find #'file-exists-p
+            '("/etc/ssl/certs/ca-certificates.crt"
+              "/usr/local/etc/openssl/certs/ca-certificates.crt"
+              "/usr/local/etc/openssl/cert.pem"))
 #+end_src
 *** Personal Gmail Account
 #+begin_src conf :noweb yes
