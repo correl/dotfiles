@@ -2,44 +2,52 @@
 #+STARTUP: indent overview
 #+PROPERTY: header-args :tangle config.el
 
-* Custom settings
-Store options set via =customize-*= in a separate file (Emacs stores
-them in =init.el= by default).
-
-#+BEGIN_SRC emacs-lisp
-  (setq custom-file "~/.emacs.d/custom.el")
-  (if (file-exists-p custom-file)
-      (load custom-file))
-
-  (setf custom-safe-themes t)
-#+END_SRC
-
-* Theme
+* Look And Feel
+** Theme
 I'm feeling the gruvbox theme lately.
 #+begin_src emacs-lisp
   (setq doom-theme 'doom-gruvbox)
 #+end_src
-* UX Improvements
-** Disable C-z backgrounding when the GUI is loaded
-
-In OSX, this minimizes the window. It's incredibly annoying, and I accidentally
-hit it too much. I also can't think of any reason I'd want to background Emacs
-outside of a terminal session.
+** Dashboard
+Customize the Doom Emacs dashboard with commissioned artwork, chosen randomly.
+The dashboard can be reloaded with the =g= key.
 
 #+begin_src emacs-lisp
-  (if (display-graphic-p)
-      (global-unset-key (kbd "C-z")))
+(defun my/choice (&rest things)
+  (let ((index (random (length things))))
+    (nth index things)))
+
+(defun my/dashboard-randomize ()
+  (interactive)
+  (let ((logo (my/choice "~/Pictures/Patreon/Jon Bliss/phoenix-and-catgirl-500.png"
+                         "~/Pictures/Patreon/Jon Bliss/Bassist-final-transparent-500.png"
+                         "~/Pictures/Patreon/Jon Bliss/catgirl-final-transparent-500.png"
+                         "~/Pictures/Patreon/Jon Bliss/lapiz-final-transparent-500.png"
+                         "~/Pictures/Patreon/Jon Bliss/Poledancer-final-transparent-500.png"
+                         "~/Pictures/Patreon/Jon Bliss/Hacker-final-transparent-500.png"
+                         "~/Pictures/Patreon/Bee/IMG_3666_transparent_500.png")))
+
+    (setq fancy-splash-image logo)
+    (if (called-interactively-p)
+        (+doom-dashboard-reload))))
+
+(my/dashboard-randomize)
+(map!
+ :map +doom-dashboard-mode-map
+ "g" #'my/dashboard-randomize)
 #+end_src
-** Mixed Pitch
-Facilitates mixing monospace and proportional fonts. I'm using an MIT-licensed
-version of the [[https://github.com/edwardtufte/et-book][Edward Tufte book font]] because it's /gorgeous/.
+** Frame transparency
+Set the background transparency to 90% so my wallpaper shows through.
+
 #+begin_src emacs-lisp
-  (use-package! mixed-pitch
-    :hook ((org-mode markdown-mode rst-mode) . mixed-pitch-mode))
-  (setq doom-variable-pitch-font (font-spec :family "ETBookOT" :size 19))
+  (set-frame-parameter (selected-frame) 'alpha '(90 . 90))
+  (add-to-list 'default-frame-alist '(alpha . (90 . 90)))
 #+end_src
 ** Comic Sans Mono
 Why not, it's fun 🤣
+
+Adds a command to switch to the monospaced Comic Sans font, and make it the
+default font for PHP buffers.
 
 https://dtinth.github.io/comic-mono-font/
 
@@ -52,129 +60,90 @@ https://dtinth.github.io/comic-mono-font/
   (after! php-mode
     (add-hook 'php-mode-hook #'my/buffer-face-comic-mono))
 #+end_src
-** Frame transparency
+** Mixed Pitch
+Facilitates mixing monospace and proportional fonts. I'm using an MIT-licensed
+version of the [[https://github.com/edwardtufte/et-book][Edward Tufte book font]] because it's /gorgeous/.
 #+begin_src emacs-lisp
-  (set-frame-parameter (selected-frame) 'alpha '(90 . 90))
-  (add-to-list 'default-frame-alist '(alpha . (90 . 90)))
+  (use-package! mixed-pitch
+    :hook ((org-mode markdown-mode rst-mode) . mixed-pitch-mode))
+  (setq doom-variable-pitch-font (font-spec :family "ETBookOT" :size 19))
 #+end_src
-* Counsel
-** Linux application launcher
+* UX Improvements
+** Disable C-z backgrounding when the GUI is loaded
+
+In OSX, this minimizes the window. It's incredibly annoying, and I accidentally
+hit it too much. I also can't think of any reason I'd want to background Emacs
+outside of a terminal session.
+
 #+begin_src emacs-lisp
-(use-package! counsel
-  :custom (counsel-linux-app-format-function #'counsel-linux-app-format-function-name-only)
-  :config (counsel-mode 1))
+  (if (display-graphic-p)
+      (global-unset-key (kbd "C-z")))
 #+end_src
-* EXWM
+** Custom settings
+Store options set via =customize-*= in a separate file (Emacs stores
+them in =init.el= by default).
 
-#+begin_src sh :tangle ~/.dmrc
-[Desktop]
-session=~/.doom.d/start-exwm.sh
-#+end_src
+#+BEGIN_SRC emacs-lisp
+  (setq custom-file "~/.emacs.d/custom.el")
+  (if (file-exists-p custom-file)
+      (load custom-file))
 
-#+begin_src sh :tangle start-exwm.sh :shebang #!/bin/sh
-emacs -mm --debug-init -l ~/.doom.d/exwm.el
-#+end_src
+  (setf custom-safe-themes t)
+#+END_SRC
+** Eval and Replace
+Replace an s-expression with its value. Taken from [[http://emacsredux.com/blog/2013/06/21/eval-and-replace/][Emacs Redux]].
 
-#+begin_src emacs-lisp :tangle exwm.el
-(defun my/exwm-update-class ()
-  (exwm-workspace-rename-buffer exwm-class-name))
-(defun my/run-in-background (command)
-  (let ((command-parts (split-string command "[ ]+")))
-    (apply #'call-process `(,(car command-parts) nil 0 nil ,@(cdr command-parts)))))
-(defun my/set-desktop-background ()
-  (interactive)
-  (start-process-shell-command "feh" nil "feh --bg-scale ~/Pictures/Wallpapers/1520742811045.png"))
-(defun my/exwm-init-hook ()
-  ;; Start tint2 bar
-  (my/run-in-background "tint2")
-  ;; Start system tray applets
-  (my/run-in-background "nm-applet")
-  (my/run-in-background "pasystray")
-  (my/run-in-background "blueman-applet")
-  (my/run-in-background "nextcloud --background")
-  (my/run-in-background "compton"))
-(use-package! exwm
-  :config
-  (setq exwm-input-global-keys
-        `(([?\s-r] . exwm-reset)
-          ([?\s-w] . exwm-workspace-switch)
-          ,@(mapcar (lambda (i)
-                      `(,(kbd (format "s-%d" i)) .
-                        (lambda ()
-                          (interactive)
-                          (exwm-workspace-switch-create ,(- i 1)))))
-                    (number-sequence 1 9))
-          ([?\s-&] . (lambda (command)
-                       (interactive (list (read-shell-command "$ ")))
-                       (start-process-shell-command command nil command)))))
-  (setq exwm-workspace-number 4)
-  (exwm-input-set-key (kbd "s-SPC") #'counsel-linux-app)
-  (add-hook! 'exwm-update-class-hook #'my/exwm-update-class)
-  (add-hook! 'exwm-init-hook #'my/exwm-init-hook)
-  (my/set-desktop-background)
-  (exwm-enable))
-(use-package! exwm-config
-  :after exwm)
-(use-package! desktop-environment
-  :after exwm
-  :config
-  (desktop-environment-mode))
-#+end_src
-* Dashboard
 #+begin_src emacs-lisp
-    (defun my/choice (&rest things)
-      (let ((index (random (length things))))
-        (nth index things)))
+  (defun eval-and-replace ()
+    "Replace the preceding sexp with its value."
+    (interactive)
+    (backward-kill-sexp)
+    (condition-case nil
+        (prin1 (eval (read (current-kill 0)))
+               (current-buffer))
+      (error (message "Invalid expression")
+             (insert (current-kill 0)))))
 
-    (defun my/dashboard-randomize ()
-      (interactive)
-      (let ((logo (my/choice "~/Pictures/Patreon/Jon Bliss/phoenix-and-catgirl-500.png"
-                             "~/Pictures/Patreon/Jon Bliss/Bassist-final-transparent-500.png"
-                             "~/Pictures/Patreon/Jon Bliss/catgirl-final-transparent-500.png"
-                             "~/Pictures/Patreon/Jon Bliss/lapiz-final-transparent-500.png"
-                             "~/Pictures/Patreon/Jon Bliss/Poledancer-final-transparent-500.png"
-                             "~/Pictures/Patreon/Jon Bliss/Hacker-final-transparent-500.png"
-                             "~/Pictures/Patreon/Bee/IMG_3666_transparent_500.png")))
-
-        (setq fancy-splash-image logo)
-        (if (called-interactively-p)
-            (+doom-dashboard-reload))))
-
-  (my/dashboard-randomize)
-  (map!
-   :map +doom-dashboard-mode-map
-   "g" #'my/dashboard-randomize)
+  (global-set-key (kbd "C-)") 'eval-and-replace)
 #+end_src
-* BibTeX
+* Writing
+
+** BibTeX
+Tell Emacs where to find my bibliography files. I keep most everything in my
+Calibre library, which I regularly export and keep synced via Nextcloud.
+
 #+begin_src emacs-lisp
   (setq my/bibliographies
         '("~/Documents/bibliography/references.bib"
           "~/Documents/bibliography/calibre.bib"))
 #+end_src
-** Helm BibTeX
+*** Helm BibTeX
 #+begin_src emacs-lisp
   (setq bibtex-completion-bibliography
         my/bibliographies)
   (setq bibtex-completion-pdf-field "File")
 #+end_src
-* Org
+** Org
 :PROPERTIES:
 :header-args: :tangle no :noweb-ref org
 :END:
+
+Configure a variety of options and tools for [[https://orgmode.org][Org Mode]], the markup I use for
+everything from simple notes to task management.
 
 #+begin_src emacs-lisp :noweb yes :tangle yes :noweb-ref org-all
   (after! org
     <<org>>)
 #+end_src
 
-** Override DOOM indentation behavior
+*** Override DOOM indentation behavior
 #+begin_src emacs-lisp
   (defun my/org-init-babel ()
     (setq org-src-preserve-indentation nil))
 
   (add-hook! 'org-mode-hook #'my/org-init-babel)
 #+end_src
-** Disable DOOM's centralized attachment system
+*** Disable DOOM's centralized attachment system
 It's incompatible with all of the org files I already have using the standard
 setup.
 #+begin_src emacs-lisp
@@ -182,7 +151,10 @@ setup.
   (remove-hook! 'org-load-hook
     #'(+org-init-centralized-attachments-h))
 #+end_src
-** Agenda
+*** Agenda
+Set up my agenda view. I use separate files for my personal TODOs and my work
+TODOs, synced externally using Nextcloud.
+
 #+begin_src emacs-lisp
   (after! org-agenda
     (require 'f)
@@ -254,8 +226,10 @@ setup.
      org-icalendar-use-scheduled '(todo-start event-if-todo)
      org-icalendar-combined-agenda-file (expand-file-name "~/Documents/org.ics")))
 #+end_src
-** LaTeX Export
-*** Document Classes
+*** LaTeX Export
+**** Document Classes
+Tell Emacs about all of the LaTeX classes I use to export documents.
+
 #+BEGIN_SRC emacs-lisp
   (use-package! ox-latex
     :config
@@ -356,12 +330,17 @@ setup.
               ("\\paragraph{%s}" . "\\paragraph*{%s}")
               ("\\subparagraph{%s}" . "\\subparagraph*{%s}")))))
 #+END_SRC
-*** DnD
+**** DnD
+This adds an additional LaTeX export option that outputs documents resembling a
+Dungeons and Dragons manual.
+
 #+begin_src emacs-lisp
   (use-package! ox-dnd
     :after ox)
 #+end_src
-** Capture templates
+*** Capture templates
+Set up my capture templates for making new notes and journal entries.
+
 #+begin_src emacs-lisp
   (setq org-capture-templates
         `(
@@ -421,7 +400,7 @@ setup.
            :immediate-finish t
            :prepend t)))
 #+end_src
-** Custom ID generation
+*** Custom ID generation
 Because I'm all kinds of crazy, I like the custom IDs of my work log entries to
 be based on their headings.
 
@@ -515,7 +494,9 @@ be based on their headings.
             id))))))
 
 #+end_src
-** Publish projects
+*** Publish projects
+Tell Emacs how to build the document collections I export to HTML.
+
 #+begin_src emacs-lisp
   (require 'org-attach)
 
@@ -781,13 +762,19 @@ be based on their headings.
 
   (bind-key "C-c o p" #'my/org-publish)
 #+end_src
-** Enhanced Confluence export
+*** Enhanced Confluence export
+Adds [[https://github.com/correl/ox-confluence-en][my own package]] that extends the built-in Confluence wiki markup exporter
+with better formatting and macro support.
+
 #+begin_src emacs-lisp
   (use-package! ox-confluence-en
     :after ox
     :commands ox-confluence-en-export-as-confluence)
 #+end_src
-** Reload images on source execution
+*** Reload images on source execution
+Force images to redisplay after executing a source code block, so I can
+immediately see the result of regenerating graphs and diagrams.
+
 #+begin_src emacs-lisp
   (defun my/redisplay-org-images ()
     (when org-inline-image-overlays
@@ -796,13 +783,15 @@ be based on their headings.
   (add-hook 'org-babel-after-execute-hook
             'my/redisplay-org-images)
 #+end_src
-** Sticky headers
+*** Sticky headers
+Keeps the current heading visible at the top of the Emacs window.
+
 #+begin_src emacs-lisp
   (use-package! org-sticky-header
     :hook (org-mode . org-sticky-header-mode)
     :config (setq org-sticky-header-full-path 'full))
 #+end_src
-** Library of Babel
+*** Library of Babel
 
 Load shared code snippets to be used in org documents.
 
@@ -813,7 +802,7 @@ Load shared code snippets to be used in org documents.
                          (seq-map (lambda (path) (f-join path "library-of-babel.org"))
                                   org-dirs))))
 #+end_src
-** Nicer looking timestamps
+*** Nicer looking timestamps
 #+begin_src emacs-lisp
   (setq org-time-stamp-custom-formats '("<%A, %B %d %Y>" . "<%A, %B %d %Y %H:%M>"))
 
@@ -832,12 +821,14 @@ Load shared code snippets to be used in org documents.
      'org-export-filter-timestamp-functions
      'org-export-filter-timestamp-remove-brackets))
 #+end_src
-** Tufte HTML
+*** Tufte HTML
+Gorgeous HTML exports.
+
 #+begin_src emacs-lisp
   (use-package! ox-tufte
     :after ox)
 #+end_src
-** Journal
+*** Journal
 #+begin_src emacs-lisp
   (use-package org-journal
     :if (f-dir? "~/org-aweber")
@@ -847,7 +838,9 @@ Load shared code snippets to be used in org documents.
     (org-journal-dir "~/org-aweber")
     (org-journal-date-format "%A, %d %B %Y"))
 #+end_src
-** Ref
+*** Ref
+Tools for linking and taking notes on books and papers.
+
 #+begin_src emacs-lisp
   (use-package! org-ref
     :config
@@ -857,8 +850,12 @@ Load shared code snippets to be used in org documents.
           org-ref-default-bibliography my/bibliographies
           org-ref-pdf-directory "~/Documents/bibliography/bibtex-pdfs/"))
 #+end_src
-** Roam
-*** Add backlinks to org-roam exports
+*** Roam
+Powerful cross-linked note-taking.
+
+https://orgroam.com
+
+**** Add backlinks to org-roam exports
 
 Adapted from https://org-roam.readthedocs.io/en/master/org_export/.
 #+begin_src emacs-lisp
@@ -979,7 +976,9 @@ Adapted from https://org-roam.readthedocs.io/en/master/org_export/.
 
   (add-hook 'org-export-before-processing-hook 'my/org-export-preprocessor)
 #+end_src
-*** Org Roam Bibtex
+**** Org Roam Bibtex
+Make it easy to take notes on books and papers that I'm reading.
+
 #+begin_src emacs-lisp
   (use-package! org-roam-bibtex
     :after org-roam
@@ -987,12 +986,16 @@ Adapted from https://org-roam.readthedocs.io/en/master/org_export/.
     :bind (:map org-mode-map
            (("C-c n r a" . orb-note-actions))))
 #+end_src
-*** Org Roam Server
+**** Org Roam Server
+Provides a fun way to browse through a collection of notes.
+
 #+begin_src emacs-lisp
   (use-package! org-roam-server
     :commands org-roam-server-mode)
 #+end_src
-*** Use writeroom in org-roam buffers
+**** Use writeroom in org-roam buffers
+Makes for a much nicer note-taking experience.
+
 #+begin_src emacs-lisp
   (defun my/org-roam-writeroom ()
     ;; Use a buffer-local local variables hook to ensure the org-roam-directory is
@@ -1006,7 +1009,7 @@ Adapted from https://org-roam.readthedocs.io/en/master/org_export/.
 
   (add-hook! 'org-mode-hook #'my/org-roam-writeroom)
 #+end_src
-** Sidebar
+*** Sidebar
 Display a sidebar with file-local todos and scheduling.
 
 #+begin_src emacs-lisp
@@ -1019,7 +1022,7 @@ Display a sidebar with file-local todos and scheduling.
                org-sidebar-tree
                org-sidebar-tree-toggle))
 #+end_src
-** Transclusion
+*** Transclusion
 Show linked org document sections inline.
 
 #+begin_src emacs-lisp
@@ -1028,25 +1031,61 @@ Show linked org document sections inline.
            ("C-c l v t" . org-transclusion-mode))
     :commands (org-transclusion-mode))
 #+end_src
-* Eshell
-** Change directory in the context of a remote host
+** Unfill
+Does the opposite of =fill (M-q)=, removing line breaks from a paragraph or
+region.
+
 #+begin_src emacs-lisp
-  (defun eshell/lcd (&optional directory)
-    (interactive)
-    (if (file-remote-p default-directory)
-        (with-parsed-tramp-file-name default-directory nil
-          (eshell/cd (tramp-make-tramp-file-name
-                      (tramp-file-name-method v)
-                      (tramp-file-name-user v)
-                      (tramp-file-name-domain v)
-                      (tramp-file-name-host v)
-                      (tramp-file-name-port v)
-                      (or directory "")
-                      (tramp-file-name-hop v))))
-      (eshell/cd directory)))
+  (use-package! unfill
+    :commands (unfill-paragraph
+               unfill-region)
+    :bind ("M-Q" . unfill-paragraph))
 #+end_src
-* Email
-** MU4E
+* Reading
+** Epub reader
+A major mode for reading and navigating =.epub= files.
+
+#+begin_src emacs-lisp
+  (use-package! nov
+    :mode ("\\.epub\\'" . nov-mode)
+    :config
+    (setq nov-save-place-file (concat doom-cache-dir "nov-places")))
+#+end_src
+** Kanji Mode
+Minor mode for displaying Japanese characters' stroke orders.
+
+#+begin_src emacs-lisp
+  (use-package! kanji-mode
+    :commands kanji-mode)
+#+end_src
+** Kanji Glasses Mode
+Study kanji by overlaying hiragana readings.
+
+#+begin_src emacs-lisp
+  (use-package! kanji-glasses-mode
+    :commands kanji-glasses-mode)
+#+end_src
+* Coding
+** Erlang
+*** Kerl
+Select the active erlang installation managed with [[https://github.com/kerl/kerl][kerl]].
+
+#+begin_src emacs-lisp
+  (use-package! kerl
+    :commands (kerl-use))
+#+end_src
+** Lisp
+*** Paredit
+Adds shortcuts to edit the structure of lisp code.
+
+#+begin_src emacs-lisp
+  (use-package! paredit
+    :hook ((emacs-lisp-mode . enable-paredit-mode)))
+#+end_src
+* Applications
+** Email
+Configure MU4E to read email synced from my personal and work accounts.
+
 #+begin_src emacs-lisp
   (use-package! mu4e
     :bind (("<f9>" . mu4e))
@@ -1101,90 +1140,69 @@ Show linked org document sections inline.
     (setq mu4e-user-mail-address-list '("correlr@aweber.com"
                                         "correl@gmail.com")))
 #+end_src
-* Prodigy
-Manage background services
+** Chat
+Connect to my weechat instance for IRC and other services that I've linked it to
+using Bitlbee.
+
 #+begin_src emacs-lisp
-  (use-package! prodigy
-    :defer 2
+  (use-package! weechat
+    :commands weechat-connect
     :config
+    (require 'gnutls)
 
-    (global-set-key (kbd "<f7>") 'prodigy)
+    (setq weechat-host-default "git.phoenixinquis.net")
+    (setq weechat-port-default 9001)
+    (setq weechat-mode-default 'ssl)
+    (setq weechat-auto-monitor-buffers t)
+    (setq weechat-modules '(weechat-button
+                            weechat-complete
+                            weechat-alert
+                            weechat-tracking
+                            weechat-image
+                            weechat-speedbar))
+    (setq weechat-tracking-types
+        '(("^[[:alnum:]]+\\.#" . :highlight)
+          ("^[[:alnum:]]+\\.[^#]" . :message)))
+    (use-package! weechat-alert)
 
-    (prodigy-define-tag
-     :name 'work)
-    (prodigy-define-tag
-     :name 'personal)
 
-    ;; https://martinralbrecht.wordpress.com/2016/05/30/handling-email-with-emacs/
-    (when (executable-find "imapnotify")
-      (prodigy-define-tag
-        :name 'email
-        :ready-message "Checking Email using IMAP IDLE. Ctrl-C to shutdown.")
-      (prodigy-define-service
-        :name "imapnotify-work"
-        :command "imapnotify"
-        :args (list "-c" (expand-file-name "~/.config/imap_inotify/work.js"))
-        :tags '(email work autostart)
-        :kill-signal 'sigkill)
-      (unless (string-equal "croush" (user-login-name))
-        (prodigy-define-service
-          :name "imapnotify-personal"
-          :command "imapnotify"
-          :args (list "-c" (expand-file-name "~/.config/imap_inotify/personal.js"))
-          :tags '(email personal autostart)
-          :kill-signal 'sigkill)))
-    (when (f-exists? (expand-file-name "~/code/elm-dashboard"))
-      (prodigy-define-service
-        :name "elm-dashboard"
-        :command "python"
-        :args '("-m" "SimpleHTTPServer" "3000")
-        :cwd (expand-file-name "~/code/elm-dashboard")
-        :tags '(personal elm)
-        :stop-signal 'sigkill
-        :kill-process-buffer-on-stop t))
-    (when (f-exists? (expand-file-name "~/git/www"))
-      (prodigy-define-service
-        :name "AWeber WWW"
-        :command "npm"
-        :args '("start")
-        :cwd (expand-file-name "~/git/www")
-        :tags '(work)))
-    (when (f-exists? (expand-file-name "~/Public/org"))
-      (prodigy-define-service
-        :name "Org Documents"
-        :command "python"
-        :args '("-m" "http.server" "3001")
-        :cwd (expand-file-name "~/Public/org")
-        :tags '(work autostart)
-        :kill-signal 'sigkill))
-    (mapcar
-     #'prodigy-start-service
-     (-concat (prodigy-services-tagged-with 'autostart))))
+    ;; Dangit, powerline. Adding to global-mode-string so tracking shows up
+    ;; (unless (memq 'tracking-mode-line-buffers global-mode-string)
+    ;;   (setq global-mode-string
+    ;;         (-insert-at 1 'tracking-mode-line-buffers global-mode-string)))
+    )
 #+end_src
-* Projectile
+** Music
+Configure EMMS for playing music files on my computer.
+
 #+begin_src emacs-lisp
-  (after! projectile
-    (require 'dash)
-    (require 'f)
+  (use-package! emms
+    :commands (emms
+               emms-play-file
+               emms-play-directory
+               emms-smart-browse)
+    :config
+    (let ((emms-player-base-format-list
+           ;; Add some VGM formats to the list for VLC to play
+           (append emms-player-base-format-list '("nsf" "spc" "gym"))))
+      (require 'emms-player-vlc))
+    (require 'emms-setup)
+    (emms-all)
+    (setq emms-player-list '(emms-player-vlc))
+    ;; Use the installed VLC app if we're in OSX
+    (if (f-exists? "/Applications/VLC.app/Contents/MacOS/VLC")
+        (setq emms-player-vlc-command-name
+              "/Applications/VLC.app/Contents/MacOS/VLC")))
 
-    (setq projectile-switch-project-action #'magit-status)
-    (let ((project-directories (-filter #'f-directory?
-                                        '("~/code"
-                                          "~/git"))))
-      (-map
-       (lambda (directory)
-         (-map (lambda (project)
-                 (-> (concat  project "/") ;; Projectile likes trailing slashes
-                     (projectile-add-known-project)))
-               (-filter (lambda (f) (and (not (s-ends-with? "." f))
-                                         (f-directory? f)))
-                        (-map (lambda (f) (concat directory "/" f))
-                              (directory-files directory)))))
-       project-directories))
-
-    (projectile-cleanup-known-projects))
+  (map! :leader
+        (:prefix-map ("x" . "EMMS")
+          :desc "Play file" "f" #'emms-play-file
+          :desc "Play directory" "d" #'emms-play-directory
+          :desc "Smart Browser" "b" #'emms-smart-browse))
 #+end_src
-* Elfeed
+** News Aggregation
+Read blogs and articles from the RSS feeds I follow.
+
 #+begin_src emacs-lisp
   (use-package! elfeed
     :commands (elfeed my/elfeed my/elfeed-emacs my/elfeed-blogs)
@@ -1225,66 +1243,9 @@ Manage background services
       (interactive)
       (my/elfeed-with-filters  "@6-months-ago +unread +blog")))
 #+end_src
-* Paredit
-#+begin_src emacs-lisp
-  (use-package! paredit
-    :hook ((emacs-lisp-mode . enable-paredit-mode)))
-#+end_src
-* UUID Generation
-#+begin_src emacs-lisp
-  (use-package! uuidgen
-    :commands (uuidgen))
-#+end_src
-* Eval and Replace
-Taken from [[http://emacsredux.com/blog/2013/06/21/eval-and-replace/][Emacs Redux]]
+** Kubernetes
+Manage a Kubernetes cluster and set up remote shell/file access via TRAMP.
 
-#+begin_src emacs-lisp
-  (defun eval-and-replace ()
-    "Replace the preceding sexp with its value."
-    (interactive)
-    (backward-kill-sexp)
-    (condition-case nil
-        (prin1 (eval (read (current-kill 0)))
-               (current-buffer))
-      (error (message "Invalid expression")
-             (insert (current-kill 0)))))
-
-  (global-set-key (kbd "C-)") 'eval-and-replace)
-#+end_src
-* Unfill
-#+begin_src emacs-lisp
-  (use-package! unfill
-    :commands (unfill-paragraph
-               unfill-region)
-    :bind ("M-Q" . unfill-paragraph))
-#+end_src
-* EMMS
-#+begin_src emacs-lisp
-  (use-package! emms
-    :commands (emms
-               emms-play-file
-               emms-play-directory
-               emms-smart-browse)
-    :config
-    (let ((emms-player-base-format-list
-           ;; Add some VGM formats to the list for VLC to play
-           (append emms-player-base-format-list '("nsf" "spc" "gym"))))
-      (require 'emms-player-vlc))
-    (require 'emms-setup)
-    (emms-all)
-    (setq emms-player-list '(emms-player-vlc))
-    ;; Use the installed VLC app if we're in OSX
-    (if (f-exists? "/Applications/VLC.app/Contents/MacOS/VLC")
-        (setq emms-player-vlc-command-name
-              "/Applications/VLC.app/Contents/MacOS/VLC")))
-
-  (map! :leader
-        (:prefix-map ("x" . "EMMS")
-          :desc "Play file" "f" #'emms-play-file
-          :desc "Play directory" "d" #'emms-play-directory
-          :desc "Smart Browser" "b" #'emms-smart-browse))
-#+end_src
-* Kubernetes
 #+begin_src emacs-lisp
   (use-package! kubernetes
     :commands (kubernetes-overview)
@@ -1296,18 +1257,43 @@ Taken from [[http://emacsredux.com/blog/2013/06/21/eval-and-replace/][Emacs Redu
     :config
     (setq tramp-remote-shell-executable "sh"))
 #+end_src
-* Twitter
+** Twitter
+It's Twitter, in Emacs.
+
 #+begin_src emacs-lisp
   (define-key! twittering-mode-map
     "f" #'twittering-favorite
     "F" #'twittering-unfavorite)
 #+end_src
-* Kerl
+** Project Management
+*** Projectile
+Pre-load Projectile with projects in my usual code directories.
+
 #+begin_src emacs-lisp
-  (use-package! kerl
-    :commands (kerl-use))
+  (after! projectile
+    (require 'dash)
+    (require 'f)
+
+    (setq projectile-switch-project-action #'magit-status)
+    (let ((project-directories (-filter #'f-directory?
+                                        '("~/code"
+                                          "~/git"))))
+      (-map
+       (lambda (directory)
+         (-map (lambda (project)
+                 (-> (concat  project "/") ;; Projectile likes trailing slashes
+                     (projectile-add-known-project)))
+               (-filter (lambda (f) (and (not (s-ends-with? "." f))
+                                         (f-directory? f)))
+                        (-map (lambda (f) (concat directory "/" f))
+                              (directory-files directory)))))
+       project-directories))
+
+    (projectile-cleanup-known-projects))
 #+end_src
-* Jira
+*** Jira
+Add some commands for interacting with Jira within org documents.
+
 #+begin_src emacs-lisp
   (use-package jira-api
     :config (setq jira-api-host "jira.aweber.io"
@@ -1382,57 +1368,165 @@ Taken from [[http://emacsredux.com/blog/2013/06/21/eval-and-replace/][Emacs Redu
         "C-c j c" #'jira-api-create-issue-from-heading
         "C-c j u" #'jira-api-update-issue-from-heading)
 #+end_src
-* Weechat
+** Eshell
+*** Change directory in the context of a remote host
+Add an =lcd= command that functions similarly to =cd=, but is scoped to the
+remote host being accessed. Basically means I can use =lcd /= and other absolute
+paths and not worry about being bounced back to my local filesystem.
+
 #+begin_src emacs-lisp
-  (use-package! weechat
-    :commands weechat-connect
+  (defun eshell/lcd (&optional directory)
+    (interactive)
+    (if (file-remote-p default-directory)
+        (with-parsed-tramp-file-name default-directory nil
+          (eshell/cd (tramp-make-tramp-file-name
+                      (tramp-file-name-method v)
+                      (tramp-file-name-user v)
+                      (tramp-file-name-domain v)
+                      (tramp-file-name-host v)
+                      (tramp-file-name-port v)
+                      (or directory "")
+                      (tramp-file-name-hop v))))
+      (eshell/cd directory)))
+#+end_src
+** Background Processes
+Manage background services
+#+begin_src emacs-lisp
+  (use-package! prodigy
+    :defer 2
     :config
-    (require 'gnutls)
 
-    (setq weechat-host-default "git.phoenixinquis.net")
-    (setq weechat-port-default 9001)
-    (setq weechat-mode-default 'ssl)
-    (setq weechat-auto-monitor-buffers t)
-    (setq weechat-modules '(weechat-button
-                            weechat-complete
-                            weechat-alert
-                            weechat-tracking
-                            weechat-image
-                            weechat-speedbar))
-    (setq weechat-tracking-types
-        '(("^[[:alnum:]]+\\.#" . :highlight)
-          ("^[[:alnum:]]+\\.[^#]" . :message)))
-    (use-package! weechat-alert)
+    (global-set-key (kbd "<f7>") 'prodigy)
 
+    (prodigy-define-tag
+     :name 'work)
+    (prodigy-define-tag
+     :name 'personal)
 
-    ;; Dangit, powerline. Adding to global-mode-string so tracking shows up
-    ;; (unless (memq 'tracking-mode-line-buffers global-mode-string)
-    ;;   (setq global-mode-string
-    ;;         (-insert-at 1 'tracking-mode-line-buffers global-mode-string)))
-    )
+    ;; https://martinralbrecht.wordpress.com/2016/05/30/handling-email-with-emacs/
+    (when (executable-find "imapnotify")
+      (prodigy-define-tag
+        :name 'email
+        :ready-message "Checking Email using IMAP IDLE. Ctrl-C to shutdown.")
+      (prodigy-define-service
+        :name "imapnotify-work"
+        :command "imapnotify"
+        :args (list "-c" (expand-file-name "~/.config/imap_inotify/work.js"))
+        :tags '(email work autostart)
+        :kill-signal 'sigkill)
+      (unless (string-equal "croush" (user-login-name))
+        (prodigy-define-service
+          :name "imapnotify-personal"
+          :command "imapnotify"
+          :args (list "-c" (expand-file-name "~/.config/imap_inotify/personal.js"))
+          :tags '(email personal autostart)
+          :kill-signal 'sigkill)))
+    (when (f-exists? (expand-file-name "~/code/elm-dashboard"))
+      (prodigy-define-service
+        :name "elm-dashboard"
+        :command "python"
+        :args '("-m" "SimpleHTTPServer" "3000")
+        :cwd (expand-file-name "~/code/elm-dashboard")
+        :tags '(personal elm)
+        :stop-signal 'sigkill
+        :kill-process-buffer-on-stop t))
+    (when (f-exists? (expand-file-name "~/git/www"))
+      (prodigy-define-service
+        :name "AWeber WWW"
+        :command "npm"
+        :args '("start")
+        :cwd (expand-file-name "~/git/www")
+        :tags '(work)))
+    (when (f-exists? (expand-file-name "~/Public/org"))
+      (prodigy-define-service
+        :name "Org Documents"
+        :command "python"
+        :args '("-m" "http.server" "3001")
+        :cwd (expand-file-name "~/Public/org")
+        :tags '(work autostart)
+        :kill-signal 'sigkill))
+    (mapcar
+     #'prodigy-start-service
+     (-concat (prodigy-services-tagged-with 'autostart))))
 #+end_src
-* Kanji Mode
-Minor mode for displaying Japanese characters' stroke orders.
-
+** UUID Generation
 #+begin_src emacs-lisp
-  (use-package! kanji-mode
-    :commands kanji-mode)
+  (use-package! uuidgen
+    :commands (uuidgen))
 #+end_src
-* Kanji Glasses Mode
-Study kanji by overlaying hiragana readings.
+* Operating Systems
+** Linux
+*** EXWM
+**** Set Emacs + EXWM as the default X window manager
 
-#+begin_src emacs-lisp
-  (use-package! kanji-glasses-mode
-    :commands kanji-glasses-mode)
+#+begin_src sh :tangle ~/.dmrc
+[Desktop]
+session=~/.doom.d/start-exwm.sh
 #+end_src
-* Nov Epub reader
-#+begin_src emacs-lisp
-  (use-package! nov
-    :mode ("\\.epub\\'" . nov-mode)
-    :config
-    (setq nov-save-place-file (concat doom-cache-dir "nov-places")))
+
+#+begin_src sh :tangle start-exwm.sh :shebang #!/bin/sh
+emacs -mm -l ~/.doom.d/exwm.el
 #+end_src
-* Editing binary-compressed plist files in OSX
+**** Configure EXWM
+- Sets the desktop background
+- Starts a bar/system tray and various applets
+- Sets up workspaces
+- Names X window buffers based on which application is running
+#+begin_src emacs-lisp :tangle exwm.el
+(defun my/exwm-update-class ()
+  (exwm-workspace-rename-buffer exwm-class-name))
+(defun my/run-in-background (command)
+  (let ((command-parts (split-string command "[ ]+")))
+    (apply #'call-process `(,(car command-parts) nil 0 nil ,@(cdr command-parts)))))
+(defun my/set-desktop-background ()
+  (interactive)
+  (start-process-shell-command "feh" nil "feh --bg-scale ~/Pictures/Wallpapers/1520742811045.png"))
+(defun my/exwm-init-hook ()
+  ;; Start tint2 bar
+  (my/run-in-background "tint2")
+  ;; Start system tray applets
+  (my/run-in-background "nm-applet")
+  (my/run-in-background "pasystray")
+  (my/run-in-background "blueman-applet")
+  (my/run-in-background "nextcloud --background")
+  (my/run-in-background "compton"))
+(use-package! exwm
+  :config
+  (setq exwm-input-global-keys
+        `(([?\s-r] . exwm-reset)
+          ([?\s-w] . exwm-workspace-switch)
+          ,@(mapcar (lambda (i)
+                      `(,(kbd (format "s-%d" i)) .
+                        (lambda ()
+                          (interactive)
+                          (exwm-workspace-switch-create ,(- i 1)))))
+                    (number-sequence 1 9))
+          ([?\s-&] . (lambda (command)
+                       (interactive (list (read-shell-command "$ ")))
+                       (start-process-shell-command command nil command)))))
+  (setq exwm-workspace-number 4)
+  (exwm-input-set-key (kbd "s-SPC") #'counsel-linux-app)
+  (add-hook! 'exwm-update-class-hook #'my/exwm-update-class)
+  (add-hook! 'exwm-init-hook #'my/exwm-init-hook)
+  (my/set-desktop-background)
+  (exwm-enable))
+(use-package! exwm-config
+  :after exwm)
+(use-package! desktop-environment
+  :after exwm
+  :config
+  (desktop-environment-mode))
+#+end_src
+***** Application launcher
+Use counsel as an application launcher. Scans for =.desktop= files in all the
+usual places.
+#+begin_src emacs-lisp
+(use-package! counsel
+  :custom (counsel-linux-app-format-function #'counsel-linux-app-format-function-name-only)
+  :config (counsel-mode 1))
+#+end_src
+** OSX
+*** Editing binary-compressed plist files
 From https://www.emacswiki.org/emacs/MacOSXPlist#toc1
 #+begin_src emacs-lisp
   ;; Allow editing of binary .plist files.
