@@ -14,7 +14,7 @@ function _brew {
 function _brew_cask {
     local pkg=$1
     if ! brew cask list $pkg >/dev/null 2>&1; then
-        _run "[brew cask] Install $pkg" brew cask install $@
+        _run "[brew cask] Install $pkg" brew install --cask $@
     else
         echo "[brew cask] $pkg is already installed, skipping."
     fi
