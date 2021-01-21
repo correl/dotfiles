@@ -2,6 +2,88 @@
 # Description: Email syncing tools plus the mu4e client
 set -e
 
+__MAXMESSAGES=100
+
+function __certificatefile {
+    for path in \
+        /usr/local/etc/ssl \
+        /usr/local/etc/openssl \
+        /usr/local/etc/openssl@1.1 \
+        /etc/ssl \
+        /etc/openssl \
+        ; do
+
+        for certfile in \
+            cert.pem \
+            certs/ca-certificates.crt \
+            ; do
+
+            if test -f "${path}/${certfile}"; then
+                echo "${path}/${certfile}"
+                return
+            fi
+        done
+    done
+}
+
+function __mbsync_config {
+    cat > ${HOME}/.mbsyncrc <<EOF
+IMAPAccount personal
+Host imap.gmail.com
+User correl@gmail.com
+PassCmd "pass accounts.google.com/correl@gmail.com | grep ^isync: | awk '{print \$2}'"
+AuthMechs LOGIN
+SSLType IMAPS
+SSLVersions TLSv1.2
+CertificateFile $(__certificatefile)
+
+IMAPStore personal-remote
+Account personal
+
+MaildirStore personal-local
+Subfolders Verbatim
+Path ~/Mail/Personal/
+Inbox ~/Mail/Personal/INBOX
+
+Channel personal
+Master :personal-remote:
+Slave :personal-local:
+MaxMessages ${__MAXMESSAGES}
+ExpireUnread yes
+Patterns "INBOX" "[Gmail]/Drafts" "[Gmail]/Sent Mail" "[Gmail]/Starred" "[Gmail]/All Mail" "[Gmail]/Chats" "[Gmail]/Trash"
+Create Both
+Expunge Both
+SyncState *
+
+IMAPAccount work
+Host imap.gmail.com
+User correlr@aweber.com
+PassCmd "pass Work/aweber/accounts.google.com/correlr@aweber.com | grep ^isync: | awk '{print \$2}'"
+AuthMechs LOGIN
+SSLType IMAPS
+SSLVersions TLSv1.2
+CertificateFile $(__certificatefile)
+
+IMAPStore work-remote
+Account work
+
+MaildirStore work-local
+Subfolders Verbatim
+Path ~/Mail/Work/
+Inbox ~/Mail/Work/INBOX
+
+Channel work
+Master :work-remote:
+Slave :work-local:
+MaxMessages ${__MAXMESSAGES}
+ExpireUnread yes
+Patterns "INBOX" "AWeber Times" "[Gmail]/Drafts" "[Gmail]/Sent Mail" "[Gmail]/Starred" "[Gmail]/All Mail" "[Gmail]/Chats" "[Gmail]/Trash"
+Create Both
+Expunge Both
+SyncState *
+EOF
+}
+
 _recipe emacs
 case $_PLATFORM in
     darwin)
@@ -44,6 +126,12 @@ case $_PLATFORM in
         ;;
 esac
 
-_run "[email] Creating mail directories" mkdir -p Mail/{Personal,Work,.attachments}
+_run "[email] Creating mail directories" mkdir -p ${HOME}/Mail/{Personal,Work,.attachments}
+_run "[email] Configuring mbsync" __mbsync_config
+_run "[email] Initializing mail database" mu init -m Mail \
+    --my-address=correl@gmail.com \
+    --my-address=correlr@aweber.com \
+    --my-address=correlr@aweber.net
+_run "[email] Indexing mail" mu index
 _recipe nvm
 _npm imapnotify
