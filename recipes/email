@@ -128,7 +128,7 @@ esac
 
 _run "[email] Creating mail directories" mkdir -p ${HOME}/Mail/{Personal,Work,.attachments}
 _run "[email] Configuring mbsync" __mbsync_config
-_run "[email] Initializing mail database" mu init -m Mail \
+_run "[email] Initializing mail database" mu init -m ${HOME}/Mail \
     --my-address=correl@gmail.com \
     --my-address=correlr@aweber.com \
     --my-address=correlr@aweber.net
