@@ -1,3 +1,4 @@
 config.el
 exwm.el
 polybar.conf
+start-exwm.sh
