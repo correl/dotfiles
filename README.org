@@ -1,0 +1,53 @@
+#+TITLE: Correl's Dotfiles
+#+STARTUP: indent
+
+My personal configuration files and installation scripts.
+
+* Emacs Configuration
+I use [[https://github.com/hlissner/doom-emacs][Doom Emacs]] with a handful of additional packages. My configuration lives
+in the [[file:.doom.d/][.doom.d]] folder in the following three files:
+
+- [[file:.doom.d/init.el][init.el]] :: Sets up Doom Emacs with the modules I want available.
+- [[file:.doom.d/packages.el][packages.el]] :: Contains all of the additional packages that I install.
+- [[file:.doom.d/config.org][config.org]] :: My literate configuration file containing all of my
+  customization. Check this out if you want to see how I set things up.
+* Provisioning
+Rather than attempting to remember what I which applications I want installed
+and how I have to install them on my machines, I've scripted them into a set of
+"recipes" that I can easily execute to get my environment set up. Think
+something like Chef or Ansible, except hacked together in bash.
+
+Simply by cloning this repository and running [[file:provision.sh][./provision.sh]], I can turn any OSX
+or Ubuntu machine (typically my work laptop and personal Chromebook running
+[[https://galliumos.org/][GalliumOS]]) into a comfortably familiar [[file:recipes/base][basic environment]] with [[file:recipes/zsh][zsh]], [[file:recipes/git][git]], [[file:recipes/emacs][emacs]],
+my [[file:recipes/bin][personal scripts]], and my favorite [[file:recipes/shell-utils][command-line utilities]].
+
+Once the [[file:recipes/base][base]] (or, at the very least, [[file:recipes/bin][bin]]) recipe has been installed, the
+provisioning tool is available in my path as =dotfiles=, which I can then
+execute to install other recipes as I need them.
+
+Most (but not all!) of the recipes are built to support both OSX and Ubuntu (or
+other Debian-based distributions). I've preferred =brew= when possible for OSX,
+and =apt= for Ubuntu (as linuxbrew is slow and eats up way too much space on my
+Chromebook).
+
+** Setup
+- Clone this repository to =~/dotfiles= (some recipes depend on this location,
+  sorry).
+- Run =./provision.sh= with no arguments for the base installation, or
+  =./provision.sh bin= for the minimum (which simply adds =${HOME}/dotfiles/bin=
+  to the PATH).
+** Usage
+: dotfiles [OPTION]... [RECIPE]...
+
+Provision one or more dotfiles RECIPEs.
+
+*** Options:
+- -A, --all :: Install all available recipes.
+- -D, --debug :: Enable debug logging, including command output for each step.
+- -h, --help :: Display this help text and exit.
+- -l, --list :: Display all available recipes and exit.
+- -r, --restart :: Restart the shell upon completion.
+
+If no =RECIPE= is provided (and the =-A/--all= flag is not set), the [[file:recipes/base][base]] recipe
+will be provisioned.
