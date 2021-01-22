@@ -23,7 +23,6 @@ case $_PLATFORM in
 
         # File compression
         _brew p7zip
-        _brew unrar
 
         # Misc
         _brew entr
@@ -31,6 +30,7 @@ case $_PLATFORM in
         _brew htop
         _brew jq
         _brew lnav
+        _brew ripgrep
         _brew the_silver_searcher
         _brew tig
         _brew tmux
@@ -52,7 +52,6 @@ case $_PLATFORM in
 
         # File compression
         _apt p7zip
-        _apt unrar
 
         # Misc
         _apt entr
@@ -60,6 +59,7 @@ case $_PLATFORM in
         _apt htop
         _apt jq
         _apt lnav
+        _apt ripgrep
         _apt silversearcher-ag
         _apt tig
         _apt tmux

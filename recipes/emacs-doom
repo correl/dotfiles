@@ -16,4 +16,4 @@ if ! [ -d ${HOME}/.doom.d ]; then
     _run "[emacs-doom] Install .doom.d" ln -s ${HOME}/dotfiles/.doom.d ${HOME}/.doom.d
 fi
 
-_run "[emacs-doom] Refreshing" $HOME/.emacs.d/bin/doom refresh
+_run "[emacs-doom] Refreshing" $HOME/.emacs.d/bin/doom sync
