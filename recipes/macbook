@@ -1,0 +1,35 @@
+#!/bin/bash
+# Description: Work Macbook setup
+set -e
+
+_recipe base
+
+_recipe elixir
+_recipe emacs-doom
+_recipe email
+_recipe gnuplot
+_recipe graphviz
+_recipe kubernetes
+_recipe nextcloud
+_recipe nvm
+_recipe pandoc
+_recipe password-store
+_recipe python
+_recipe tex
+_recipe yabai
+
+# Install required python versions
+_pyenv 2.7.17
+_pyenv 3.8.2
+_pyenv 3.9.1
+
+# Needed for psycopg2
+_recipe _path
+_recipe brew
+
+_brew openssl
+_brew postgresql
+_profile 'export LIBRARY_PATH="$(brew --prefix openssl)/lib"'
+_profile 'export LDFLAGS="-L$(brew --prefix openssl)/lib"'
+_profile 'export CPPFLAGS="-I$(brew --prefix openssl)/include"'
+_profile 'export PKG_CONFIG_PATH="$(brew --prefix openssl)/lib/pkgconfig"'
