@@ -15,6 +15,7 @@
 (package! kanji-glasses-mode :recipe (:host github :repo "correl/kanji-glasses-mode"))
 (package! kanji-mode)
 (package! kerl :recipe (:host github :repo "correl/kerl.el"))
+(package! keypression)
 (package! kubernetes)
 (package! kubernetes-tramp)
 (package! migemo)
