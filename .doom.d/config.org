@@ -1143,6 +1143,16 @@ Configure MU4E to read email synced from my personal and work accounts.
     (setq mu4e-user-mail-address-list '("correlr@aweber.com"
                                         "correl@gmail.com")))
 #+end_src
+
+Prefer sending HTML-formatted messages with plain text as a fallback option
+(alternative formats should be specified in increasing level of preference per
+[[https://www.w3.org/Protocols/rfc1341/7_2_Multipart.html][RFC-1341]]).
+
+#+begin_src emacs-lisp
+(use-package! org-msg
+  :config
+  (setq org-msg-default-alternatives '(text html)))
+#+end_src
 ** Chat
 Connect to my weechat instance for IRC and other services that I've linked it to
 using Bitlbee.
