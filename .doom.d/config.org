@@ -1111,6 +1111,7 @@ Configure MU4E to read email synced from my personal and work accounts.
                          (mu4e-compose-signature . ,(with-temp-buffer
                                                       (insert-file-contents "~/.signature-aweber")
                                                       (buffer-string)))
+                         (smtpmail-smtp-user . "correlr@aweber.com")
                          (smtpmail-smtp-server . "smtp.gmail.com")
                          (smtpmail-smtp-service . 465)
                          (smtpmail-stream-type . ssl)))))
@@ -1132,10 +1133,12 @@ Configure MU4E to read email synced from my personal and work accounts.
                 (mu4e-compose-signature . ,(with-temp-buffer
                                              (insert-file-contents "~/.signature")
                                              (buffer-string)))
+                (smtpmail-smtp-user . "correl@gmail.com")
                 (smtpmail-smtp-server . "smtp.gmail.com")
                 (smtpmail-smtp-service . 465)
                 (smtpmail-stream-type . ssl)))))
     (setq mu4e-context-policy 'pick-first)
+    (setq mu4e-compose-context-policy 'ask)
     (setq mu4e-compose-dont-reply-to-self t)
     (setq mu4e-user-mail-address-list '("correlr@aweber.com"
                                         "correl@gmail.com")))
