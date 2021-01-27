@@ -77,7 +77,7 @@ Master :work-remote:
 Slave :work-local:
 MaxMessages ${__MAXMESSAGES}
 ExpireUnread yes
-Patterns "INBOX" "AWeber Times" "[Gmail]/Drafts" "[Gmail]/Sent Mail" "[Gmail]/Starred" "[Gmail]/All Mail" "[Gmail]/Chats" "[Gmail]/Trash"
+Patterns "INBOX" "AWeber Times" "Jira" "[Gmail]/Drafts" "[Gmail]/Sent Mail" "[Gmail]/Starred" "[Gmail]/All Mail" "[Gmail]/Chats" "[Gmail]/Trash"
 Create Both
 Expunge Both
 SyncState *
