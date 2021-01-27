@@ -1141,6 +1141,8 @@ Configure MU4E to read email synced from my personal and work accounts.
     (setq mu4e-compose-context-policy 'ask)
     (setq mu4e-compose-dont-reply-to-self t)
     (setq mu4e-index-lazy-check nil)
+    (setq mu4e-headers-include-related nil)
+    (setq mu4e-headers-skip-duplicates t)
     (setq mu4e-user-mail-address-list '("correlr@aweber.com"
                                         "correl@gmail.com")))
 #+end_src
