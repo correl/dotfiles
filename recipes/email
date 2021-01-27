@@ -111,18 +111,20 @@ case $_PLATFORM in
         done
         dir=`mktemp -d` && \
             pushd $dir >/dev/null
-        echo "[tgz] Fetching mu"
-        curl -sL https://github.com/djcb/mu/archive/master.tar.gz \
-            | tar xz --strip 1 && \
-            echo "[tgz] Configuring mu" && \
-            ./autogen.sh >/dev/null 2>&1 && \
-            ./configure --prefix=/usr >/dev/null 2>&1 && \
-            echo "[tgz] Building mu" && \
-            make >/dev/null 2>&1 && \
-            echo "[tgz] Installing mu" && \
-            sudo make install >/dev/null 2>&1
-        popd >/dev/null
-        rm -rf "$dir"
+        if ! command -v mu >/dev/null; then
+            echo "[tgz] Fetching mu"
+            curl -sL https://github.com/djcb/mu/archive/master.tar.gz \
+                | tar xz --strip 1 && \
+                echo "[tgz] Configuring mu" && \
+                ./autogen.sh >/dev/null 2>&1 && \
+                ./configure --prefix=/usr >/dev/null 2>&1 && \
+                echo "[tgz] Building mu" && \
+                make >/dev/null 2>&1 && \
+                echo "[tgz] Installing mu" && \
+                sudo make install >/dev/null 2>&1
+            popd >/dev/null
+            rm -rf "$dir"
+        fi
         ;;
 esac
 
