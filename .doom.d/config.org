@@ -131,7 +131,7 @@ Calibre library, which I regularly export and keep synced via Nextcloud.
 Configure a variety of options and tools for [[https://orgmode.org][Org Mode]], the markup I use for
 everything from simple notes to task management.
 
-#+begin_src emacs-lisp :noweb yes :tangle yes :noweb-ref org-all
+#+begin_src emacs-lisp :noweb yes :tangle "config.el" :noweb-ref org-all
   (after! org
     <<org>>)
 #+end_src
