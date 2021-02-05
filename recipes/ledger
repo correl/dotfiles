@@ -7,7 +7,11 @@ case $_PLATFORM in
         _recipe brew
         _brew ledger
         ;;
-    *)
+    arch)
+        _recipe _arch
+        _pacman ledger
+        ;;
+    debian)
         _recipe _apt
         _ppa mbudde/ledger
         _apt ledger

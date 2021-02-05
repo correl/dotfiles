@@ -10,7 +10,11 @@ case $_PLATFORM in
         _recipe brew
         _brew git
         ;;
-    *)
+    arch)
+        _recipe _arch
+        _pacman git
+        ;;
+    debian)
         _recipe _apt
         _ppa git-core/ppa
         _apt git

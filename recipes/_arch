@@ -1,0 +1,29 @@
+#!/bin/bash
+# Description: Arch Package Manager
+set -e
+
+function _pacman {
+    local pkg=$1
+    if ! pacman -Qi $pkg >/dev/null 2>&1; then
+        if [ -z "$__pacman_updated" ]; then
+            _run "[pacman] Synchronizing package databases" sudo pacman -Syy
+            __pacman_updated=yes
+        fi
+        _run "[pacman] Install $pkg" sudo pacman -S --noconfirm $pkg
+    else
+        echo "[pacman] $pkg is already installed, skipping."
+    fi
+}
+
+function _yay {
+    local pkg=$1
+    if ! yay -Qi $pkg >/dev/null 2>&1; then
+        if [ -z "$__yay_updated" ]; then
+            _run "[yay] Synchronizing package databases" yay -Syy
+            __pacman_updated=yes
+        fi
+        _run "[yay] Install $pkg" yay -S --noconfirm $pkg
+    else
+        echo "[yay] $pkg is already installed, skipping."
+    fi
+}

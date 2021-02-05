@@ -7,7 +7,11 @@ case $_PLATFORM in
         _recipe brew
         _brew graphviz
         ;;
-    *)
+    arch)
+        _recipe _arch
+        _pacman graphviz
+        ;;
+    debian)
         _recipe _apt
         _apt graphviz
         ;;

@@ -2,12 +2,35 @@
 # Description: Document typesetting
 set -e
 
-case "$(uname -s)" in
-    Darwin)
+__tex_init="tlmgr init-usertree 2>/dev/null || true"
+__tex_info="tlmgr --usermode info --only-installed"
+__tex_install="tlmgr --usermode install"
+
+case "$_PLATFORM" in
+    darwin)
         _recipe brew
         _brew_cask mactex
         ;;
-    *)
+    arch)
+        _recipe _arch
+        _pacman texlive-bibtexextra
+        _pacman texlive-core
+        _pacman texlive-fontsextra
+        _pacman texlive-formatsextra
+        _pacman texlive-games
+        _pacman texlive-humanities
+        _pacman texlive-latexextra
+        _pacman texlive-music
+        _pacman texlive-pictures
+        _pacman texlive-pstricks
+        _pacman texlive-publishers
+        _pacman texlive-science
+        _yay tllocalmgr-git
+        __tex_init=""
+        __tex_info="tllocalmgr info --localsearch"
+        __tex_install="yes | tllocalmgr install"
+        ;;
+    debian)
         _recipe _apt
         # Install texlive if it isn't already available (e.g. a local or
         # portable installation).
@@ -21,12 +44,12 @@ case "$(uname -s)" in
         _apt xzdec
 esac
 
-tlmgr init-usertree 2>/dev/null || true
+$__tex_init
 
 function _tex {
     local pkg=$1
-    if ! tlmgr --usermode info --only-installed $pkg | grep -i '^installed:.*Yes$' >/dev/null 2>&1; then
-        _run "[tex] Install $pkg" tlmgr --usermode install $@
+    if ! $__tex_info $pkg | grep -i '^installed:.*Yes$' >/dev/null 2>&1; then
+        _run "[tex] Install $pkg" bash -c "$__tex_install $@"
     else
         echo "[tex] $pkg is already installed, skipping."
     fi
@@ -40,7 +63,7 @@ function _tex_git {
     local install_path="$(kpsewhich -var-value TEXMFHOME)/tex/latex/${pkg}"
     if [[ ! -d "${install_path}" ]]; then
         _git $2 "$(kpsewhich -var-value TEXMFHOME)/git/latex/${pkg}"
-        _run "[tex] Install $pkg" ln -s "${clone_path}/${repo_path}" "${install_path}"
+        _run "[tex] Install $pkg" mkdir -p "${install_path}" && ln -s "${clone_path}/${repo_path}" "${install_path}"
     else
         echo "[tex] $pkg is already installed, skipping."
     fi

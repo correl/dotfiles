@@ -6,7 +6,11 @@ case $_PLATFORM in
     darwin)
         _brew elixir
         ;;
-    *)
+    arch)
+        _recipe _arch
+        _pacman elixir
+        ;;
+    debian)
         _recipe _apt
 
         _apt_source "deb https://packages.erlang-solutions.com/ubuntu $(lsb_release -cs) contrib"

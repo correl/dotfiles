@@ -110,6 +110,16 @@ function _recipe {
 USER=${USER:-$(whoami)}
 _PLATFORM=$(uname -s | awk '{print tolower($1)}')
 
+case $_PLATFORM in
+    linux)
+        if [ -f /etc/arch-release ]; then
+            _PLATFORM=arch
+        elif [ -f /etc/debian_version ]; then
+            _PLATFORM=debian
+        fi
+        ;;
+esac
+
 if [ "${#INSTALL[@]}" -eq 0 ]; then
     INSTALL=(base)
 fi

@@ -91,7 +91,12 @@ case $_PLATFORM in
         _brew isync
         EMACS=$(which emacs) _brew mu --HEAD
         ;;
-    *)
+    arch)
+        _recipe _arch
+        _pacman isync
+        _yay mu
+        ;;
+    debian)
         _recipe _apt
         for dep in \
             build-essential \

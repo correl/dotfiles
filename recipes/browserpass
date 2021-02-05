@@ -25,6 +25,11 @@ case $_PLATFORM in
         test -e /Applications/Google\ Chrome.app && _browserpass chrome
         test -e /Applications/Firefox.app && _browserpass firefox
         ;;
+    arch)
+        _recipe _arch
+        which chromium 2>&1 >/dev/null && _pacman browserpass-chromium
+        which firefox 2>&1 >/dev/null && _pacman browserpass-firefox
+        ;;
     *)
         if ! test -d ~/.local/lib/browserpass; then
             echo "[curl] Downloading browserpass native"

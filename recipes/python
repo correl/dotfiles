@@ -31,7 +31,12 @@ case $_PLATFORM in
         _brew pyenv
         _brew pyenv-virtualenv
         ;;
-    *)
+    arch)
+        _recipe _arch
+        _pacman pyenv
+        _yay pyenv-virtualenv
+        ;;
+    debian)
         _recipe _apt
         for dep in make build-essential libssl-dev zlib1g-dev libbz2-dev \
                         libreadline-dev libsqlite3-dev wget curl llvm  \

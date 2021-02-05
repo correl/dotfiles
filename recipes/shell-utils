@@ -43,7 +43,28 @@ case $_PLATFORM in
             _path $path \;
         done
         ;;
-    *)
+    arch)
+        _recipe _arch
+
+        # File browsing
+        _pacman tree
+        _pacman ncdu
+
+        # File compression
+        _pacman p7zip
+
+        # Misc
+        _pacman entr
+        _yay html-xml-utils
+        _pacman htop
+        _pacman jq
+        _yay lnav
+        _pacman ripgrep
+        _pacman the_silver_searcher
+        _pacman tig
+        _pacman tmux
+        ;;
+    debian)
         _recipe _apt
 
         # File browsing

@@ -8,7 +8,11 @@ case $_PLATFORM in
         _brew_tap railwaycat/emacsmacport
         _brew emacs-mac --with-modern-icon
         ;;
-    linux)
+    arch)
+        _recipe _arch
+        _pacman emacs
+        ;;
+    debian)
         _recipe _apt
         _ppa kelleyk/emacs
         _apt emacs27

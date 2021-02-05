@@ -7,7 +7,11 @@ case $_PLATFORM in
         _recipe brew
         _brew gnuplot
         ;;
-    *)
+    arch)
+        _recipe _arch
+        _pacman gnuplot
+        ;;
+    debian)
         _recipe _apt
         _apt gnuplot
         ;;

@@ -2,12 +2,16 @@
 # Description: Terminal emulator mimicing old cathode tube screens
 set -e
 
-case "$(uname -s)" in
-    Darwin)
+case "$_PLATFORM" in
+    darwin)
         _recipe brew
         _brew_cask cool-retro-term
         ;;
-    *)
+    arch)
+        _recipe _arch
+        _pacman cool-retro-term
+        ;;
+    debian)
         _recipe _apt
         _ppa vantuz/cool-retro-term
         _apt cool-retro-term

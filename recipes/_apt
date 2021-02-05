@@ -1,4 +1,5 @@
 #!/bin/bash
+# Description: Debian Package Manager
 set -e
 
 function _apt {

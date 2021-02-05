@@ -7,7 +7,7 @@ case $_PLATFORM in
         _recipe brew
         _brew cmigemo
         ;;
-    linux)
+    debian)
         _recipe _apt
         _apt kakasi
         _apt cmigemo

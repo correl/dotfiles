@@ -29,13 +29,17 @@ function _brew_tap {
     fi
 }
 
-case "$(uname -s)" in
-    Darwin)
+case $_PLATFORM in
+    darwin)
         if ! which brew >/dev/null; then
             _run "Install brew" /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
         fi
         ;;
-    *)
+    arch)
+        _recipe _arch
+        _yay brew-git
+        ;;
+    debian)
         _recipe _apt
         _recipe _path
 

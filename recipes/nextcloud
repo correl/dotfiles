@@ -9,7 +9,11 @@ case $_PLATFORM in
         _brew_cask nextcloud
         _path /Applications/nextcloud.app/Contents/MacOS
         ;;
-    *)
+    arch)
+        _recipe _arch
+        _pacman nextcloud-client
+        ;;
+    debian)
         _recipe _apt
         _ppa nextcloud-devs/client
         _apt nextcloud-client
