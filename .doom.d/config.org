@@ -1009,6 +1009,46 @@ Makes for a much nicer note-taking experience.
 
   (add-hook! 'org-mode-hook #'my/org-roam-writeroom)
 #+end_src
+**** Provide seamless switching between org-roam slipboxes
+When we visit a buffer in a different slip box (different =org-roam-directory=)
+than we were visiting previously, ensure the cache is updated.
+
+#+begin_src emacs-lisp
+  (defvar my/org-roam-directory-cache (list (expand-file-name org-roam-directory)
+                                            (expand-file-name org-roam-db-location)))
+
+  (after! savehist
+  (add-to-list 'savehist-additional-variables
+               'my/org-roam-directory-cache))
+
+  (defun my/org-roam-directory--update ()
+    (plist-put! my/org-roam-directory-cache
+                org-roam-directory
+                org-roam-db-location))
+
+  (add-hook! 'org-roam-buffer-prepare-hook #'my/org-roam-directory--update)
+
+  (defun my/org-roam-find-in-directory ()
+    (interactive)
+    (let* ((org-roam-directory (completing-read "Roam Directory"
+                                                (plist-get-keys my/org-roam-directory-cache)))
+           (org-roam-db-location (plist-get my/org-roam-directory-cache
+                                            org-roam-directory)))
+      (org-roam-find-file)))
+
+  (map! :leader
+        (:prefix-map ("n" . "notes")
+         (:prefix ("r" . "roam")
+          :desc "Find file in slipbox" "F" #'my/org-roam-find-in-directory)))
+#+end_src
+
+When setting up additional slipboxes, be sure to set both =org-roam-directory=
+/and/ =org-roam-db-location=. An example =.dir-locals.el=:
+
+#+begin_example
+((nil . ((eval . (setq-local org-roam-directory (expand-file-name "./")
+                             org-roam-db-location (expand-file-name "./org-roam.db"))))))
+#+end_example
 *** Sidebar
 Display a sidebar with file-local todos and scheduling.
 
