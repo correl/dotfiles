@@ -1071,6 +1071,14 @@ Show linked org document sections inline.
            ("C-c l v t" . org-transclusion-mode))
     :commands (org-transclusion-mode))
 #+end_src
+** ReStructuredText
+#+begin_src emacs-lisp
+  (use-package! polymode
+    :defer t)
+
+  (use-package! poly-rst
+    :mode ("\\.rst\\'" . poly-rst-mode))
+#+end_src
 ** Unfill
 Does the opposite of =fill (M-q)=, removing line breaks from a paragraph or
 region.

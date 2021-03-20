@@ -40,6 +40,8 @@
 (package! weechat)
 (package! weechat-alert)
 (package! yapfify)
+(package! polymode)
+(package! poly-rst)
 
 ;; When using org-roam via the `+roam` flag
 (unpin! org-roam company-org-roam)
