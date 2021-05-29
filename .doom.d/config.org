@@ -1509,6 +1509,14 @@ Manage background services
         :cwd (expand-file-name "~/Public/org")
         :tags '(work autostart)
         :kill-signal 'sigkill))
+    (when (f-exists? (expand-file-name "~/Public/roam"))
+      (prodigy-define-service
+        :name "Org Roam Documents"
+        :command "python"
+        :args '("-m" "http.server" "3002")
+        :cwd (expand-file-name "~/Public/roam")
+        :tags '(personal autostart)
+        :kill-signal 'sigkill))
     (mapcar
      #'prodigy-start-service
      (-concat (prodigy-services-tagged-with 'autostart))))
