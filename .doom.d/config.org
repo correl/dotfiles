@@ -1205,36 +1205,25 @@ Prefer sending HTML-formatted messages with plain text as a fallback option
   (setq org-msg-default-alternatives '(text html)))
 #+end_src
 ** Chat
-Connect to my weechat instance for IRC and other services that I've linked it to
-using Bitlbee.
-
+*** Circe
 #+begin_src emacs-lisp
-  (use-package! weechat
-    :commands weechat-connect
-    :config
-    (require 'gnutls)
-
-    (setq weechat-host-default "git.phoenixinquis.net")
-    (setq weechat-port-default 9001)
-    (setq weechat-mode-default 'ssl)
-    (setq weechat-auto-monitor-buffers t)
-    (setq weechat-modules '(weechat-button
-                            weechat-complete
-                            weechat-alert
-                            weechat-tracking
-                            weechat-image
-                            weechat-speedbar))
-    (setq weechat-tracking-types
-        '(("^[[:alnum:]]+\\.#" . :highlight)
-          ("^[[:alnum:]]+\\.[^#]" . :message)))
-    (use-package! weechat-alert)
-
-
-    ;; Dangit, powerline. Adding to global-mode-string so tracking shows up
-    ;; (unless (memq 'tracking-mode-line-buffers global-mode-string)
-    ;;   (setq global-mode-string
-    ;;         (-insert-at 1 'tracking-mode-line-buffers global-mode-string)))
-    )
+  (after! circe
+    (set-irc-server!
+     "liberachat"
+     `(:tls nil
+       :host "znc.phoenixinquis.is-a-geek.org"
+       :port 8667
+       :nick "correl"
+       :user "correl/liberachat"
+       :pass (lambda (&rest _) (+pass-get-secret "Social/znc.phoenixinquis.is-a-geek.org/correl"))))
+    (set-irc-server!
+     "twitch"
+     `(:tls nil
+       :host "znc.phoenixinquis.is-a-geek.org"
+       :port 8667
+       :nick "correl"
+       :user "correl/twitch"
+       :pass (lambda (&rest _) (+pass-get-secret "Social/znc.phoenixinquis.is-a-geek.org/correl")))))
 #+end_src
 ** Music
 Configure EMMS for playing music files on my computer.
