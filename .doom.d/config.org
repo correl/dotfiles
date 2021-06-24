@@ -1200,9 +1200,10 @@ Prefer sending HTML-formatted messages with plain text as a fallback option
 [[https://www.w3.org/Protocols/rfc1341/7_2_Multipart.html][RFC-1341]]).
 
 #+begin_src emacs-lisp
-(use-package! org-msg
-  :config
-  (setq org-msg-default-alternatives '(text html)))
+  (use-package! org-msg
+    :config
+    (setq org-msg-default-alternatives '(text html)
+          org-msg-options "html-postamble:nil toc:nil author:nil email:nil ^:nil"))
 #+end_src
 ** Chat
 *** Circe
