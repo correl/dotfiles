@@ -164,7 +164,7 @@ TODOs, synced externally using Nextcloud.
 
           org-agenda-files (-filter #'f-exists?
                                     (-concat
-                                     (if (string-equal (system-name) "s1069.ofc.lair")
+                                     (if (string-equal (system-name) "s1326.ofc.lair")
                                          (cdr (assoc 'work my/agenda-files))
                                        (cdr (assoc 'personal my/agenda-files))))))
 
