@@ -1422,6 +1422,13 @@ Add some commands for interacting with Jira within org documents.
         "C-c j c" #'jira-api-create-issue-from-heading
         "C-c j u" #'jira-api-update-issue-from-heading)
 #+end_src
+** Source Control
+#+begin_src emacs-lisp
+  (after! forge
+    (add-to-list
+     'forge-alist
+     '("gitlab.aweber.io" "gitlab.aweber.io/api/v4" "gitlab.aweber.io" forge-gitlab-repository)))
+#+end_src
 ** Eshell
 *** Change directory in the context of a remote host
 Add an =lcd= command that functions similarly to =cd=, but is scoped to the
