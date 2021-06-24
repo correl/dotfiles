@@ -1014,26 +1014,32 @@ When we visit a buffer in a different slip box (different =org-roam-directory=)
 than we were visiting previously, ensure the cache is updated.
 
 #+begin_src emacs-lisp
-  (defvar my/org-roam-directory-cache (list (expand-file-name org-roam-directory)
-                                            (expand-file-name org-roam-db-location)))
+  (defvar my/org-roam-directory-cache (list
+                                       (cons (expand-file-name org-roam-directory)
+                                             (expand-file-name org-roam-db-location))))
 
   (after! savehist
   (add-to-list 'savehist-additional-variables
                'my/org-roam-directory-cache))
 
+  (defun my/org-roam-directory--lookup (path)
+    (alist-get path my/org-roam-directory-cache nil nil #'s-equals?))
+
   (defun my/org-roam-directory--update ()
-    (plist-put! my/org-roam-directory-cache
-                org-roam-directory
-                org-roam-db-location))
+    (setq my/org-roam-directory-cache
+          (cons (cons org-roam-directory org-roam-db-location)
+                (seq-filter
+                 (lambda (x) (not (s-equals? org-roam-directory (car x))))
+                 my/org-roam-directory-cache))))
 
   (add-hook! 'org-roam-buffer-prepare-hook #'my/org-roam-directory--update)
 
   (defun my/org-roam-find-in-directory ()
     (interactive)
     (let* ((org-roam-directory (completing-read "Roam Directory"
-                                                (plist-get-keys my/org-roam-directory-cache)))
-           (org-roam-db-location (plist-get my/org-roam-directory-cache
-                                            org-roam-directory)))
+                                                (mapcar #'car  my/org-roam-directory-cache)))
+           (org-roam-db-location (my/org-roam-directory--lookup
+                                  org-roam-directory)))
       (org-roam-find-file)))
 
   (map! :leader
