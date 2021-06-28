@@ -1306,7 +1306,9 @@ Read blogs and articles from the RSS feeds I follow.
 
     (defun my/elfeed-blogs ()
       (interactive)
-      (my/elfeed-with-filters  "@6-months-ago +unread +blog")))
+      (my/elfeed-with-filters  "@6-months-ago +unread +blog"))
+
+    (add-hook! 'elfeed-show-mode-hook #'mixed-pitch-mode))
 #+end_src
 ** Kubernetes
 Manage a Kubernetes cluster and set up remote shell/file access via TRAMP.
