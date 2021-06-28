@@ -573,7 +573,7 @@ Tell Emacs how to build the document collections I export to HTML.
            :base-directory "~/org-aweber"
            :base-extension "org"
            ;; :exclude "\\(^knowledge-transfer.org$\\|-archive.org$\\)"
-           :exclude "\\(^README.org$\\|roam/.*\\)"
+           :exclude "\\(^README.org$\\|^worklog\\|roam/.*\\)"
            :publishing-directory "~/Public/org"
            :publishing-function (my/org-work-publish-to-html
                                  org-org-publish-to-org
