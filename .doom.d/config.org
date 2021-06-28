@@ -8,6 +8,10 @@ I'm feeling the gruvbox theme lately.
 #+begin_src emacs-lisp
   (setq doom-theme 'doom-gruvbox)
 #+end_src
+** Default font
+#+begin_src emacs-lisp
+  (setq doom-font (font-spec :family "Inconsolata" :size 20))
+#+end_src
 ** Dashboard
 Customize the Doom Emacs dashboard with commissioned artwork, chosen randomly.
 The dashboard can be reloaded with the =g= key.
