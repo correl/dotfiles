@@ -110,6 +110,13 @@ Replace an s-expression with its value. Taken from [[http://emacsredux.com/blog/
 
   (global-set-key (kbd "C-)") 'eval-and-replace)
 #+end_src
+** Prompt for unsafe local variables
+Doom sets this to =:safe=, logging unsafe variables for later addressing. I'd
+rather continue to be prompted.
+
+#+begin_src emacs-lisp
+  (setq enable-local-variables t)
+#+end_src
 * Writing
 
 ** BibTeX
