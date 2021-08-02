@@ -155,8 +155,8 @@
                   +pandoc             ; pandoc integration into org's exporter
                   ;;+pomodoro        ; be fruitful with the tomato technique
                   +present    ; using Emacs for presentations
-                  +roam)      ; non-hierarchicial note-taking
                  php          ; perl's insecure younger brother
+                  +roam2)      ; non-hierarchicial note-taking
                  plantuml     ; diagrams for confusing people more
                  ;;purescript        ; javascript, but functional
                  (python +lsp +pyenv) ; beautiful is better than ugly
