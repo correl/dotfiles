@@ -191,7 +191,9 @@ TODOs, synced externally using Nextcloud.
              ((agenda "" ((org-agenda-span 'week)))
               (tags-todo "DEADLINE<=\"<+7d>\""
                          ((org-agenda-overriding-header "Due soon")))
-              (todo ""))
+              (todo ""
+                    ((org-agenda-overriding-header "Unscheduled")
+                     (org-agenda-skip-function '(org-agenda-skip-entry-if 'scheduled 'deadline)))))
 
              ((org-agenda-start-with-log-mode t)
               (org-agenda-start-day nil)
