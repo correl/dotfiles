@@ -1472,6 +1472,14 @@ paths and not worry about being bounced back to my local filesystem.
                       (tramp-file-name-hop v))))
       (eshell/cd directory)))
 #+end_src
+*** Disable company autocompletion on remote hosts
+#+begin_src emacs-lisp
+  (defun my/toggle-shell-autocomplete ()
+    (when (fboundp 'company-mode)
+      (company-mode (if (file-remote-p default-directory) -1 1))))
+  
+  (add-hook! 'eshell-directory-change-hook #'my/toggle-shell-autocomplete)
+#+end_src
 ** Background Processes
 Manage background services
 #+begin_src emacs-lisp
