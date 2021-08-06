@@ -22,6 +22,7 @@
 (package! mixed-pitch)
 (package! nov)
 (package! ob-http)
+(package! org-msg)
 (package! org-ref)
 (package! org-roam-bibtex :recipe (:host github :repo "org-roam/org-roam-bibtex"))
 (package! org-roam-server)
