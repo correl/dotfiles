@@ -25,7 +25,7 @@
 (package! org-msg)
 (package! org-ref)
 (package! org-roam-bibtex :recipe (:host github :repo "org-roam/org-roam-bibtex"))
-(package! org-roam-server)
+(package! org-roam-ui :recipe (:host github :repo "org-roam/org-roam-ui" :files ("*.el" "out")))
 (package! org-sidebar :recipe (:host github :repo "alphapapa/org-sidebar"))
 (package! org-sticky-header)
 (package! org-transclusion :recipe (:host github :repo "nobiot/org-transclusion"))
@@ -38,14 +38,12 @@
 (package! python-black)
 (package! unfill)
 (package! uuidgen)
+(package! websocket)
 (package! weechat)
 (package! weechat-alert)
 (package! yapfify)
 (package! polymode)
 (package! poly-rst)
-
-;; When using org-roam via the `+roam` flag
-(unpin! org-roam company-org-roam)
 
 ;; When using bibtex-completion via the `biblio` module
 (unpin! bibtex-completion helm-bibtex ivy-bibtex)
