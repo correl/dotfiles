@@ -868,6 +868,19 @@ Powerful cross-linked note-taking.
 
 https://orgroam.com
 
+**** Capture templates
+#+begin_src emacs-lisp
+  (setq org-roam-capture-templates
+        '(("d" "default" plain "%?" :if-new
+           (file+head "%<%Y%m%d%H%M%S>-${slug}.org" "#+title: ${title}
+  ")
+           :unnarrowed t)
+          ("w" "work" plain "%?" :if-new
+           (file+head "aweber/%<%Y%m%d%H%M%S>-${slug}.org" "#+title: ${title}
+  ")
+           :unnarrowed t)))
+#+end_src
+
 **** Add backlinks to org-roam exports
 
 Adapted from https://org-roam.readthedocs.io/en/master/org_export/.
