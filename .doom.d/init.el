@@ -119,8 +119,8 @@
                  ;;csharp            ; unity, .NET, and mono shenanigans
                  data         ; config/data formats
                  ;;(dart +flutter)   ; paint ui and not much else
-                 elixir               ; erlang done right
-                 elm                  ; care for a cup of TEA?
+                 (elixir +lsp)               ; erlang done right
+                 (elm +lsp)                  ; care for a cup of TEA?
                  emacs-lisp           ; drown in parentheses
                  ;;erlang            ; an elegant language for a more civilized age
                  ;;ess               ; emacs speaks statistics
@@ -134,7 +134,7 @@
                  ;;idris             ;
                  ;;json              ; At least it ain't XML
                  ;;(java +meghanada) ; the poster child for carpal tunnel syndrome
-                 javascript      ; all(hope(abandon(ye(who(enter(here))))))
+                 (javascript +lsp)      ; all(hope(abandon(ye(who(enter(here))))))
                  ;;julia             ; a better, faster MATLAB
                  ;;kotlin            ; a better, slicker Java(Script)
                  latex         ; writing papers in Emacs has never been so fun
@@ -155,8 +155,8 @@
                   +pandoc             ; pandoc integration into org's exporter
                   ;;+pomodoro        ; be fruitful with the tomato technique
                   +present    ; using Emacs for presentations
-                 php          ; perl's insecure younger brother
                   +roam2)      ; non-hierarchicial note-taking
+                 (php +lsp)          ; perl's insecure younger brother
                  plantuml     ; diagrams for confusing people more
                  ;;purescript        ; javascript, but functional
                  (python +lsp +pyenv) ; beautiful is better than ugly
