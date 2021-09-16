@@ -1040,8 +1040,9 @@ Makes for a much nicer note-taking experience.
     (add-hook 'hack-local-variables-hook
               (lambda ()
                 (when (and org-roam-directory
-                           (f-child-of? (or (buffer-file-name) default-directory)
-                                        (expand-file-name org-roam-directory)))
+                           (f-ancestor-of?
+                            (expand-file-name org-roam-directory)
+                            (or (buffer-file-name) default-directory)))
                   (writeroom-mode t)))
               nil t))
 
