@@ -1010,7 +1010,7 @@ Make it easy to take notes on books and papers that I'm reading.
     :after org-roam
     :hook (org-roam . org-roam-bibtex-mode)
     :bind (:map org-mode-map
-           (("C-c n r a" . orb-note-actions))))
+           (("C-c n r b" . orb-note-actions))))
 #+end_src
 **** Org Roam Server
 Provides a fun way to browse through a collection of notes.
