@@ -1128,13 +1128,6 @@ Download and use a recent version of [[https://github.com/stathissideris/ditaa][
       (setq org-ditaa-jar-path jar-path
             org-ditaa-eps-jar-path jar-path)))
 #+end_src
-
-Render using a transparent background.
-
-#+begin_src emacs-lisp
-  (after! ob-ditaa
-    (setq org-ditaa-jar-option "-jar -T"))
-#+end_src
 ** ReStructuredText
 #+begin_src emacs-lisp
   (use-package! polymode
