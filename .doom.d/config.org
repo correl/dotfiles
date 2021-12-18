@@ -1116,6 +1116,25 @@ Show linked org document sections inline.
            ("C-c l v t" . org-transclusion-mode))
     :commands (org-transclusion-mode))
 #+end_src
+*** Ditaa
+Download and use a recent version of [[https://github.com/stathissideris/ditaa][ditaa]] for rendering ASCII diagrams.
+
+#+begin_src emacs-lisp
+  (after! ob-ditaa
+    (let ((jar-url "https://github.com/stathissideris/ditaa/releases/download/v0.11.0/ditaa-0.11.0-standalone.jar")
+          (jar-path (concat doom-etc-dir "ditaa.jar")))
+      (unless (f-exists? jar-path)
+        (url-copy-file jar-url jar-path))
+      (setq org-ditaa-jar-path jar-path
+            org-ditaa-eps-jar-path jar-path)))
+#+end_src
+
+Render using a transparent background.
+
+#+begin_src emacs-lisp
+  (after! ob-ditaa
+    (setq org-ditaa-jar-option "-jar -T"))
+#+end_src
 ** ReStructuredText
 #+begin_src emacs-lisp
   (use-package! polymode
