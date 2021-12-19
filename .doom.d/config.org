@@ -134,6 +134,10 @@ Calibre library, which I regularly export and keep synced via Nextcloud.
         my/bibliographies)
   (setq bibtex-completion-pdf-field "File")
 #+end_src
+*** Citar
+#+begin_src emacs-lisp
+  (setq citar-bibliography my/bibliographies)
+#+end_src
 ** Org
 :PROPERTIES:
 :header-args: :tangle no :noweb-ref org
