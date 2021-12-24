@@ -46,8 +46,8 @@ Path ~/Mail/Personal/
 Inbox ~/Mail/Personal/INBOX
 
 Channel personal
-Master :personal-remote:
-Slave :personal-local:
+Far :personal-remote:
+Near :personal-local:
 MaxMessages ${__MAXMESSAGES}
 ExpireUnread yes
 Patterns "INBOX" "[Gmail]/Drafts" "[Gmail]/Sent Mail" "[Gmail]/Starred" "[Gmail]/All Mail" "[Gmail]/Chats" "[Gmail]/Trash"
@@ -73,8 +73,8 @@ Path ~/Mail/Work/
 Inbox ~/Mail/Work/INBOX
 
 Channel work
-Master :work-remote:
-Slave :work-local:
+Far :work-remote:
+Near :work-local:
 MaxMessages ${__MAXMESSAGES}
 ExpireUnread yes
 Patterns "INBOX" "AWeber Times" "Jira" "[Gmail]/Drafts" "[Gmail]/Sent Mail" "[Gmail]/Starred" "[Gmail]/All Mail" "[Gmail]/Chats" "[Gmail]/Trash"
