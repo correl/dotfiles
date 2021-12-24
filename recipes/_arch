@@ -16,14 +16,18 @@ function _pacman {
 }
 
 function _yay {
+    local yay=yay
+    if command -v paru &>/dev/null; then
+        yay=paru
+    fi
     local pkg=$1
     if ! yay -Qi $pkg >/dev/null 2>&1; then
         if [ -z "$__yay_updated" ]; then
-            _run "[yay] Synchronizing package databases" yay -Syy
+            _run "[$yay] Synchronizing package databases" $yay -Syy
             __pacman_updated=yes
         fi
-        _run "[yay] Install $pkg" yay -S --noconfirm $pkg
+        _run "[$yay] Install $pkg" $yay -S --noconfirm $pkg
     else
-        echo "[yay] $pkg is already installed, skipping."
+        echo "[$yay] $pkg is already installed, skipping."
     fi
 }
