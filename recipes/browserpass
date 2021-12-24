@@ -9,6 +9,9 @@ function _browserpass {
         darwin)
             _prefix=/usr/local/opt/browserpass
             ;;
+        arch)
+            _prefix=/usr
+            ;;
     esac
     _run "[browserpass] Installing native messaging host to $browser" \
          make PREFIX=$_prefix hosts-$browser-user \
@@ -27,8 +30,19 @@ case $_PLATFORM in
         ;;
     arch)
         _recipe _arch
-        which chromium 2>&1 >/dev/null && _pacman browserpass-chromium
-        which firefox 2>&1 >/dev/null && _pacman browserpass-firefox
+        if command -v chromium 2>&1 >/dev/null \
+            || command -v google-chrome 2>&1 >/dev/null \
+            || command -v google-chrome-stable 2>&1 >/dev/null; then
+            _pacman browserpass-chromium
+        fi
+        if command -v firefox 2>&1 >/dev/null \
+            || command -v firedragon 2>&1 >/dev/null; then
+            _pacman browserpass-firefox
+        fi
+        if command -v google-chrome 2>&1 >/dev/null \
+            || command -v google-chrome-stable 2>&1 >/dev/null; then
+            _browserpass chrome
+        fi
         ;;
     *)
         if ! test -d ~/.local/lib/browserpass; then
@@ -41,6 +55,6 @@ case $_PLATFORM in
             popd >/dev/null
             rm -rf "$tempdir"
         fi
-        which google-chrome 2>&1 >/dev/null && _browserpass chrome
-        which firefox 2>&1 >/dev/null && _browserpass
+        command -v google-chrome 2>&1 >/dev/null && _browserpass chrome
+        command -v firefox 2>&1 >/dev/null && _browserpass
 esac
