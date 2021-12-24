@@ -2,7 +2,7 @@
 # Description: The Python programming language
 set -e
 
-__PYTHON_VERSION=3.9.1
+__PYTHON_VERSION=3.10.0
 
 _recipe _path
 _recipe git
@@ -52,7 +52,7 @@ case $_PLATFORM in
         ;;
 esac
 
-_profile 'eval "$(pyenv init -)"'
+_profile 'eval "$(pyenv init --path)"'
 _profile 'eval "$(pyenv virtualenv-init -)"'
 _profile 'pyenv global $(pyenv versions --bare --skip-aliases | egrep "^(\.?[[:digit:]]+)+$" | sort -rV)'
 
