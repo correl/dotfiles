@@ -130,13 +130,14 @@ Calibre library, which I regularly export and keep synced via Nextcloud.
 #+end_src
 *** Helm BibTeX
 #+begin_src emacs-lisp
-  (setq bibtex-completion-bibliography
-        my/bibliographies)
-  (setq bibtex-completion-pdf-field "File")
+  (setq bibtex-completion-bibliography my/bibliographies
+        bibtex-completion-pdf-field "File"
+        bibtex-completion-notes-path "~/org/roam")
 #+end_src
 *** Citar
 #+begin_src emacs-lisp
-  (setq citar-bibliography my/bibliographies)
+  (setq citar-bibliography my/bibliographies
+        citar-notes-paths '("~/org/roam"))
 #+end_src
 ** Org
 :PROPERTIES:
