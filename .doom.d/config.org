@@ -1608,6 +1608,11 @@ Manage background services
   (use-package! uuidgen
     :commands (uuidgen))
 #+end_src
+** Wordle
+#+begin_src emacs-lisp
+  (use-package! wordle
+    :commands (wordel wordel-marathon))
+#+end_src
 * Operating Systems
 ** Linux
 *** EXWM

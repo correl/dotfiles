@@ -41,6 +41,7 @@
 (package! websocket)
 (package! weechat)
 (package! weechat-alert)
+(package! wordel)
 (package! yapfify)
 (package! polymode)
 (package! poly-rst)
