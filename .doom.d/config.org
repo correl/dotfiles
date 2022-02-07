@@ -1749,3 +1749,13 @@ Make reading an open buffer an exercise in insanity.
   (use-package! owo-mode
     :commands owo-mode)
 #+end_src
+** Elcord
+Emits rich presence to Discord.
+
+#+begin_src emacs-lisp
+  (use-package! elcord
+    :config
+    (setq elcord-display-buffer-details nil
+          elcord-quiet t)
+    (elcord-mode t))
+#+end_src
