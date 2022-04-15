@@ -348,7 +348,7 @@ Tell Emacs about all of the LaTeX classes I use to export documents.
               ("\\paragraph{%s}" . "\\paragraph*{%s}")
               ("\\subparagraph{%s}" . "\\subparagraph*{%s}"))
              ("thermal-paper"
-              "\\documentclass[5pt]{article}
+              "\\documentclass{paper}
   \\usepackage[paperwidth=52mm]{geometry}"
               ("\\section{%s}" . "\\section*{%s}")
               ("\\subsection{%s}" . "\\subsection*{%s}")
