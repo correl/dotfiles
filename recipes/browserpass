@@ -55,6 +55,7 @@ case $_PLATFORM in
             popd >/dev/null
             rm -rf "$tempdir"
         fi
+        command -v chromium-browser 2>&1 >/dev/null && _browserpass chromium
         command -v google-chrome 2>&1 >/dev/null && _browserpass chrome
-        command -v firefox 2>&1 >/dev/null && _browserpass
+        command -v firefox 2>&1 >/dev/null && _browserpass firefox
 esac
