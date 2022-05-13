@@ -1767,6 +1767,8 @@ Emits rich presence to Discord.
   (use-package! elcord
     :config
     (setq elcord-display-buffer-details nil
-          elcord-quiet t)
+          elcord-quiet t
+          elcord-editor-icon "emacs_material_icon"
+          elcord-use-major-mode-as-main-icon t)
     (elcord-mode t))
 #+end_src
