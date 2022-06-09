@@ -1125,9 +1125,13 @@ Show linked org document sections inline.
 
 #+begin_src emacs-lisp
   (use-package! org-transclusion
-    :bind (:map org-mode-map
-           ("C-c l v t" . org-transclusion-mode))
-    :commands (org-transclusion-mode))
+    :after org
+    :init
+    (map!
+     :map global-map "<f12>" #'org-transclusion-add
+     :leader
+     :prefix "n"
+     :desc "Org Transclusion Mode" "t" #'org-transclusion-mode))
 #+end_src
 *** Ditaa
 Download and use a recent version of [[https://github.com/stathissideris/ditaa][ditaa]] for rendering ASCII diagrams.
