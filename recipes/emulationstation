@@ -1,0 +1,132 @@
+#!/bin/bash
+# Description: A frontend for multiple emulators
+set -e
+
+function __emulationstation_config {
+    mkdir -p $HOME/.emulationstation
+    if test -f $HOME/.emulationstation/es_systems.cfg; then
+        return
+    fi
+    cat > $HOME/.emulationstation/es_systems.cfg <<EOF
+<!-- This is the EmulationStation Systems configuration file.
+All systems must be contained within the <systemList> tag.-->
+
+<systemList>
+    <!-- Here's an example system to get you started. -->
+    <system>
+
+        <!-- A short name, used internally. Traditionally lower-case. -->
+        <name>nes</name>
+
+        <!-- A "pretty" name, displayed in menus and such. -->
+        <fullname>Nintendo Entertainment System</fullname>
+
+        <!-- The path to start searching for ROMs in. '~' will be expanded to $HOME on Linux or %HOMEPATH% on Windows. -->
+        <path>~/roms/nes</path>
+
+        <!-- A list of extensions to search for, delimited by any of the whitespace characters (", \r\n\t").
+        You MUST include the period at the start of the extension! It's also case sensitive. -->
+        <extension>.nes .NES</extension>
+
+        <!-- The shell command executed when a game is selected. A few special tags are replaced if found in a command:
+        %ROM% is replaced by a bash-special-character-escaped absolute path to the ROM.
+        %BASENAME% is replaced by the "base" name of the ROM.  For example, "/foo/bar.rom" would have a basename of "bar". Useful for MAME.
+        %ROM_RAW% is the raw, unescaped path to the ROM. -->
+        <command>retroarch -L /usr/lib/libretro/mesen_libretro.so %ROM%</command>
+
+        <!-- The platform to use when scraping. You can see the full list of accepted platforms in src/PlatformIds.cpp.
+        It's case sensitive, but everything is lowercase. This tag is optional.
+        You can use multiple platforms too, delimited with any of the whitespace characters (", \r\n\t"), eg: "genesis, megadrive" -->
+        <platform>nes</platform>
+
+        <!-- The theme to load from the current theme set.  See THEMES.md for more information.
+        This tag is optional. If not set, it will default to the value of <name>. -->
+        <theme>nes</theme>
+    </system>
+    <system>
+        <name>snes</name>
+        <fullname>Super Nintendo Entertainment System</fullname>
+        <path>~/roms/snes</path>
+        <extension>.smc .sfc .SMC .SFC</extension>
+        <command> retroarch -L /usr/lib/libretro/snes9x_libretro.so %ROM%</command>
+        <platform>snes</platform>
+        <theme>snes</theme>
+    </system>
+    <system>
+        <name>ps2</name>
+        <fullname>Playstation 2</fullname>
+        <path>~/roms/ps2</path>
+        <extension>.iso .ISO</extension>
+        <command>retroarch -L /usr/lib/libretro/pcsx2_libretro.so %ROM%</command>
+        <platform>ps2</platform>
+        <theme>ps2</theme>
+    </system>
+</systemList>
+
+EOF
+}
+
+function __emulationstation_theme_simple {
+    if test -d $HOME/.emulationstation/themes/simple; then
+        return
+    fi
+    echo "[curl] Downloading simple emulationstation theme"
+    local tempdir=$(mktemp -d)
+    curl -skL https://www.emulationstation.org/downloads/themes/simple_latest.zip --output "$tempdir/simple.zip"
+    unzip -qd $HOME/.emulationstation/themes "$tempdir/simple.zip"
+    rm -rf "$tempdir"
+}
+
+case $_PLATFORM in
+    arch)
+        _recipe _arch
+
+        _yay emulationstation-git
+        _yay retroarch
+
+        # _yay libretro-beetle-pce        # NEC PC Engine/SuperGrafx/CD core
+        # _yay libretro-beetle-pce-fast   # NEC PC Engine/CD core
+        # _yay libretro-beetle-psx        # Sony PlayStation core
+        # _yay libretro-beetle-psx-hw     # Sony PlayStation core
+        # _yay libretro-beetle-supergrafx # NEC SuperGrafx core
+        # _yay libretro-blastem           # Sega Mega Drive core
+        # _yay libretro-bsnes             # Super Nintendo Entertainment System cores
+        # _yay libretro-bsnes-hd          # Super Nintendo Entertainment System core
+        # _yay libretro-bsnes2014         # Super Nintendo Entertainment System cores
+        # _yay libretro-citra             # Nintendo 3DS core
+        # _yay libretro-core-info         # Libretro core info files
+        # _yay libretro-desmume           # Nintendo DS core
+        # _yay libretro-dolphin           # Nintendo GC/Wii core
+        # _yay libretro-duckstation       # Sony PlayStation core
+        # _yay libretro-flycast           # Sega Dreamcast core
+        # _yay libretro-gambatte          # Nintendo Game Boy/Game Boy Color core
+        # _yay libretro-genesis-plus-gx   # Sega MS/GG/MD/CD core
+        # _yay libretro-kronos            # Sega Saturn core
+        # _yay libretro-mame              # MAME Arcade core
+        # _yay libretro-mame2016          # MAME 2016 Arcade core
+        # _yay libretro-melonds           # Nintendo DS core
+        _yay libretro-mesen             # Nintendo Entertainment System core
+        # _yay libretro-mesen-s           # Super Nintendo Entertainment System core
+        # _yay libretro-mgba              # Nintendo Game Boy Advance core
+        # _yay libretro-mupen64plus-next  # Nintendo 64 core
+        # _yay libretro-nestopia          # Nintendo Entertainment System core
+        # _yay libretro-overlays          # Collection of overlays for libretro
+        # _yay libretro-parallel-n64      # Nintendo 64 core
+        _yay libretro-pcsx2             # Sony PlayStation 2 core
+        # _yay libretro-picodrive         # Sega MS/MD/CD/32X core
+        # _yay libretro-play              # Sony PlayStation 2 core
+        # _yay libretro-ppsspp            # Sony PlayStation Portable core
+        # _yay libretro-retrodream        # Sega Dreamcast core
+        # _yay libretro-sameboy           # Nintendo Game Boy/Game Boy Color core
+        # _yay libretro-scummvm           # ScummVM core
+        # _yay libretro-shaders-slang     # Collection of shaders for libretro
+        _yay libretro-snes9x            # Super Nintendo Entertainment System core
+        # _yay libretro-yabause           # Sega Saturn core
+        # _yay libretro-mame-git          # libretro implementation of MAME. (Arcade)
+        # _yay libretro-opera-git         # libretro implementation of 4DO/libfreedo (3DO)
+        # _yay libretro-stella2014-git    # libretro implementation of Stella. (Atari 2600)
+
+        _run "[emulationstation] Configuring systems" __emulationstation_config
+        __emulationstation_theme_simple
+        ;;
+esac
