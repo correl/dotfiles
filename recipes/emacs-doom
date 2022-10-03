@@ -9,7 +9,7 @@ _recipe _path
 # Include japanese language support utilties used by configured packages
 _recipe japanese
 
-_git "https://github.com/hlissner/doom-emacs" "$HOME/.emacs.d"
+_git "https://github.com/doomemacs/doomemacs" "$HOME/.emacs.d"
 _path "$HOME/.emacs.d/bin"
 
 if ! [ -d ${HOME}/.doom.d ]; then
