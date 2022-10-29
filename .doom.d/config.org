@@ -4,9 +4,9 @@
 
 * Look And Feel
 ** Theme
-I'm feeling the gruvbox theme lately.
+I'm feeling the shades of purple theme lately.
 #+begin_src emacs-lisp
-  (setq doom-theme 'doom-laserwave)
+  (setq doom-theme 'doom-shades-of-purple)
 #+end_src
 ** Default font
 #+begin_src emacs-lisp
@@ -898,7 +898,7 @@ https://orgroam.com
 #+begin_src emacs-lisp
   (use-package! org-roam-export
     :after org-roam
-    :config
+    :init
     (add-hook 'org-export-before-processing-hook #'org-roam-export-preprocessor))
 #+end_src
 **** Org Roam Bibtex
