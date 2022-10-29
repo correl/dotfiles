@@ -52,6 +52,8 @@ case $_PLATFORM in
 
         # File compression
         _pacman p7zip
+        _pacman unrar
+        _pacman unzip
 
         # Misc
         _pacman entr
