@@ -892,7 +892,7 @@ https://orgroam.com
 
 **** Add backlinks to org-roam exports
 #+begin_src emacs-lisp
-  (use-package! org-roam-export
+  (use-package! org-roam-export-backlinks
     :after org-roam
     :init
     (add-hook 'org-export-before-processing-hook #'org-roam-export-preprocessor))
