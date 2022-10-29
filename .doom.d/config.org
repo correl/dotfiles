@@ -739,7 +739,7 @@ Tell Emacs how to build the document collections I export to HTML.
 
           ("roam-assets"
            :base-directory "~/org/roam"
-           :base-extension "css\\|gif\\|jpe?g\\|png\\|svg\\|pdf"
+           :base-extension "css\\|js\\|json\\|gif\\|jpe?g\\|png\\|svg\\|pdf"
            :publishing-directory "~/Public/roam"
            :publishing-function org-publish-attachment
            :recursive t)
