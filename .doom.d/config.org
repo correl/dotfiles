@@ -884,12 +884,8 @@ https://orgroam.com
 **** Capture templates
 #+begin_src emacs-lisp
   (setq org-roam-capture-templates
-        '(("d" "default" plain "%?" :if-new
+        '(("d" "default" plain "%?" :target
            (file+head "%<%Y%m%d%H%M%S>-${slug}.org" "#+title: ${title}
-  ")
-           :unnarrowed t)
-          ("w" "work" plain "%?" :if-new
-           (file+head "aweber/%<%Y%m%d%H%M%S>-${slug}.org" "#+title: ${title}
   ")
            :unnarrowed t)))
 #+end_src
@@ -911,14 +907,9 @@ Make it easy to take notes on books and papers that I'm reading.
     :bind (:map org-mode-map
            (("C-c n r b" . orb-note-actions))))
 #+end_src
-**** Org Roam Server
+**** Org Roam UI
 Provides a fun way to browse through a collection of notes.
 
-#+begin_src emacs-lisp
-  (use-package! org-roam-server
-    :commands org-roam-server-mode)
-#+end_src
-**** Org Roam UI
 #+begin_src emacs-lisp
   (use-package! org-roam-ui
     :after org-roam
