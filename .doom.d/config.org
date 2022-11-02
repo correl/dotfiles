@@ -893,9 +893,10 @@ https://orgroam.com
 **** Add backlinks to org-roam exports
 #+begin_src emacs-lisp
   (use-package! org-roam-export-backlinks
-    :after org-roam
+    :commands org-roam-export-backlinks-preprocessor
     :init
-    (add-hook 'org-export-before-processing-hook #'org-roam-export-preprocessor))
+    (add-to-list 'org-export-before-processing-hook
+                 #'org-roam-export-backlinks-preprocessor))
 #+end_src
 **** Org Roam Bibtex
 Make it easy to take notes on books and papers that I'm reading.
