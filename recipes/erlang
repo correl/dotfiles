@@ -2,5 +2,45 @@
 # Description: The Erlang programming language
 set -e
 
-_recipe brew
-_brew kerl
+PREFIX=${HOME}/.local
+
+__OTP_VERSION=25.2
+__OTP_PATH=${PREFIX}/lib/otp
+
+_recipe _path
+
+function _kerl_build {
+    local version=$1
+    if ! kerl list builds | grep -q "^${version},${version}\$"; then
+        _run "[kerl] Building OTP ${version}" kerl build "${version}"
+    else
+        echo "[kerl] OTP ${version} is already built, skipping."
+    fi
+}
+
+function _kerl_install {
+    local version=$1
+    _kerl_build $1
+    if ! kerl list installations | grep -q "^${version} "; then
+        mkdir -p "${__OTP_PATH}"
+        _run "[kerl] Installing OTP ${version}" kerl install "${version}" "${__OTP_PATH}/${version}"
+    else
+        echo "[kerl] OTP ${version} is already installed, skipping."
+    fi
+}
+
+mkdir -p ${PREFIX}/bin
+
+_run "[erlang] Download kerl" \
+    curl https://raw.githubusercontent.com/kerl/kerl/master/kerl \
+    -o ${PREFIX}/bin/kerl \
+    && chmod +x ${PREFIX}/bin/kerl
+
+_run "[erlang] Download rebar3" \
+    curl https://s3.amazonaws.com/rebar3/rebar3 \
+    -o ${PREFIX}/bin/rebar3 \
+    && chmod +x ${PREFIX}/bin/rebar3
+_run "Add ${PREFIX}/bin to PATH" _path_high ${PREFIX}/bin
+
+_kerl_install $__OTP_VERSION
+_profile "source ${__OTP_PATH}/${__OTP_VERSION}/activate"
