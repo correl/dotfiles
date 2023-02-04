@@ -1082,6 +1082,14 @@ Adds shortcuts to edit the structure of lisp code.
   (use-package! paredit
     :hook ((emacs-lisp-mode . enable-paredit-mode)))
 #+end_src
+** OpenSCAD
+Mode for editing OpenSCAD 3D modeling files. Files can be opened externally for
+live-updated previews within OpenSCAD itself using =C-c C-o=.
+
+#+begin_src emacs-lisp
+  (use-package! scad-mode
+    :mode "\\.scad\\'")
+#+end_src
 * Applications
 ** Email
 Configure MU4E to read email synced from my personal and work accounts.
