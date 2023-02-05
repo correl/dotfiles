@@ -647,6 +647,25 @@ Tell Emacs how to build the document collections I export to HTML.
            :publishing-function org-html-publish-to-tufte-html)
           ("work" :components ("work-html" "work-roam-html" "work-todo" "work-assets" "work-themes"))
 
+          ("cookbook-html"
+           :base-directory "~/org/cookbook"
+           :base-extension "org"
+           :publishing-directory "~/Public/cookbook"
+           :recursive t
+           :with-toc nil
+           :section-numbers nil
+           :auto-sitemap nil
+           :publishing-function org-html-publish-to-html
+           :html-head "<link rel=\"stylesheet\" href=\"https://gongzhitaao.org/orgcss/org.css\"/>")
+
+          ("cookbook-assets"
+           :base-directory "~/org/cookbook"
+           :base-extension "css\\|js\\|json\\|gif\\|jpe?g\\|png\\|svg\\|pdf"
+           :publishing-directory "~/Public/cookbook"
+           :publishing-function org-publish-attachment
+           :recursive t)
+          ("cookbook" :components ("cookbook-html" "cookbook-assets"))
+
           ("dotfiles-common"
            :base-directory "~/dotfiles"
            :publishing-directory "~/Public/dotfiles"
