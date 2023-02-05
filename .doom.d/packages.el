@@ -6,6 +6,8 @@
 ;; (package! another-package :recipe (:host github :repo "username/repo"))
 ;; (package! builtin-package :disable t)
 
+(package! arduino-mode)
+(package! arduino-cli-mode)
 (package! counsel)
 (package! desktop-environment)
 (package! elcord)

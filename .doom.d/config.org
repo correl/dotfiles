@@ -1066,6 +1066,17 @@ Study kanji by overlaying hiragana readings.
     :commands kanji-glasses-mode)
 #+end_src
 * Coding
+** Arduino
+#+begin_src emacs-lisp
+  (use-package! arduino-mode
+    :mode "\\.ino\\'")
+
+  (use-package! arduino-cli-mode
+    :hook arduino-mode
+    :custom
+    (arduino-cli-warnings 'all)
+    (arduino-cli-verify t))
+#+end_src
 ** Erlang
 *** Kerl
 Select the active erlang installation managed with [[https://github.com/kerl/kerl][kerl]].
