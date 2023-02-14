@@ -16,4 +16,12 @@ if ! [ -d ${HOME}/.doom.d ]; then
     _run "[emacs-doom] Install .doom.d" ln -s ${HOME}/dotfiles/.doom.d ${HOME}/.doom.d
 fi
 
+# HACK: Install a local copy of ob-ledger
+# Required until https://github.com/doomemacs/doomemacs/issues/6457 is fixed
+if ! [ -f ${HOME}/.doom.d/lisp/ob-ledger/ob-ledger.el ]; then
+    mkdir -p ${HOME}/.doom.d/lisp/ob-ledger
+    _run "[curl] Installing local ob-ledger" curl -sLo ${HOME}/.doom.d/lisp/ob-ledger/ob-ledger.el \
+        'https://raw.githubusercontent.com/overtone/emacs-live/master/packs/stable/org-pack/lib/org-mode/lisp/ob-ledger.el'
+fi
+
 _run "[emacs-doom] Refreshing" $HOME/.emacs.d/bin/doom sync

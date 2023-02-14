@@ -53,3 +53,11 @@
 
 ;; When using bibtex-completion via the `biblio` module
 (unpin! bibtex-completion helm-bibtex ivy-bibtex)
+
+;; HACK: Install a local copy of ob-ledger
+;; Required until https://github.com/doomemacs/doomemacs/issues/6457 is fixed
+(package! ob-ledger :recipe (:local-repo "lisp/ob-ledger"))
+
+;; HACK: Pin transient and with-editor until https://github.com/doomemacs/doomemacs/issues/7078 is fixed
+(package! transient :pin "c2bdf7e12c530eb85476d3aef317eb2941ab9440")
+(package! with-editor :pin "391e76a256aeec6b9e4cbd733088f30c677d965b")
