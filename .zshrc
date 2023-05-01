@@ -12,6 +12,7 @@ else
         git clone https://github.com/jandamm/zgenom.git "${HOME}/.zgenom"
     fi
     source $HOME/.zgenom/zgenom.zsh
+    zgenom autoupdate
     if ! zgenom saved; then
         zgenom ohmyzsh
         zgenom ohmyzsh plugins/git
@@ -24,6 +25,8 @@ else
 nojhan/liquidprompt
 zsh-users/zsh-syntax-highlighting
 EOF
+        zgenom save
+        zgenom compile $HOME/.zshrc
     fi
     unsetopt correct_all
 fi
