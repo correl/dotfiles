@@ -8,34 +8,23 @@ if [[ $TERM == "dumb" ]]; then	# in emacs
     unfunction precmd
     unfunction preexec
 else
-
-    if [ ! -d $HOME/antigen ]; then
-        git clone https://github.com/zsh-users/antigen.git $HOME/antigen
+    if [ ! -d $HOME/.zgenom ]; then
+        git clone https://github.com/jandamm/zgenom.git "${HOME}/.zgenom"
     fi
+    source $HOME/.zgenom/zgenom.zsh
+    if ! zgenom saved; then
+        zgenom ohmyzsh
+        zgenom ohmyzsh plugins/git
+        zgenom ohmyzsh plugins/git-extras
+        zgenom ohmyzsh plugins/pip
+        zgenom ohmyzsh plugins/pass
+        zgenom ohmyzsh plugins/ssh-agent
 
-    source $HOME/antigen/antigen.zsh
-
-    # Load the oh-my-zsh library
-    antigen use oh-my-zsh
-
-    antigen bundles <<EOF
-
-git
-git-extras
-git-remote-branch
-pip
-ssh-agent
+        zgenom loadall <<EOF
 nojhan/liquidprompt
-
 zsh-users/zsh-syntax-highlighting
-
 EOF
-
-    # Themes
-    # antigen-theme kphoen
-
-    antigen apply
-
+    fi
     unsetopt correct_all
 fi
 
