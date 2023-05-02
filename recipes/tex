@@ -12,23 +12,29 @@ case "$_PLATFORM" in
         _brew_cask mactex
         ;;
     arch)
-        _recipe _arch
-        _pacman texlive-bibtexextra
-        _pacman texlive-core
-        _pacman texlive-fontsextra
-        _pacman texlive-formatsextra
-        _pacman texlive-games
-        _pacman texlive-humanities
-        _pacman texlive-latexextra
-        _pacman texlive-music
-        _pacman texlive-pictures
-        _pacman texlive-pstricks
-        _pacman texlive-publishers
-        _pacman texlive-science
-        _yay tllocalmgr-git
-        __tex_init=""
-        __tex_info="tllocalmgr info --localsearch"
-        __tex_install="yes | tllocalmgr install"
+        # Install texlive if it isn't already available (e.g. a local or
+        # portable installation).
+        if ! command -v tlmgr >/dev/null; then
+            _recipe _arch
+            _pacman texlive-bibtexextra
+            _pacman texlive-core
+            _pacman texlive-fontsextra
+            _pacman texlive-formatsextra
+            _pacman texlive-games
+            _pacman texlive-humanities
+            _pacman texlive-latexextra
+            _pacman texlive-music
+            _pacman texlive-pictures
+            _pacman texlive-pstricks
+            _pacman texlive-publishers
+            _pacman texlive-science
+            _yay tllocalmgr-git
+            __tex_init=""
+            __tex_info="tllocalmgr info --localsearch"
+            __tex_install="yes | tllocalmgr install"
+        else
+            echo "[tex] Texlive appears to already be installed, skipping."
+        fi
         ;;
     debian)
         _recipe _apt
