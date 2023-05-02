@@ -81,12 +81,12 @@ _tex labbook
 _tex mdframed
 _tex microtype
 _tex minted
-_tex moderncv
 _tex soul
 _tex tufte-latex
 
 _recipe git
 _tex_git dnd https://github.com/evanbergeron/DND-5e-LaTeX-Template.git
 _tex_git trek https://github.com/lancelet/beamer-trek.git theme
+_tex_git moderncv https://github.com/moderncv/moderncv.git
 
 _run "[tex] Indexing packages" $__tex_index
