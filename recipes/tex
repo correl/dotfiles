@@ -2,7 +2,7 @@
 # Description: Document typesetting
 set -e
 
-__tex_init="tlmgr init-usertree 2>/dev/null || true"
+__tex_init="tlmgr init-usertree"
 __tex_info="tlmgr --usermode info --only-installed"
 __tex_install="tlmgr --usermode install"
 
@@ -50,7 +50,7 @@ case "$_PLATFORM" in
         _apt xzdec
 esac
 
-$__tex_init
+$__tex_init 2>/dev/null || /bin/true
 
 function _tex {
     local pkg=$1
