@@ -66,10 +66,11 @@ function _tex_git {
     local repo=$2
     local repo_path=$3
     local clone_path="$(kpsewhich -var-value TEXMFHOME)/git/latex/${pkg}"
-    local install_path="$(kpsewhich -var-value TEXMFHOME)/tex/latex/${pkg}"
+    local install_parent="$(kpsewhich -var-value TEXMFHOME)/tex/latex"
+    local install_path="${install_parent}/${pkg}"
     if [[ ! -d "${install_path}" ]]; then
         _git $2 "$(kpsewhich -var-value TEXMFHOME)/git/latex/${pkg}"
-        _run "[tex] Install $pkg" mkdir -p "${install_path}" && ln -s "${clone_path}/${repo_path}" "${install_path}"
+        _run "[tex] Install $pkg" mkdir -p "${install_parent}" && ln -s "${clone_path}/${repo_path}" "${install_path}"
     else
         echo "[tex] $pkg is already installed, skipping."
     fi
