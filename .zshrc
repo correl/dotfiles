@@ -31,6 +31,11 @@ EOF
     unsetopt correct_all
 fi
 
+if [[ $TERM == "xterm-kitty" ]]; then
+    # Enable ssh shell integrations for the Kitty terminal
+    alias ssh="kitty +kitten ssh"
+fi
+
 export PATH=$HOME/bin:$PATH
 export EDITOR="emacsclient"
 export ALTERNATE_EDITOR=""
