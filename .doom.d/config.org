@@ -4,9 +4,11 @@
 
 * Look And Feel
 ** Theme
-I'm feeling the shades of purple theme lately.
+It's Catppuccin time!
 #+begin_src emacs-lisp
-  (setq doom-theme 'doom-shades-of-purple)
+  (use-package! catppuccin-theme
+    :config (setq catppuccin-flavor 'macchiato
+                  doom-theme 'catppuchin))
 #+end_src
 ** Default font
 #+begin_src emacs-lisp

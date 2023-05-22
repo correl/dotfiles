@@ -8,6 +8,7 @@
 
 (package! arduino-mode)
 (package! arduino-cli-mode)
+(package! catppuccin-theme)
 (package! counsel)
 (package! desktop-environment)
 (package! elcord)
