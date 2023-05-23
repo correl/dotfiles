@@ -7,8 +7,8 @@
 It's Catppuccin time!
 #+begin_src emacs-lisp
   (use-package! catppuccin-theme
-    :config (setq catppuccin-flavor 'macchiato
-                  doom-theme 'catppuchin))
+    :init (setq catppuccin-flavor 'macchiato)
+    :config (setq doom-theme 'catppuccin))
 #+end_src
 ** Default font
 #+begin_src emacs-lisp
