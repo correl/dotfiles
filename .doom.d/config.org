@@ -382,6 +382,10 @@ Set up my capture templates for making new notes and journal entries.
           ("n" "Note" entry
            (file+headline "~/Nextcloud/org/personal.org" "Notes")
            "* %^{Description}\n%U\n\n%?")
+          ("c" "Cookbook Recipe" entry
+           (file "~/org/cookbook/index.org")
+           "%(org-chef-get-recipe-from-url)"
+           :empty-lines 1)
           ;; Org-Protocol
           ("b" "Bookmark" entry
            (file+headline "~/org/bookmarks.org" "Unsorted")
@@ -884,6 +888,11 @@ Gorgeous HTML exports.
     (org-journal-file-format "%Y-%m-%d.org")
     (org-journal-dir "~/org-aweber")
     (org-journal-date-format "%A, %d %B %Y"))
+#+end_src
+*** Cookbook
+#+begin_src emacs-lisp
+  (use-package! org-chef
+    :commands (org-chef-get-recipe-from-url))
 #+end_src
 *** Ref
 Tools for linking and taking notes on books and papers.
