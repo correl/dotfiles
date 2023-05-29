@@ -12,6 +12,7 @@
 (package! counsel)
 (package! desktop-environment)
 (package! elcord)
+(package! ement)
 (package! emms)
 (package! exwm)
 (package! gnuplot)

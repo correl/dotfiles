@@ -1228,6 +1228,11 @@ Prefer sending HTML-formatted messages with plain text as a fallback option
        :user "correl/twitch"
        :pass (lambda (&rest _) (+pass-get-secret "Social/znc.phoenixinquis.is-a-geek.org/correl")))))
 #+end_src
+*** Matrix
+#+begin_src emacs-lisp
+  (use-package! ement
+    :commands 'ement-connect)
+#+end_src
 ** Music
 Configure EMMS for playing music files on my computer.
 
