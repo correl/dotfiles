@@ -1231,7 +1231,29 @@ Prefer sending HTML-formatted messages with plain text as a fallback option
 *** Matrix
 #+begin_src emacs-lisp
   (use-package! ement
-    :commands 'ement-connect)
+    :commands 'ement-connect
+    :init
+    (defvar +matrix-workspace-name "*Matrix*")
+    (defvar +matrix--old-wconf nil)
+    (defun +matrix ()
+      (interactive)
+      (if (modulep! :ui workspaces)
+          (+workspace/new +matrix-workspace-name)
+        (setq +matrix--old-wconf (current-window-configuration))
+        (delete-other-windows)
+        (switch-to-buffer (doom-fallback-buffer)))
+      (call-interactively #'ement-connect))
+    (defun +matrix/quit ()
+      (interactive)
+      (ement-disconnect (mapcar #'cdr ement-sessions))
+      (when (modulep! :ui workspaces)
+          (+workspace/delete +matrix-workspace-name))
+      (when +matrix--old-wconf
+        (set-window-configuration +matrix--old-wconf)
+        (setq +matrix--old-wconf nil)))
+    :config
+    (when (modulep! :ui popup)
+      (set-popup-rule! "\\*Ement " :ignore t)))
 #+end_src
 ** Music
 Configure EMMS for playing music files on my computer.
