@@ -1343,14 +1343,6 @@ Manage a Kubernetes cluster and set up remote shell/file access via TRAMP.
     :config
     (setq tramp-remote-shell-executable "sh"))
 #+end_src
-** Twitter
-It's Twitter, in Emacs.
-
-#+begin_src emacs-lisp
-  (define-key! twittering-mode-map
-    "f" #'twittering-favorite
-    "F" #'twittering-unfavorite)
-#+end_src
 ** Project Management
 *** Projectile
 Pre-load Projectile with projects in my usual code directories.
