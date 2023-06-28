@@ -1253,7 +1253,10 @@ Prefer sending HTML-formatted messages with plain text as a fallback option
         (setq +matrix--old-wconf nil)))
     :config
     (when (modulep! :ui popup)
-      (set-popup-rule! "\\*Ement " :ignore t)))
+      (set-popup-rule! "\\*Ement " :ignore t))
+    :custom
+    (ement-room-prism 'both)
+    (ement-save-sessions t))
 #+end_src
 ** Music
 Configure EMMS for playing music files on my computer.
