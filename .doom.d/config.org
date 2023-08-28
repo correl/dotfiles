@@ -911,6 +911,10 @@ Powerful cross-linked note-taking.
 
 https://orgroam.com
 
+#+begin_src emacs-lisp
+  (setq org-roam-directory (file-truename (if (f-dir? "~/org-roam") "~/org-roam"
+                                            "~/org/roam")))
+#+end_src
 **** Capture templates
 #+begin_src emacs-lisp
   (setq org-roam-capture-templates
