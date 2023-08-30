@@ -2,7 +2,7 @@
 # Description: The Python programming language
 set -e
 
-__PYTHON_VERSION=3.10.0
+__PYTHON_VERSION=3.11.4
 
 _recipe _path
 _recipe git
