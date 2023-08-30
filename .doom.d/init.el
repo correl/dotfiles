@@ -44,7 +44,7 @@
         +all          ; catch all popups that start with an asterix
         +defaults)    ; default popup rules
        ;;tabs              ; a tab bar for Emacs
-       ;;treemacs          ; a project drawer, like neotree but cooler
+       treemacs          ; a project drawer, like neotree but cooler
        ;;unicode           ; extended unicode support for various languages
        vc-gutter            ; vcs diff in the fringe
        vi-tilde-fringe      ; fringe tildes to mark beyond EOB
@@ -107,6 +107,7 @@
        ;;rgb               ; creating color strings
        ;;taskrunner        ; taskrunner for all your projects
        ;;terraform         ; infrastructure as code
+       tree-sitter
        ;;tmux              ; an API for interacting with tmux
        ;;upload            ; map local to remote projects via ssh/ftp
 
@@ -167,7 +168,7 @@
        (php +lsp)          ; perl's insecure younger brother
        plantuml     ; diagrams for confusing people more
        ;;purescript        ; javascript, but functional
-       (python +lsp +pyenv) ; beautiful is better than ugly
+       (python +lsp +pyenv +pyright +tree-sitter) ; beautiful is better than ugly
        ;;qt                ; the 'cutest' gui framework ever
        ;;racket            ; a DSL for DSLs
        ;;raku              ; the artist formerly known as perl6
