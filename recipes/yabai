@@ -11,13 +11,12 @@ _link ${HOME}/dotfiles/yabai/.yabairc \
 _link ${HOME}/dotfiles/yabai/.skhdrc \
       ${HOME}/.skhdrc
 
-_brew_tap koekeishiya/formulae
-_brew yabai
+_brew koekeishiya/formulae/yabai
 
 _brew koekeishiya/formulae/skhd
-# Use launchd directly rather than brew services so we can configure
-# the shell to use bash. There is a significant delay when using zsh
+# Use launchd directly so we can configure the shell to use bash (uses a custom
+# plist in ../Library/LaunchAgents). There is a significant delay when using zsh
 # (my preferred default).
 _launchd com.koekeishiya.skhd
-
-brew services start yabai
+skhd --start-service
+yabai --start-service
