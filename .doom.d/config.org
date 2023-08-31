@@ -1007,13 +1007,6 @@ keep them tidy.
           :desc "Synchronize all slipbox databases" "S" #'my/org-roam-slipbox-db-sync)))
 #+end_src
 
-When setting up additional slipboxes, be sure to set both =org-roam-directory=
-/and/ =org-roam-db-location=. An example =.dir-locals.el=:
-
-#+begin_example
-((nil . ((eval . (setq-local org-roam-directory (expand-file-name "./")
-                             org-roam-db-location (expand-file-name "./org-roam.db"))))))
-#+end_example
 *** Sidebar
 Display a sidebar with file-local todos and scheduling.
 
