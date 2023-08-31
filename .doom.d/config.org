@@ -876,8 +876,8 @@ Load shared code snippets to be used in org documents.
 Gorgeous HTML exports.
 
 #+begin_src emacs-lisp
-  (use-package! ox-tufte
-    :after ox)
+  ;; (use-package! ox-tufte
+  ;;   :after ox)
 #+end_src
 *** Journal
 #+begin_src emacs-lisp
@@ -1005,6 +1005,11 @@ keep them tidy.
         (:prefix-map ("n" . "notes")
          (:prefix ("r" . "roam")
           :desc "Synchronize all slipbox databases" "S" #'my/org-roam-slipbox-db-sync)))
+
+  ;; Set a default org-roam directory from the available slipboxes
+  (if-let (slipbox (-first-item (-map #'f-filename (f-directories my/org-roam-slipbox-directory))))
+    (setq org-roam-directory (f-join my/org-roam-slipbox-directory slipbox)
+          org-roam-db-location (f-join my/org-roam-slipbox-directory (s-concat slipbox ".db"))))
 #+end_src
 
 *** Sidebar
