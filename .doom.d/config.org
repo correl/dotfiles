@@ -981,9 +981,9 @@ keep them tidy.
 
   (defun my/org-roam-slipbox-node-find ()
     (interactive)
-    (let* ((slipbox (completing-read "Slipbox" (-map #'f-filename (f-directories my/org-roam-slipbox-directory))))
-           (org-roam-directory (f-join my/org-roam-slipbox-directory slipbox))
-           (org-roam-db-location (f-join my/org-roam-slipbox-directory (s-concat slipbox ".db"))))
+    (let ((slipbox (completing-read "Slipbox" (-map #'f-filename (f-directories my/org-roam-slipbox-directory)))))
+      (setq  org-roam-directory (f-join my/org-roam-slipbox-directory slipbox)
+             org-roam-db-location (f-join my/org-roam-slipbox-directory (s-concat slipbox ".db")))
       (unless (f-exists? org-roam-db-location)
         (org-roam-db-sync))
       (org-roam-node-find)))
