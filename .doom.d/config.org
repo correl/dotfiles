@@ -911,10 +911,6 @@ Powerful cross-linked note-taking.
 
 https://orgroam.com
 
-#+begin_src emacs-lisp
-  (setq org-roam-directory (file-truename (if (f-dir? "~/org-roam") "~/org-roam"
-                                            "~/org/roam")))
-#+end_src
 **** Capture templates
 #+begin_src emacs-lisp
   (setq org-roam-capture-templates
@@ -974,42 +970,41 @@ Makes for a much nicer note-taking experience.
   (add-hook! 'org-mode-hook #'my/org-roam-writeroom)
 #+end_src
 **** Provide seamless switching between org-roam slipboxes
-When we visit a buffer in a different slip box (different =org-roam-directory=)
-than we were visiting previously, ensure the cache is updated.
+I keep multiple slipboxes under a common directory, some of which may or may not
+be available on different machines (e.g. a work slipbox vs a personal one). This
+gives me an interface for easily switching between them and resyncing their
+databases. The databases are kept out of the slipbox directories themselves to
+keep them tidy.
 
 #+begin_src emacs-lisp
-  (defvar my/org-roam-directory-cache (list
-                                       (cons (expand-file-name org-roam-directory)
-                                             (expand-file-name org-roam-db-location))))
+  (defvar my/org-roam-slipbox-directory (expand-file-name "~/roam"))
 
-  (after! savehist
-  (add-to-list 'savehist-additional-variables
-               'my/org-roam-directory-cache))
-
-  (defun my/org-roam-directory--lookup (path)
-    (alist-get path my/org-roam-directory-cache nil nil #'s-equals?))
-
-  (defun my/org-roam-directory--update ()
-    (setq my/org-roam-directory-cache
-          (cons (cons org-roam-directory org-roam-db-location)
-                (seq-filter
-                 (lambda (x) (not (s-equals? org-roam-directory (car x))))
-                 my/org-roam-directory-cache))))
-
-  (add-hook! 'org-roam-buffer-prepare-hook #'my/org-roam-directory--update)
-
-  (defun my/org-roam-find-in-directory ()
+  (defun my/org-roam-slipbox-node-find ()
     (interactive)
-    (let* ((org-roam-directory (completing-read "Roam Directory"
-                                                (mapcar #'car  my/org-roam-directory-cache)))
-           (org-roam-db-location (my/org-roam-directory--lookup
-                                  org-roam-directory)))
-      (org-roam-find-file)))
+    (let* ((slipbox (completing-read "Slipbox" (-map #'f-filename (f-directories my/org-roam-slipbox-directory))))
+           (org-roam-directory (f-join my/org-roam-slipbox-directory slipbox))
+           (org-roam-db-location (f-join my/org-roam-slipbox-directory (s-concat slipbox ".db"))))
+      (unless (f-exists? org-roam-db-location)
+        (org-roam-db-sync))
+      (org-roam-node-find)))
+
+  (defun my/org-roam-slipbox-db-sync ()
+    (interactive)
+    (-each (-map #'f-filename (f-directories my/org-roam-slipbox-directory))
+      (lambda (slipbox)
+        (let ((org-roam-directory (f-join my/org-roam-slipbox-directory slipbox))
+              (org-roam-db-location (f-join my/org-roam-slipbox-directory (s-concat slipbox ".db"))))
+          (org-roam-db-sync)))))
 
   (map! :leader
         (:prefix-map ("n" . "notes")
          (:prefix ("r" . "roam")
-          :desc "Find file in slipbox" "F" #'my/org-roam-find-in-directory)))
+          :desc "Find file in slipbox" "F" #'my/org-roam-slipbox-node-find)))
+
+  (map! :leader
+        (:prefix-map ("n" . "notes")
+         (:prefix ("r" . "roam")
+          :desc "Synchronize all slipbox databases" "S" #'my/org-roam-slipbox-db-sync)))
 #+end_src
 
 When setting up additional slipboxes, be sure to set both =org-roam-directory=
