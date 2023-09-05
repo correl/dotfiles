@@ -979,37 +979,66 @@ keep them tidy.
 #+begin_src emacs-lisp
   (defvar my/org-roam-slipbox-directory (expand-file-name "~/roam"))
 
+  (defun my/slipbox-directories ()
+    (f-directories my/org-roam-slipbox-directory))
+
+  (defun my/slipbox-names ()
+    (-map #'f-filename (my/slipbox-directories)))
+
+  (defun my/slipbox--directory (slipbox)
+    (f-join my/org-roam-slipbox-directory slipbox))
+
+  (defun my/slipbox--database (slipbox)
+    (f-join my/org-roam-slipbox-directory (s-concat slipbox ".db")))
+
+  (defmacro my/with-slipbox (slipbox &rest body)
+    `(let ((org-roam-directory (my/slipbox--directory ,slipbox))
+           (org-roam-db-location (my/slipbox--database ,slipbox)))
+       ,@body))
+
   (defun my/org-roam-slipbox-node-find ()
     (interactive)
-    (let ((slipbox (completing-read "Slipbox" (-map #'f-filename (f-directories my/org-roam-slipbox-directory)))))
-      (setq  org-roam-directory (f-join my/org-roam-slipbox-directory slipbox)
-             org-roam-db-location (f-join my/org-roam-slipbox-directory (s-concat slipbox ".db")))
+    (let ((slipbox (completing-read "Slipbox: " (my/slipbox-names))))
+      (setq  org-roam-directory (my/slipbox--directory slipbox)
+             org-roam-db-location (my/slipbox--database slipbox))
       (unless (f-exists? org-roam-db-location)
         (org-roam-db-sync))
       (org-roam-node-find)))
 
   (defun my/org-roam-slipbox-db-sync ()
     (interactive)
-    (-each (-map #'f-filename (f-directories my/org-roam-slipbox-directory))
-      (lambda (slipbox)
-        (let ((org-roam-directory (f-join my/org-roam-slipbox-directory slipbox))
-              (org-roam-db-location (f-join my/org-roam-slipbox-directory (s-concat slipbox ".db"))))
-          (org-roam-db-sync)))))
+    (--each (my/slipbox-names)
+      (my/with-slipbox it (org-roam-db-sync))))
+
+  (defun my/slipbox-select (slipbox)
+    (interactive
+     (list (completing-read "Slipbox: " (my/slipbox-names))))
+    (unless (member slipbox (my/slipbox-names))
+      (error "Unknown slipbox %s" slipbox))
+    (setq  org-roam-directory (my/slipbox--directory slipbox)
+           org-roam-db-location (my/slipbox--database slipbox))
+    (unless (f-exists? org-roam-db-location)
+      (org-roam-db-sync))
+    slipbox)
 
   (map! :leader
         (:prefix-map ("n" . "notes")
-         (:prefix ("r" . "roam")
-          :desc "Find file in slipbox" "F" #'my/org-roam-slipbox-node-find)))
+                     (:prefix ("r" . "roam")
+                      :desc "Select slipbox" "c" #'my/slipbox-select)))
 
   (map! :leader
         (:prefix-map ("n" . "notes")
-         (:prefix ("r" . "roam")
-          :desc "Synchronize all slipbox databases" "S" #'my/org-roam-slipbox-db-sync)))
+                     (:prefix ("r" . "roam")
+                      :desc "Find file in slipbox" "F" #'my/org-roam-slipbox-node-find)))
+
+  (map! :leader
+        (:prefix-map ("n" . "notes")
+                     (:prefix ("r" . "roam")
+                      :desc "Synchronize all slipbox databases" "S" #'my/org-roam-slipbox-db-sync)))
 
   ;; Set a default org-roam directory from the available slipboxes
-  (if-let (slipbox (-first-item (-map #'f-filename (f-directories my/org-roam-slipbox-directory))))
-    (setq org-roam-directory (f-join my/org-roam-slipbox-directory slipbox)
-          org-roam-db-location (f-join my/org-roam-slipbox-directory (s-concat slipbox ".db"))))
+  (if-let (slipbox (-first-item (my/slipbox-names)))
+      (my/slipbox-select slipbox))
 #+end_src
 
 *** Sidebar
