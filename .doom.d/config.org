@@ -1565,6 +1565,16 @@ Manage background services
         keypression-y-offset 100
         keypression-font-face-attribute '(:height 400 :weight bold)))
 #+end_src
+** Swagger API documentation
+Make calls to swagger-documented APIs with completion support.
+
+#+begin_src emacs-lisp
+    (use-package! swagg
+      :commands (swagg-request swagg-request-with-rest-block)
+      :config (setq swagg-rest-block-prelude "#+BEGIN_SRC http
+  "
+                    swagg-rest-block-postlude "#+END_SRC"))
+#+end_src
 ** UUID Generation
 #+begin_src emacs-lisp
   (use-package! uuidgen
