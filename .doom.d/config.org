@@ -597,35 +597,10 @@ Tell Emacs how to build the document collections I export to HTML.
            :base-extension "js\\|css\\|gif\\|jpe?g\\|png\\|svg\\|ogv"
            :recursive t
            :publishing-function org-publish-attachment)
-          ("work-html"
-           :base-directory "~/org-aweber"
-           :base-extension "org"
-           ;; :exclude "\\(^knowledge-transfer.org$\\|-archive.org$\\)"
-           :exclude "\\(^README.org$\\|^worklog\\|roam/.*\\)"
-           :publishing-directory "~/Public/org"
-           :publishing-function (my/org-work-publish-to-html
-                                 org-org-publish-to-org
-                                 org-babel-tangle-publish)
-
-           ;; :htmlized-source t
-           ;; :html-head "<link rel=\"stylesheet\" type=\"text/css\" href=\"http://thomasf.github.io/solarized-css/solarized-dark.min.css\" />"
-           ;; :html-head-extra "<link rel=\"stylesheet\" type=\"text/css\" href=\"/~croush/org/css/org.css\" />"
-           ;; :setup-file "~/.emacs.local.d/org-html-themes/setup/theme-readtheorg-local.setup"
-           :html-link-home ,my/org-base-url
-           :html-doctype "html5"
-           :html-html5-fancy t
-           :with-sub-superscript nil
-           :section-numbers nil
-           ;; :infojs-opt "path:http://thomasf.github.io/solarized-css/org-info.min.js view:showall"
-           :auto-sitemap t
-           :sitemap-filename "index.org"
-           :sitemap-title "Correl Roush's Org Documents"
-           :sitemap-sort-folders last
-           :recursive t)
           ("work-roam-html"
-           :base-directory "~/org-aweber/roam"
+           :base-directory "~/roam/aweber"
            :base-extension "org"
-           :publishing-directory "~/Public/org/roam"
+           :publishing-directory "~/Public/roam-aweber"
            :recursive t
            :with-toc nil
            :section-numbers nil
@@ -634,24 +609,15 @@ Tell Emacs how to build the document collections I export to HTML.
            :sitemap-title "Correl Roush's Org Roam Notes"
            :publishing-function org-html-publish-to-html
            :html-head "<link rel=\"stylesheet\" href=\"https://gongzhitaao.org/orgcss/org.css\"/>")
-          ("work-assets"
-           :base-directory "~/org-aweber"
+          ("work-roam-assets"
+           :base-directory "~/roam/aweber"
            :base-extension "css\\|gif\\|jpe?g\\|png\\|svg\\|pdf\\|ogv\\|py\\|html\\|ya?ml"
            :include (".gitlab-ci.yml")
-           :publishing-directory "~/Public/org"
+           :publishing-directory "~/Public/roam-aweber"
            :publishing-function org-publish-attachment
            :display-custom-times t
            :recursive t)
-          ("work-todo"
-           :base-directory "~/Nextcloud/org"
-           :exclude ".*"
-           :include ("aweber.org")
-           :html-head "<link rel=\"stylesheet\" href=\"styles/tufte-css/tufte.css\"/>"
-           :html-head-extra "<link rel=\"stylesheet\" href=\"styles/tufte-css/latex.css\"/>"
-
-           :publishing-directory "~/Public/org"
-           :publishing-function org-html-publish-to-tufte-html)
-          ("work" :components ("work-html" "work-roam-html" "work-todo" "work-assets" "work-themes"))
+          ("work-roam" :components ("work-roam-html" "work-roam-assets" "work-themes"))
 
           ("cookbook-html"
            :base-directory "~/org/cookbook"
@@ -752,7 +718,7 @@ Tell Emacs how to build the document collections I export to HTML.
                                  org-latex-export-to-pdf))
 
           ("roam-html"
-           :base-directory "~/org/roam"
+           :base-directory "~/roam/personal"
            :base-extension "org"
            :publishing-directory "~/Public/roam"
            :recursive t
@@ -763,7 +729,7 @@ Tell Emacs how to build the document collections I export to HTML.
            :html-head "<link rel=\"stylesheet\" href=\"https://gongzhitaao.org/orgcss/org.css\"/>")
 
           ("roam-assets"
-           :base-directory "~/org/roam"
+           :base-directory "~/roam/personal"
            :base-extension "css\\|js\\|json\\|gif\\|jpe?g\\|png\\|svg\\|pdf"
            :publishing-directory "~/Public/roam"
            :publishing-function org-publish-attachment
