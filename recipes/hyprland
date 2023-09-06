@@ -1,0 +1,45 @@
+#!/bin/bash
+# Description: Hyprland Wayland Compositor and Tiling Desktop Environment
+set -e
+
+# TODO:
+# - Install hyprland
+#   - Install wlr-randr to check, control resolution
+#   - Install kitty
+#   - Install brightnessctl
+# - Install waybar
+#   - Install latest otf-font-awesome
+#   - Install catppuccin theme and configure
+# - Install nwgbar(-bin)
+# - Install nwg-drawer(-bin)
+# - Install catppuccin theme for rofi
+#   - Install ttf-jetbrains-mono-nerd
+# - Install swaylock-effects
+# - Install cava (terminal audio visualizer)
+# - Install grimblast and wl-clipboard (screenshotting)
+#
+# Use (some) configuration files from https://github.com/yurihikari/garuda-sway-config.git
+
+case $_PLATFORM in
+    arch)
+        _recipe _arch
+
+        _yay hyprland
+        _yay hyprpaper
+        _yay wlr-randr
+        _yay kitty
+        _yay brightnessctl
+
+        _yay waybar
+        _yay otf-font-awesome
+
+        _yay nwg-bar-bin
+        _yay nwg-drawer
+        _yay ttf-jetbrains-mono-nerd
+
+        _yay swaylock-effects
+        _yay cava
+        _yay grimblast
+        _yay wl-clipboard
+        ;;
+esac

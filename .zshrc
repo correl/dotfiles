@@ -45,3 +45,18 @@ alias erl='rlwrap -a erl'
 if [ -d ${HOME}/.cabal/bin ]; then
     export PATH="${HOME}/.cabal/bin:$PATH"
 fi
+
+export NVM_DIR="$HOME/.nvm"
+# [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+# [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+
+# OPAM configuration
+# . /home/correlr/.opam/opam-init/init.zsh > /dev/null 2> /dev/null || true
+# eval "$(pyenv init --path)"
+# eval "$(pyenv virtualenv-init -)"
+# pyenv global $(pyenv versions --bare --skip-aliases | egrep "^(\.?[[:digit:]]+)+$" | sort -rV) > /dev/null 2> /dev/null
+
+export STACK_ROOT=/run/media/correlr/Correl/.stack
+export PLATFORMIO_CORE_DIR=/run/media/correlr/Correl/.platformio
+
+[ -f "/media/correlr/Correl/.ghcup/env" ] && source "/run/media/correlr/Correl/.ghcup/env" # ghcup-env

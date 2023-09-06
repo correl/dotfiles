@@ -26,10 +26,12 @@
 (package! kubernetes-tramp)
 (package! migemo)
 (package! mixed-pitch)
+(package! mtg :recipe (:host nil :repo "git@git.phoenixinquis.net:correlr/emacs-mtg"))
 (package! nov)
 (package! ob-http)
 (package! scad-mode)
 (package! org-chef)
+(package! org-d20)
 (package! org-msg)
 (package! org-ref)
 (package! org-roam-bibtex :recipe (:host github :repo "org-roam/org-roam-bibtex"))
@@ -64,5 +66,5 @@
 (package! ob-ledger :recipe (:local-repo "lisp/ob-ledger"))
 
 ;; HACK: Pin transient and with-editor until https://github.com/doomemacs/doomemacs/issues/7078 is fixed
-(package! transient :pin "c2bdf7e12c530eb85476d3aef317eb2941ab9440")
-(package! with-editor :pin "391e76a256aeec6b9e4cbd733088f30c677d965b")
+;; (package! transient :pin "c2bdf7e12c530eb85476d3aef317eb2941ab9440")
+;; (package! with-editor :pin "391e76a256aeec6b9e4cbd733088f30c677d965b")

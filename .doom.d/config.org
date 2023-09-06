@@ -66,6 +66,12 @@ https://dtinth.github.io/comic-mono-font/
   (after! php-mode
     (add-hook 'php-mode-hook #'my/buffer-face-comic-mono))
 #+end_src
+** Emoji Support
+Use the Noto Emoji font.
+#+begin_src emacs-lisp
+  (setf use-default-font-for-symbols nil)
+  (set-fontset-font t 'unicode "Noto Emoji" nil 'append)
+#+end_src
 ** Mixed Pitch
 Facilitates mixing monospace and proportional fonts. I'm using an MIT-licensed
 version of the [[https://github.com/edwardtufte/et-book][Edward Tufte book font]] because it's /gorgeous/.
@@ -1045,6 +1051,11 @@ Download and use a recent version of [[https://github.com/stathissideris/ditaa][
       (setq org-ditaa-jar-path jar-path
             org-ditaa-eps-jar-path jar-path)))
 #+end_src
+*** DND
+#+begin_src emacs-lisp
+  (use-package! org-d20
+    :after org)
+#+end_src
 ** ReStructuredText
 #+begin_src emacs-lisp
   (use-package! polymode
@@ -1239,7 +1250,7 @@ Prefer sending HTML-formatted messages with plain text as a fallback option
       (interactive)
       (ement-disconnect (mapcar #'cdr ement-sessions))
       (when (modulep! :ui workspaces)
-          (+workspace/delete +matrix-workspace-name))
+        (+workspace/delete +matrix-workspace-name))
       (when +matrix--old-wconf
         (set-window-configuration +matrix--old-wconf)
         (setq +matrix--old-wconf nil)))
@@ -1248,7 +1259,8 @@ Prefer sending HTML-formatted messages with plain text as a fallback option
       (set-popup-rule! "\\*Ement " :ignore t))
     :custom
     (ement-room-prism 'both)
-    (ement-save-sessions t))
+    (ement-save-sessions t) ;; Beware, this stores your token to disk in plain text!
+    )
 #+end_src
 ** Music
 Configure EMMS for playing music files on my computer.
@@ -1542,6 +1554,14 @@ Manage background services
         :cwd (expand-file-name "~/Public/roam")
         :tags '(personal autostart)
         :kill-signal 'sigkill))
+    (when (f-exists? (expand-file-name "~/code/correl.github.io"))
+      (prodigy-define-service
+        :name "Blog"
+        :command "hugo"
+        :args '("serve" "-D")
+        :cwd (expand-file-name "~/code/correl.github.io")
+        :rags '(personal)
+        :kill-signal 'sigkill))
     (mapcar
      #'prodigy-start-service
      (-concat (prodigy-services-tagged-with 'autostart))))
@@ -1726,4 +1746,9 @@ Emits rich presence to Discord.
           elcord-editor-icon "emacs_material_icon"
           elcord-use-major-mode-as-main-icon t)
     (elcord-mode t))
+#+end_src
+** MTG Mode
+#+begin_src emacs-lisp
+  (use-package! mtg
+    :commands (mtg-mode))
 #+end_src

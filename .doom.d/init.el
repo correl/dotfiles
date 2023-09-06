@@ -107,8 +107,8 @@
        ;;rgb               ; creating color strings
        ;;taskrunner        ; taskrunner for all your projects
        ;;terraform         ; infrastructure as code
-       tree-sitter
        ;;tmux              ; an API for interacting with tmux
+       tree-sitter       ; syntax and parsing, sitting in a tree...
        ;;upload            ; map local to remote projects via ssh/ftp
 
        :os
@@ -128,7 +128,9 @@
        ;;(dart +flutter)   ; paint ui and not much else
        ;;dhall
        (elixir +lsp)               ; erlang done right
-       (elm +lsp)                  ; care for a cup of TEA?
+       (elm                ; care for a cup of TEA?
+        +lsp
+        +tree-sitter)
        emacs-lisp           ; drown in parentheses
        ;;erlang            ; an elegant language for a more civilized age
        ;;ess               ; emacs speaks statistics
@@ -168,7 +170,12 @@
        (php +lsp)          ; perl's insecure younger brother
        plantuml     ; diagrams for confusing people more
        ;;purescript        ; javascript, but functional
-       (python +lsp +pyenv +pyright +tree-sitter) ; beautiful is better than ugly
+       (python             ; beautiful is better than ugly
+        +lsp
+        +pyenv
+        +pyright
+        +poetry
+        +tree-sitter)
        ;;qt                ; the 'cutest' gui framework ever
        ;;racket            ; a DSL for DSLs
        ;;raku              ; the artist formerly known as perl6
@@ -184,7 +191,9 @@
        ;;swift             ; who asked for emoji variables?
        ;;terra             ; Earth and Moon in alignment for performance.
        web                  ; the tubes
-       yaml                 ; JSON, but readable
+       (yaml               ; JSON, but readable
+        +lsp
+        +tree-sitter)
        ;;zig               ; C, but simpler
 
        :email
