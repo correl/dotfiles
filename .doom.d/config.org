@@ -610,14 +610,13 @@ Tell Emacs how to build the document collections I export to HTML.
            :recursive t
            :with-toc nil
            :section-numbers nil
-           :auto-sitemap t
-           :sitemap-filename "index.org"
+           :auto-sitemap nil
            :sitemap-title "Correl Roush's Org Roam Notes"
            :publishing-function org-html-publish-to-html
            :html-head "<link rel=\"stylesheet\" href=\"https://gongzhitaao.org/orgcss/org.css\"/>")
           ("work-roam-assets"
            :base-directory "~/roam/aweber"
-           :base-extension "css\\|gif\\|jpe?g\\|png\\|svg\\|pdf\\|ogv\\|py\\|html\\|ya?ml"
+           :base-extension "css\\|gif\\|jpe?g\\|png\\|svg\\|pdf\\|ogv\\|py\\|html\\|js\\|json\\|ya?ml"
            :include (".gitlab-ci.yml")
            :publishing-directory "~/Public/roam-aweber"
            :publishing-function org-publish-attachment
