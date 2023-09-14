@@ -37,6 +37,7 @@ case $_PLATFORM in
         _yay nwg-drawer
         _yay ttf-jetbrains-mono-nerd
 
+        _yay rofi
         _yay swaylock-effects
         _yay cava
         _yay grimblast
