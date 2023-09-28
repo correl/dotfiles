@@ -1147,25 +1147,30 @@ Configure MU4E to read email synced from my personal and work accounts.
     (setq mu4e-maildir "~/Mail")
 
     (setq user-full-name "Correl Roush")
-    (setq mu4e-contexts
-          (list (make-mu4e-context
-                 :name "work"
-                 :vars `((user-mail-address . "correlr@aweber.com")
-                         (mu4e-drafts-folder . "/Work/[Gmail]/Drafts")
-                         (mu4e-sent-folder . "/Work/[Gmail]/Sent Mail")
-                         (mu4e-trash-folder . "/Work/[Gmail]/Trash")
-                         (mu4e-maildir-shortcuts . (("/Work/INBOX" . ?i)
-                                                    ("/Work/[Gmail]/All Mail" . ?a)
-                                                    ("/Work/[Gmail]/Starred" . ?S)
-                                                    ("/Work/[Gmail]/Sent Mail" . ?s)
-                                                    ("/Work/[Gmail]/Trash" . ?t)))
-                         (mu4e-compose-signature . ,(with-temp-buffer
-                                                      (insert-file-contents "~/.signature-aweber")
-                                                      (buffer-string)))
-                         (smtpmail-smtp-user . "correlr@aweber.com")
-                         (smtpmail-smtp-server . "smtp.gmail.com")
-                         (smtpmail-smtp-service . 465)
-                         (smtpmail-stream-type . ssl)))))
+    (setq mu4e-contexts nil)
+    (when (f-exists?
+           (f-join mu4e-maildir "Work"))
+      (add-to-list
+       'mu4e-contexts
+       (make-mu4e-context
+        :name "work"
+        :vars `((user-mail-address . "correlr@aweber.com")
+                (mu4e-drafts-folder . "/Work/[Gmail]/Drafts")
+                (mu4e-sent-folder . "/Work/[Gmail]/Sent Mail")
+                (mu4e-trash-folder . "/Work/[Gmail]/Trash")
+                (mu4e-maildir-shortcuts . (("/Work/INBOX" . ?i)
+                                           ("/Work/[Gmail]/All Mail" . ?a)
+                                           ("/Work/[Gmail]/Starred" . ?S)
+                                           ("/Work/[Gmail]/Sent Mail" . ?s)
+                                           ("/Work/[Gmail]/Trash" . ?t)))
+                (mu4e-compose-signature . ,(with-temp-buffer
+                                             (when (f-exists? "~/.signature-aweber")
+                                               (insert-file-contents "~/.signature-aweber"))
+                                             (buffer-string)))
+                (smtpmail-smtp-user . "correlr@aweber.com")
+                (smtpmail-smtp-server . "smtp.gmail.com")
+                (smtpmail-smtp-service . 465)
+                (smtpmail-stream-type . ssl)))))
     (when (f-exists?
            (f-join mu4e-maildir "Personal"))
       (add-to-list
@@ -1182,7 +1187,8 @@ Configure MU4E to read email synced from my personal and work accounts.
                                            ("/Personal/[Gmail]/Sent Mail" . ?s)
                                            ("/Personal/[Gmail]/Trash" . ?t)))
                 (mu4e-compose-signature . ,(with-temp-buffer
-                                             (insert-file-contents "~/.signature")
+                                             (when (f-exists? "~/.signature")
+                                               (insert-file-contents "~/.signature"))
                                              (buffer-string)))
                 (smtpmail-smtp-user . "correl@gmail.com")
                 (smtpmail-smtp-server . "smtp.gmail.com")
