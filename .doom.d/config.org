@@ -617,7 +617,6 @@ Tell Emacs how to build the document collections I export to HTML.
           ("work-roam-assets"
            :base-directory "~/roam/aweber"
            :base-extension "css\\|gif\\|jpe?g\\|png\\|svg\\|pdf\\|ogv\\|py\\|html\\|js\\|json\\|ya?ml"
-           :include (".gitlab-ci.yml")
            :publishing-directory "~/Public/roam-aweber"
            :publishing-function org-publish-attachment
            :display-custom-times t
@@ -1543,12 +1542,12 @@ Manage background services
         :args '("start")
         :cwd (expand-file-name "~/git/www")
         :tags '(work)))
-    (when (f-exists? (expand-file-name "~/Public/org"))
+    (when (f-exists? (expand-file-name "~/Public/roam-aweber"))
       (prodigy-define-service
         :name "Org Documents"
         :command "python"
         :args '("-m" "http.server" "3001")
-        :cwd (expand-file-name "~/Public/org")
+        :cwd (expand-file-name "~/Public/roam-aweber")
         :tags '(work autostart)
         :kill-signal 'sigkill))
     (when (f-exists? (expand-file-name "~/Public/roam"))
