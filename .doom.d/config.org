@@ -12,7 +12,7 @@ It's Catppuccin time!
 #+end_src
 ** Default font
 #+begin_src emacs-lisp
-  (setq doom-font (font-spec :family "Inconsolata" :size 16))
+  (setq doom-font (font-spec :family "Inconsolata" :size 16 :weight 'medium))
 #+end_src
 ** Dashboard
 Customize the Doom Emacs dashboard with commissioned artwork, chosen randomly.
@@ -60,7 +60,7 @@ https://dtinth.github.io/comic-mono-font/
 #+begin_src emacs-lisp
   (defun my/buffer-face-comic-mono ()
     (interactive)
-    (setq buffer-face-mode-face '(:family "Comic Mono"))
+    (setq buffer-face-mode-face '(:family "Comic Mono" :weight 'medium))
     (buffer-face-mode))
 
   (after! php-mode
@@ -78,7 +78,7 @@ version of the [[https://github.com/edwardtufte/et-book][Edward Tufte book font]
 #+begin_src emacs-lisp
   (use-package! mixed-pitch
     :hook ((org-mode markdown-mode rst-mode) . mixed-pitch-mode))
-  (setq doom-variable-pitch-font (font-spec :family "ETBookOT"))
+  (setq doom-variable-pitch-font (font-spec :family "ETBookOT" :weight 'medium))
 #+end_src
 * UX Improvements
 ** Disable C-z backgrounding when the GUI is loaded
