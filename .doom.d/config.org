@@ -1363,7 +1363,11 @@ Pre-load Projectile with projects in my usual code directories.
     (require 'dash)
     (require 'f)
 
-    (setq projectile-switch-project-action #'magit-status)
+    ;; Load magit status when switching to a project
+    ;;
+    ;; doom overrides projectile-switch-project-action for its workspace behavior,
+    ;; so rather than update that, set the workspaces switch project function.
+    (setq +workspaces-switch-project-function #'magit-status)
     (let ((project-directories (-filter #'f-directory?
                                         '("~/code"
                                           "~/git"))))
