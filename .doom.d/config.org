@@ -1294,7 +1294,7 @@ Configure EMMS for playing music files on my computer.
           :desc "Play directory" "d" #'emms-play-directory
           :desc "Smart Browser" "b" #'emms-smart-browse))
 #+end_src
-** News Aggregation
+** News Aggregation :elfeed:
 Read blogs and articles from the RSS feeds I follow.
 
 #+begin_src emacs-lisp
@@ -1312,7 +1312,7 @@ Read blogs and articles from the RSS feeds I follow.
     :config
     (use-package! elfeed-org
       :config (progn (elfeed-org)
-                     (setq rmh-elfeed-org-files '("~/org/elfeed.org"))))
+                     (setq rmh-elfeed-org-files (list (f-join doom-user-dir "config.org")))))
 
     (defun my/elfeed-with-filters (filters)
       (elfeed)
@@ -1339,6 +1339,28 @@ Read blogs and articles from the RSS feeds I follow.
 
     (add-hook! 'elfeed-show-mode-hook #'mixed-pitch-mode))
 #+end_src
+*** Blogs :blog:
+**** http://feeds.feedburner.com/codinghorror
+**** https://www.wheresyoured.at/rss/
+**** https://unseenjapan.com/feed/
+**** Programming :programming:
+***** http://www.planeterlang.com/atom.xml
+***** http://ithare.com/rssfeed/
+***** https://ferd.ca/feed.rss
+***** http://christophermeiklejohn.com/feed.xml
+**** Emacs :emacs:
+***** http://sachachua.com/blog/feed/
+***** http://endlessparentheses.com/atom.xml
+***** https://karl-voit.at/feeds/lazyblorg-all.atom_1.0.links-and-content.xml
+**** Electronics :electronics:
+***** https://hackaday.com/feed/
+*** News :news:
+**** https://epgn.com/feed/
+*** Fun :fun:
+
+**** http://feeds.feedburner.com/FlipsideJapan
+**** http://n-gate.com/index.atom
+
 ** Kubernetes
 Manage a Kubernetes cluster and set up remote shell/file access via TRAMP.
 
