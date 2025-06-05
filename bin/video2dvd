@@ -1,0 +1,159 @@
+#!/bin/sh
+# AVI or any video 2 DVD iso Script
+# DvdAuthor 7 and up needs this
+export VIDEO_FORMAT=NTSC
+# Change to "ntsc" if you would like to create NTSC disks
+format="ntsc"
+
+# Check we have enough command line arguments
+if [ $# -lt 1 ]
+then
+    echo "Usage: $0 <input file 1 ... input file n>"
+    exit
+fi
+
+# Check for dependencies
+missing=0
+dependencies="ffmpeg dvdauthor genisoimage"
+for command in $dependencies
+do
+    if ! command -v $command >/dev/null 2>&1
+    then
+        echo "$command not found"
+        missing=$(($missing + 1))
+    fi
+done
+
+if [ $missing -gt 0 ]
+then
+    echo "Please install the missing applications and try again"
+    exit
+fi
+
+emphasise() {
+    echo ""
+    echo "********** $1 **********"
+    echo ""
+}
+
+# Check the files exists
+for var in "$@"
+do
+    if [ ! -e "$var" ]
+    then
+        echo "File $var not found"
+        exit
+    fi
+done
+
+emphasise "Converting AVI to MPG"
+
+for var in "$@"
+do
+    extension="${var##*.}"
+    echo "$var: $extension"
+    ffmpeg -i "$var" -y -target ${format}-dvd -aspect 16:9 "$var.mpg"
+    if [ $? != 0 ]
+    then
+        emphasise "Conversion failed"
+        exit
+    fi
+    if [ "${extension,,}" = "mkv" ]
+    then
+        emphasise "Extracting subtitles"
+        tracknum=0
+        for track in $(mkvmerge -i -F json "$var" | jq -r '.tracks[] | select(.type=="subtitles" and .properties.language_ietf=="en") | .id')
+        do
+            mkvextract tracks "$var" "$track:$var.$tracknum.srt"
+            if [ $? != 0 ]
+            then
+                emphasise "Extraction failed"
+                exit
+            fi
+            tracknum=$((tracknum + 1))
+        done
+    fi
+
+    if [ -f "$var.0.srt" ]
+    then
+        emphasise "Rendering subtitles"
+        tracknum=0
+        while [ -f "$var.$tracknum.srt" ]
+        do
+            cat <<EOF > sub.xml
+<subpictures format="${VIDEO_FORMAT}">
+  <stream>
+    <textsub
+      filename="${var}.${tracknum}.srt"
+      fontsize="22.0" font="arial.ttf" horizontal-alignment="center"
+      vertical-alignment="bottom" left-margin="60" right-margin="60"
+      top-margin="20" bottom-margin="30" subtitle-fps="25"
+      movie-fps="25" movie-width="720" movie-height="576"
+      force="no"
+    />
+  </stream>
+</subpictures>
+EOF
+            spumux -s${tracknum} sub.xml <"$var.mpg" >"$var.sub.mpg"
+            if [ $? != 0 ]
+            then
+                emphasise "Rendering failed"
+                exit
+            fi
+            cp "$var.sub.mpg" "$var.mpg"
+            tracknum=$((tracknum + 1))
+        done
+    fi
+done
+
+emphasise "Creating XML file"
+
+echo "<dvdauthor>
+<vmgm />
+<titleset>
+<titles>
+<subpicture lang=\"en\" />
+<audio lang=\"en\" />
+<pgc>" > dvd.xml
+
+for var in "$@"
+do
+    echo "<vob file=\"$var.mpg\" />" >> dvd.xml
+done
+
+echo "</pgc>
+</titles>
+</titleset>
+</dvdauthor>" >> dvd.xml
+
+emphasise "Creating DVD contents"
+
+dvdauthor -o dvd -x dvd.xml
+
+if [ $? != 0 ]
+then
+    emphasise "DVD Creation failed"
+    exit
+fi
+
+emphasise "Creating ISO image"
+
+genisoimage -dvd-video -o dvd.iso dvd/
+
+if [ $? != 0 ]
+then
+    emphasise "ISO Creation failed"
+    exit
+fi
+
+Everything passed. Cleanup
+for var in "$@"
+do
+    rm -f "$var.mpg"
+    rm -f "$var.sub.mpg"
+    rm -f "$var.*.srt"
+done
+rm -rf dvd/
+rm -f dvd.xml
+
+emphasise "Success: dvd.iso image created"

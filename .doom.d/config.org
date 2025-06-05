@@ -253,6 +253,14 @@ TODOs, synced externally using Nextcloud.
      org-icalendar-combined-agenda-file (expand-file-name "~/Documents/org.ics")))
 #+end_src
 *** LaTeX Export
+**** Shell escaping
+Add =-shell-escape= to the latex compilation. Needed for the svg package.
+#+begin_src emacs-lisp
+  (setq org-latex-pdf-process
+        '("%latex -shell-escape -interaction nonstopmode -output-directory %o %f"
+          "%latex -shell-escape -interaction nonstopmode -output-directory %o %f"
+          "%latex -shell-escape -interaction nonstopmode -output-directory %o %f"))
+#+end_src
 **** Document Classes
 Tell Emacs about all of the LaTeX classes I use to export documents.
 
