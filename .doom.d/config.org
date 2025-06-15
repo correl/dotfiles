@@ -1220,7 +1220,9 @@ Configure MU4E to read email synced from my personal and work accounts.
     (setq mu4e-headers-include-related nil)
     (setq mu4e-headers-skip-duplicates t)
     (setq mu4e-user-mail-address-list '("correlr@aweber.com"
-                                        "correl@gmail.com")))
+                                        "correl@gmail.com"))
+    (when (modulep! :ui popup)
+      (set-popup-rule! "\\*mu4e " :ignore t)))
 #+end_src
 
 Prefer sending HTML-formatted messages with plain text as a fallback option
