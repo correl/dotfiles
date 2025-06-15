@@ -16,6 +16,7 @@
 (package! emms)
 (package! exwm)
 (package! gnuplot)
+(package! graphviz-dot-mode)
 (package! jira-api :recipe (:host github :repo "correl/jira-api"))
 (package! json-mode)
 (package! kanji-glasses-mode :recipe (:host github :repo "correl/kanji-glasses-mode"))

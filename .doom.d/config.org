@@ -1140,6 +1140,11 @@ live-updated previews within OpenSCAD itself using =C-c C-o=.
   (use-package! scad-mode
     :mode "\\.scad\\'")
 #+end_src
+** Graphviz
+#+begin_src emacs-lisp
+  (use-package! graphviz-dot-mode
+    :mode "\\.dot\\'")
+#+end_src
 * Applications
 ** Email
 Configure MU4E to read email synced from my personal and work accounts.
