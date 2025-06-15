@@ -125,6 +125,13 @@ rather continue to be prompted.
 #+begin_src emacs-lisp
   (setq enable-local-variables t)
 #+end_src
+** Environment loading
+Supports ~.envrc~ files as well as Python tools like Hatch, Poetry, and PDM.
+
+#+begin_src emacs-lisp
+  (use-package buffer-env
+    :commands (buffer-env-update buffer-env-reset))
+#+end_src
 * Writing
 
 ** BibTeX

@@ -8,6 +8,7 @@
 
 (package! arduino-mode)
 (package! arduino-cli-mode)
+(package! buffer-env)
 (package! catppuccin-theme)
 (package! counsel)
 (package! desktop-environment)
@@ -46,7 +47,6 @@
 (package! ox-dnd :recipe (:host github :repo "xeals/emacs-org-dnd"))
 (package! ox-tufte)
 (package! paredit)
-(package! poetry)
 (package! python-black)
 (package! swagg :recipe (:host github :repo "isamert/swagg.el"))
 (package! unfill)
