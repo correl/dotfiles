@@ -77,6 +77,7 @@ function _tex_git {
     fi
 }
 
+_tex inconsolata-nerd-font
 _tex labbook
 _tex mdframed
 _tex microtype
