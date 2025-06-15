@@ -19,28 +19,28 @@ Customize the Doom Emacs dashboard with commissioned artwork, chosen randomly.
 The dashboard can be reloaded with the =g= key.
 
 #+begin_src emacs-lisp
-(defun my/choice (&rest things)
-  (let ((index (random (length things))))
-    (nth index things)))
+  (defun my/choice (&rest things)
+    (let ((index (random (length things))))
+      (nth index things)))
 
-(defun my/dashboard-randomize ()
-  (interactive)
-  (let ((logo (my/choice "~/Pictures/Patreon/Jon Bliss/phoenix-and-catgirl-500.png"
-                         "~/Pictures/Patreon/Jon Bliss/Bassist-final-transparent-500.png"
-                         "~/Pictures/Patreon/Jon Bliss/catgirl-final-transparent-500.png"
-                         "~/Pictures/Patreon/Jon Bliss/lapiz-final-transparent-500.png"
-                         "~/Pictures/Patreon/Jon Bliss/Poledancer-final-transparent-500.png"
-                         "~/Pictures/Patreon/Jon Bliss/Hacker-final-transparent-500.png"
-                         "~/Pictures/Patreon/Bee/IMG_3666_transparent_500.png")))
+  (defun my/dashboard-randomize ()
+    (interactive)
+    (let ((logo (my/choice "~/Nextcloud/Pictures/Patreon/Jon Bliss/phoenix-and-catgirl-500.png"
+                           "~/Nextcloud/Pictures/Patreon/Jon Bliss/Bassist-final-transparent-500.png"
+                           "~/Nextcloud/Pictures/Patreon/Jon Bliss/catgirl-final-transparent-500.png"
+                           "~/Nextcloud/Pictures/Patreon/Jon Bliss/lapiz-final-transparent-500.png"
+                           "~/Nextcloud/Pictures/Patreon/Jon Bliss/Poledancer-final-transparent-500.png"
+                           "~/Nextcloud/Pictures/Patreon/Jon Bliss/Hacker-final-transparent-500.png"
+                           "~/Nextcloud/Pictures/Patreon/Bee/IMG_3666_transparent_500.png")))
 
-    (setq fancy-splash-image logo)
-    (if (called-interactively-p)
-        (+doom-dashboard-reload))))
+      (setq fancy-splash-image logo)
+      (if (called-interactively-p)
+          (+doom-dashboard-reload))))
 
-(my/dashboard-randomize)
-(map!
- :map +doom-dashboard-mode-map
- "g" #'my/dashboard-randomize)
+  (my/dashboard-randomize)
+  (map!
+   :map +doom-dashboard-mode-map
+   "g" #'my/dashboard-randomize)
 #+end_src
 ** Frame transparency
 Set the background transparency to 90% so my wallpaper shows through.
