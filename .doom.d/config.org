@@ -98,7 +98,7 @@ version of the [[https://github.com/edwardtufte/et-book][Edward Tufte book font]
 #+begin_src emacs-lisp
   (use-package! mixed-pitch
     :hook ((org-mode markdown-mode rst-mode) . mixed-pitch-mode))
-  (setq doom-variable-pitch-font (font-spec :family "ETBookOT" :weight 'medium))
+  (setq doom-variable-pitch-font (font-spec :family "ETBookOT" :weight 'regular))
 #+end_src
 * UX Improvements
 ** Disable C-z backgrounding when the GUI is loaded
