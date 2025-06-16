@@ -210,12 +210,11 @@ TODOs, synced externally using Nextcloud.
   (after! org-agenda
     (require 'f)
 
-    (setq my/agenda-files '((personal . ("~/Nextcloud/org/personal.org"))
-                            (work . ("~/Nextcloud/org/aweber.org")))
+    (setq my/agenda-files '((personal . ("~/Nextcloud/org/personal.org")))
 
           org-agenda-files (-filter #'f-exists?
                                     (-concat
-                                     (if (string-equal (system-name) "s1326.ofc.lair")
+                                     (if (my/is-working-hours)
                                          (cdr (assoc 'work my/agenda-files))
                                        (cdr (assoc 'personal my/agenda-files))))))
 
@@ -444,34 +443,8 @@ Set up my capture templates for making new notes and journal entries.
            :prepend t)
 
           ;; Work
-          ("w" "Work")
-          ("wt" "Work TODO" entry
-           (file+headline "~/Nextcloud/org/aweber.org" "Unsorted")
-           "* TODO %^{Description}\n%?")
-          ("wl" "Log Work Task" entry
-           (file+datetree "~/org-aweber/worklog.org")
-           "* %^{Description}  %^g\nAdded: %U\n\n%?"
-           :clock-in t
-           :clock-keep t)
-          ("wL" "Log Work Task (no clock)" entry
-           (file+datetree "~/org-aweber/worklog.org")
-           "* %^{Description}  %^g\nAdded: %U\n\n%?")
-          ("wj" "Log work on JIRA issue" entry
-           (file+datetree "~/org-aweber/worklog.org")
-           ,(concat
-             "* %?\n"
-             ":PROPERTIES:\n"
-             ":JIRA_ID: %^{JIRA_ID}\n"
-             ":END:\n"
-             "Added: %U\n\n"
-             "[[jira:%\\1][%\\1]]")
-           :clock-in t
-           :clock-keep t)
-          ("wr" "respond to email (mu4e)"
-           entry (file+headline "~/Nextcloud/org/aweber.org" "Unsorted")
-           "* REPLY to [[mailto:%:fromaddress][%:fromname]] on %a\nDEADLINE: %(org-insert-time-stamp (org-read-date nil t \"+1d\"))\n%U\n\n"
-           :immediate-finish t
-           :prepend t)))
+          ;; ("w" "Work")
+          ))
 #+end_src
 *** Custom ID generation
 Because I'm all kinds of crazy, I like the custom IDs of my work log entries to
@@ -578,87 +551,11 @@ Tell Emacs how to build the document collections I export to HTML.
 
   (setq org-re-reveal-root "https://cdn.jsdelivr.net/reveal.js/3.0.0/")
 
-  (defun my/org-work-publish-to-html (plist filename pub-dir)
-    (message "Publishing %s" filename)
-    (cond ((string-match-p "slides.org$" filename)
-           (org-re-reveal-publish-to-reveal plist filename pub-dir))
-          (t (let ((org-html-head
-                    (concat
-                        ;; Tufte
-                        ;; "<link rel=\"stylesheet\" href=\"" my/org-base-url "styles/tufte-css/tufte.css\"/>"
-                        ;; "<link rel=\"stylesheet\" href=\"" my/org-base-url "styles/tufte-css/latex.css\"/>"
-
-                        ;; Org-Spec
-                        ;; "<link href=\"https://fonts.googleapis.com/css?family=Roboto+Slab:400,700|Inconsolata:400,700\" rel=\"stylesheet\" type=\"text/css\" />"
-                        ;; "<link rel=\"stylesheet\" href=\"" my/org-base-url "styles/org-spec/style.css\"/>"
-
-                        ;; "<link rel=\"stylesheet\" type=\"text/css\" href=\"" my/org-base-url "css/info.css\" />"
-
-                        ;; ReadTheOrg
-                        "<link rel=\"stylesheet\" type=\"text/css\" href=\"" my/org-base-url "styles/readtheorg/css/htmlize.css\"/>"
-                        "<link rel=\"stylesheet\" type=\"text/css\" href=\"" my/org-base-url "styles/readtheorg/css/readtheorg.css\"/>"
-                        "<link rel=\"stylesheet\" type=\"text/css\" href=\"" my/org-base-url "css/info.css\" />"
-                        "<script src=\"https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js\"></script>"
-                        "<script src=\"https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js\"></script>"
-                        "<script type=\"text/javascript\" src=\"" my/org-base-url "styles/lib/js/jquery.stickytableheaders.min.js\"></script>"
-                        "<script type=\"text/javascript\" src=\"" my/org-base-url "styles/readtheorg/js/readtheorg.js\"></script>"
-
-                        ;; Bigblow
-                        ;; "<link rel=\"stylesheet\" type=\"text/css\" href=\"" my/org-base-url "styles/bigblow/css/htmlize.css\"/>"
-                        ;; "<link rel=\"stylesheet\" type=\"text/css\" href=\"" my/org-base-url "styles/bigblow/css/bigblow.css\"/>"
-                        ;; "<link rel=\"stylesheet\" type=\"text/css\" href=\"" my/org-base-url "styles/bigblow/css/hideshow.css\"/>"
-                        ;; "<script type=\"text/javascript\" src=\"" my/org-base-url "styles/bigblow/js/jquery-1.11.0.min.js\"></script>"
-                        ;; "<script type=\"text/javascript\" src=\"" my/org-base-url "styles/bigblow/js/jquery-ui-1.10.2.min.js\"></script>"
-                        ;; "<script type=\"text/javascript\" src=\"" my/org-base-url "styles/bigblow/js/jquery.localscroll-min.js\"></script>"
-                        ;; "<script type=\"text/javascript\" src=\"" my/org-base-url "styles/bigblow/js/jquery.scrollTo-1.4.3.1-min.js\"></script>"
-                        ;; "<script type=\"text/javascript\" src=\"" my/org-base-url "styles/bigblow/js/jquery.zclip.min.js\"></script>"
-                        ;; "<script type=\"text/javascript\" src=\"" my/org-base-url "styles/bigblow/js/bigblow.js\"></script>"
-                        ;; "<script type=\"text/javascript\" src=\"" my/org-base-url "styles/bigblow/js/hideshow.js\"></script>"
-                        ;; "<script type=\"text/javascript\" src=\"" my/org-base-url "styles/lib/js/jquery.stickytableheaders.min.js\"></script>"
-                        )))
-               (save-excursion
-                 (save-restriction
-                   (org-html-publish-to-html plist filename pub-dir)))))))
-
   ;; (setq my/org-base-url (concat "/~" (getenv "USER") "/org/"))
   (setq my/org-base-url "/")
-  (setq my/org-base-url "https://correlr.gitlab.aweber.io/org/")
 
   (setq org-publish-project-alist
-        `(
-          ;; ("work-common"
-          ;;  :base-directory "~/org/common"
-          ;;  :publishing-directory "~/Public/org"
-          ;;  :base-extension "css\\|gif\\|jpe?g\\|png\\|svg"
-          ;;  :recursive t
-          ;;  :publishing-function org-publish-attachment)
-          ("work-themes"
-           :base-directory "~/.emacs.local.d/org-html-themes/styles"
-           :publishing-directory "~/Public/org/styles"
-           :base-extension "js\\|css\\|gif\\|jpe?g\\|png\\|svg\\|ogv"
-           :recursive t
-           :publishing-function org-publish-attachment)
-          ("work-roam-html"
-           :base-directory "~/roam/aweber"
-           :base-extension "org"
-           :publishing-directory "~/Public/roam-aweber"
-           :recursive t
-           :with-toc nil
-           :section-numbers nil
-           :auto-sitemap nil
-           :sitemap-title "Correl Roush's Org Roam Notes"
-           :publishing-function org-html-publish-to-html
-           :html-head "<link rel=\"stylesheet\" href=\"https://gongzhitaao.org/orgcss/org.css\"/>")
-          ("work-roam-assets"
-           :base-directory "~/roam/aweber"
-           :base-extension "css\\|gif\\|jpe?g\\|png\\|svg\\|pdf\\|ogv\\|py\\|html\\|js\\|json\\|ya?ml"
-           :publishing-directory "~/Public/roam-aweber"
-           :publishing-function org-publish-attachment
-           :display-custom-times t
-           :recursive t)
-          ("work-roam" :components ("work-roam-html" "work-roam-assets" "work-themes"))
-
-          ("cookbook-html"
+        `(("cookbook-html"
            :base-directory "~/org/cookbook"
            :base-extension "org"
            :publishing-directory "~/Public/cookbook"
@@ -805,18 +702,6 @@ Tell Emacs how to build the document collections I export to HTML.
 
   ;; Don't prompt for babel evaluation, ever.
   (setq org-confirm-babel-evaluate nil)
-
-  (require 'ox-confluence)
-  (defun my/org-publish ()
-    (interactive)
-    (org-publish "work")
-    (let ((org-link-abbrev-alist (seq-concatenate 'list org-link-abbrev-alist
-                                                  '(("jira" . "https://jira.aweber.io/browse/")
-                                                    ("gitlab" . "https://gitlab.aweber.io/")))))
-      (org-store-agenda-views))
-    (shell-command "org-publish"))
-
-  (bind-key "C-c o p" #'my/org-publish)
 #+end_src
 *** Enhanced Confluence export
 Adds [[https://github.com/correl/ox-confluence-en][my own package]] that extends the built-in Confluence wiki markup exporter
@@ -852,7 +737,7 @@ Keeps the current heading visible at the top of the Emacs window.
 Load shared code snippets to be used in org documents.
 
 #+begin_src emacs-lisp
-  (let ((org-dirs '("~/org" "~/org-aweber")))
+  (let ((org-dirs '("~/org")))
     (seq-map #'org-babel-lob-ingest
              (seq-filter #'f-exists?
                          (seq-map (lambda (path) (f-join path "library-of-babel.org"))
@@ -883,16 +768,6 @@ Gorgeous HTML exports.
 #+begin_src emacs-lisp
   ;; (use-package! ox-tufte
   ;;   :after ox)
-#+end_src
-*** Journal
-#+begin_src emacs-lisp
-  (use-package org-journal
-    :if (f-dir? "~/org-aweber")
-    :custom
-    (org-journal-date-prefix "#+title: ")
-    (org-journal-file-format "%Y-%m-%d.org")
-    (org-journal-dir "~/org-aweber")
-    (org-journal-date-format "%A, %d %B %Y"))
 #+end_src
 *** Cookbook
 #+begin_src emacs-lisp
@@ -1188,29 +1063,6 @@ Configure MU4E to read email synced from my personal and work accounts.
     (setq user-full-name "Correl Roush")
     (setq mu4e-contexts nil)
     (when (f-exists?
-           (f-join mu4e-maildir "Work"))
-      (add-to-list
-       'mu4e-contexts
-       (make-mu4e-context
-        :name "work"
-        :vars `((user-mail-address . "correlr@aweber.com")
-                (mu4e-drafts-folder . "/Work/[Gmail]/Drafts")
-                (mu4e-sent-folder . "/Work/[Gmail]/Sent Mail")
-                (mu4e-trash-folder . "/Work/[Gmail]/Trash")
-                (mu4e-maildir-shortcuts . (("/Work/INBOX" . ?i)
-                                           ("/Work/[Gmail]/All Mail" . ?a)
-                                           ("/Work/[Gmail]/Starred" . ?S)
-                                           ("/Work/[Gmail]/Sent Mail" . ?s)
-                                           ("/Work/[Gmail]/Trash" . ?t)))
-                (mu4e-compose-signature . ,(with-temp-buffer
-                                             (when (f-exists? "~/.signature-aweber")
-                                               (insert-file-contents "~/.signature-aweber"))
-                                             (buffer-string)))
-                (smtpmail-smtp-user . "correlr@aweber.com")
-                (smtpmail-smtp-server . "smtp.gmail.com")
-                (smtpmail-smtp-service . 465)
-                (smtpmail-stream-type . ssl)))))
-    (when (f-exists?
            (f-join mu4e-maildir "Personal"))
       (add-to-list
        'mu4e-contexts
@@ -1239,8 +1091,7 @@ Configure MU4E to read email synced from my personal and work accounts.
     (setq mu4e-index-lazy-check nil)
     (setq mu4e-headers-include-related nil)
     (setq mu4e-headers-skip-duplicates t)
-    (setq mu4e-user-mail-address-list '("correlr@aweber.com"
-                                        "correl@gmail.com"))
+    (setq mu4e-user-mail-address-list '("correl@gmail.com"))
     (when (modulep! :ui popup)
       (set-popup-rule! "\\*mu4e " :ignore t)))
 #+end_src
@@ -1454,7 +1305,7 @@ Add some commands for interacting with Jira within org documents.
 #+begin_src emacs-lisp
   (after! org
     (use-package jira-api
-      :config (setq jira-api-host "jira.aweber.io"
+      :config (setq jira-api-host "jira.COMPANYNAME.io"
                     jira-api-user "correlr"))
 
     (defun my/org-clock-last-time-in-seconds ()
@@ -1529,9 +1380,8 @@ Add some commands for interacting with Jira within org documents.
 ** Source Control
 #+begin_src emacs-lisp
   (after! forge
-    (add-to-list
-     'forge-alist
-     '("gitlab.aweber.io" "gitlab.aweber.io/api/v4" "gitlab.aweber.io" forge-gitlab-repository)))
+    ;; Add repositories to forge-alist here
+    )
 #+end_src
 ** Eshell
 *** Change directory in the context of a remote host
@@ -1603,21 +1453,6 @@ Manage background services
         :tags '(personal elm)
         :stop-signal 'sigkill
         :kill-process-buffer-on-stop t))
-    (when (f-exists? (expand-file-name "~/git/www"))
-      (prodigy-define-service
-        :name "AWeber WWW"
-        :command "npm"
-        :args '("start")
-        :cwd (expand-file-name "~/git/www")
-        :tags '(work)))
-    (when (f-exists? (expand-file-name "~/Public/roam-aweber"))
-      (prodigy-define-service
-        :name "Org Documents"
-        :command "python"
-        :args '("-m" "http.server" "3001")
-        :cwd (expand-file-name "~/Public/roam-aweber")
-        :tags '(work autostart)
-        :kill-signal 'sigkill))
     (when (f-exists? (expand-file-name "~/Public/roam"))
       (prodigy-define-service
         :name "Org Roam Documents"

@@ -54,33 +54,6 @@ Patterns "INBOX" "[Gmail]/Drafts" "[Gmail]/Sent Mail" "[Gmail]/Starred" "[Gmail]
 Create Both
 Expunge Both
 SyncState *
-
-IMAPAccount work
-Host imap.gmail.com
-User correlr@aweber.com
-PassCmd "pass Work/aweber/accounts.google.com/correlr@aweber.com | grep ^isync: | awk '{print \$2}'"
-AuthMechs LOGIN
-SSLType IMAPS
-SSLVersions TLSv1.2
-CertificateFile $(__certificatefile)
-
-IMAPStore work-remote
-Account work
-
-MaildirStore work-local
-Subfolders Verbatim
-Path ~/Mail/Work/
-Inbox ~/Mail/Work/INBOX
-
-Channel work
-Far :work-remote:
-Near :work-local:
-MaxMessages ${__MAXMESSAGES}
-ExpireUnread yes
-Patterns "INBOX" "AWeber Times" "Jira" "[Gmail]/Drafts" "[Gmail]/Sent Mail" "[Gmail]/Starred" "[Gmail]/All Mail" "[Gmail]/Chats" "[Gmail]/Trash"
-Create Both
-Expunge Both
-SyncState *
 EOF
 }
 
@@ -136,9 +109,7 @@ esac
 _run "[email] Creating mail directories" mkdir -p ${HOME}/Mail/{Personal,Work,.attachments}
 _run "[email] Configuring mbsync" __mbsync_config
 _run "[email] Initializing mail database" mu init -m ${HOME}/Mail \
-    --my-address=correl@gmail.com \
-    --my-address=correlr@aweber.com \
-    --my-address=correlr@aweber.net
+    --my-address=correl@gmail.com
 _run "[email] Indexing mail" mu index
 _recipe nvm
 _npm imapnotify
