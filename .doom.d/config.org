@@ -1085,13 +1085,36 @@ Configure MU4E to read email synced from my personal and work accounts.
                 (smtpmail-smtp-server . "smtp.gmail.com")
                 (smtpmail-smtp-service . 465)
                 (smtpmail-stream-type . ssl)))))
+    (when (f-exists?
+           (f-join mu4e-maildir "Work"))
+      (add-to-list
+       'mu4e-contexts
+       (make-mu4e-context
+        :name "work"
+        :vars `((user-mail-address . "correl@gisual.com")
+                (mu4e-drafts-folder . "/Work/[Gmail]/Drafts")
+                (mu4e-sent-folder . "/Work/[Gmail]/Sent Mail")
+                (mu4e-trash-folder . "/Work/[Gmail]/Trash")
+                (mu4e-maildir-shortcuts . (("/Work/INBOX" . ?i)
+                                           ("/Work/[Gmail]/All Mail" . ?a)
+                                           ("/Work/[Gmail]/Starred" . ?S)
+                                           ("/Work/[Gmail]/Sent Mail" . ?s)
+                                           ("/Work/[Gmail]/Trash" . ?t)))
+                (mu4e-compose-signature . ,(with-temp-buffer
+                                             (when (f-exists? "~/.signature-gisual")
+                                               (insert-file-contents "~/.signature-gisual"))
+                                             (buffer-string)))
+                (smtpmail-smtp-user . "correl@gisual.com")
+                (smtpmail-smtp-server . "smtp.gmail.com")
+                (smtpmail-smtp-service . 465)
+                (smtpmail-stream-type . ssl)))))
     (setq mu4e-context-policy 'pick-first)
     (setq mu4e-compose-context-policy 'ask)
     (setq mu4e-compose-dont-reply-to-self t)
     (setq mu4e-index-lazy-check nil)
     (setq mu4e-headers-include-related nil)
     (setq mu4e-headers-skip-duplicates t)
-    (setq mu4e-user-mail-address-list '("correl@gmail.com"))
+    (setq mu4e-user-mail-address-list '("correl@gmail.com" "correl@gisual.com"))
     (when (modulep! :ui popup)
       (set-popup-rule! "\\*mu4e " :ignore t)))
 #+end_src
@@ -1431,13 +1454,14 @@ Manage background services
       (prodigy-define-tag
         :name 'email
         :ready-message "Checking Email using IMAP IDLE. Ctrl-C to shutdown.")
-      (prodigy-define-service
-        :name "imapnotify-work"
-        :command "imapnotify"
-        :args (list "-c" (expand-file-name "~/.config/imap_inotify/work.js"))
-        :tags '(email work autostart)
-        :kill-signal 'sigkill)
-      (unless (string-equal "croush" (user-login-name))
+      (when (f-exists? (expand-file-name "~/.config/imap_inotify/work.js"))
+        (prodigy-define-service
+          :name "imapnotify-work"
+          :command "imapnotify"
+          :args (list "-c" (expand-file-name "~/.config/imap_inotify/work.js"))
+          :tags '(email work autostart)
+          :kill-signal 'sigkill))
+      (when (f-directory? (expand-file-name "~/.config/imap_notify/personal.js"))
         (prodigy-define-service
           :name "imapnotify-personal"
           :command "imapnotify"
@@ -1510,15 +1534,19 @@ Make calls to swagger-documented APIs with completion support.
 * Operating Systems
 ** Linux
 *** EXWM
+**** Create EXWM start script
+#+begin_src sh :tangle start-exwm.sh :shebang #!/bin/sh
+emacs -mm -l ~/.doom.d/exwm.el
+#+end_src
 **** Set Emacs + EXWM as the default X window manager
 
 #+begin_src sh :tangle ~/.dmrc
 [Desktop]
 session=~/.doom.d/start-exwm.sh
 #+end_src
-
-#+begin_src sh :tangle start-exwm.sh :shebang #!/bin/sh
-emacs -mm -l ~/.doom.d/exwm.el
+**** Set Emacs + EXWM as the KDE window manager
+#+begin_src sh :tangle ~/.config/plasma-workspace/env/exwm.sh
+  export KDEWM=~/.doom.d/start-exwm.sh
 #+end_src
 **** Configure EXWM
 - Sets the desktop background
