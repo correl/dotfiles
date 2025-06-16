@@ -48,6 +48,7 @@
 (package! ox-dnd :recipe (:host github :repo "xeals/emacs-org-dnd"))
 (package! ox-tufte)
 (package! paredit)
+(package! prodigy)
 (package! python-black)
 (package! swagg :recipe (:host github :repo "isamert/swagg.el"))
 (package! ts)
