@@ -1,4 +1,4 @@
-if [[ $TERM == "dumb" ]]; then	# in emacs
+if [[ $TERM == "dumb" ]]; then # in emacs
     PS1='%(?..[%?])%!:%~%# '
     # for tramp to not hang, need the following. cf:
     # http://www.emacswiki.org/emacs/TrampMode
@@ -8,6 +8,8 @@ if [[ $TERM == "dumb" ]]; then	# in emacs
     unfunction precmd
     unfunction preexec
 else
+    export LP_ENABLE_KUBECONTEXT=1
+
     if [ ! -d $HOME/.zgenom ]; then
         git clone https://github.com/jandamm/zgenom.git "${HOME}/.zgenom"
     fi
@@ -17,17 +19,25 @@ else
         zgenom ohmyzsh
         zgenom ohmyzsh plugins/git
         zgenom ohmyzsh plugins/git-extras
+        zgenom ohmyzsh plugins/kubectl
+        zgenom ohmyzsh plugins/kubectx
         zgenom ohmyzsh plugins/pip
         zgenom ohmyzsh plugins/pass
         zgenom ohmyzsh plugins/ssh-agent
 
         zgenom loadall <<EOF
 nojhan/liquidprompt
+nojhan/lp-jolly
 zsh-users/zsh-syntax-highlighting
 EOF
         zgenom save
         zgenom compile $HOME/.zshrc
     fi
+    source ~/.zgenom/sources/nojhan/liquidprompt/___/themes/unfold/unfold.theme
+    source ~/.zgenom/sources/nojhan/lp-jolly/___/presets/variant-chevron.conf
+    source ~/.zgenom/sources/nojhan/lp-jolly/___/presets/colors-cyan-magenta.conf
+    source ~/.zgenom/sources/nojhan/lp-jolly/___/jolly.theme
+    lp_theme jolly
     unsetopt correct_all
 fi
 
