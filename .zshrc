@@ -26,14 +26,13 @@ else
         zgenom ohmyzsh plugins/ssh-agent
 
         zgenom loadall <<EOF
-nojhan/liquidprompt
+liquidprompt/liquidprompt
 nojhan/lp-jolly
 zsh-users/zsh-syntax-highlighting
 EOF
         zgenom save
         zgenom compile $HOME/.zshrc
     fi
-    source ~/.zgenom/sources/nojhan/liquidprompt/___/themes/unfold/unfold.theme
     source ~/.zgenom/sources/nojhan/lp-jolly/___/presets/variant-chevron.conf
     source ~/.zgenom/sources/nojhan/lp-jolly/___/presets/colors-cyan-magenta.conf
     source ~/.zgenom/sources/nojhan/lp-jolly/___/jolly.theme
