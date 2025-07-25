@@ -6,14 +6,17 @@ case $_PLATFORM in
     darwin)
         _recipe brew
         _brew zsh
+        _brew starship
         ;;
     arch)
         _recipe _arch
         _pacman zsh
+        _pacman starship
         ;;
     debian)
         _recipe _apt
         _apt zsh
+        _apt starship
         ;;
 esac
 
@@ -38,6 +41,9 @@ if [ "$__shell" != "$__zsh_bin" ]; then
     RESTART_SHELL=1
 fi
 
+if ! [ -f ${HOME}/.config/starship.toml ]; then
+    _run "Install starship.toml" ln -s ${HOME}/dotfiles/starship/starship.toml ${HOME}/.config/starship.toml
+fi
 if ! [ -f ${HOME}/.zshrc ]; then
     _run "Install .zshrc" ln -s ${HOME}/dotfiles/.zshrc ${HOME}/.zshrc
     RESTART_SHELL=1
