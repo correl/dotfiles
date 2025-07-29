@@ -1687,3 +1687,13 @@ Emits rich presence to Discord.
   (use-package! mtg
     :commands (mtg-mode))
 #+end_src
+** 1Password
+A simple Emacs function to retrieve secrets from the 1Password CLI
+
+#+begin_src emacs-lisp
+  (defun op-read (secret-ref)
+    (string-trim
+     (with-temp-buffer
+       (call-process "op" nil t nil "read" secret-ref)
+       (buffer-string))))
+#+end_src
