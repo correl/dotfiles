@@ -16,7 +16,11 @@ case $_PLATFORM in
     debian)
         _recipe _apt
         _apt zsh
-        _apt starship
+        if ! command -v starship > /dev/null 2>&1; then
+            __starship_install=$(mktemp)
+            _run "Downloading starship" curl -sS https://starship.rs/install.sh --output $__starship_install
+            _run "Installing starship" sh $__starship_install --yes
+        fi
         ;;
 esac
 
