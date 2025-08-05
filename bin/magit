@@ -1,0 +1,2 @@
+#!/usr/bin/env bash
+emacs -nw -f magit-status --eval "(local-set-key \"q\" #'kill-emacs)" -f delete-other-windows
