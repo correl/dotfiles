@@ -1306,21 +1306,22 @@ Pre-load Projectile with projects in my usual code directories.
     ;; doom overrides projectile-switch-project-action for its workspace behavior,
     ;; so rather than update that, set the workspaces switch project function.
     (setq +workspaces-switch-project-function #'magit-status)
-    (let ((project-directories (-filter #'f-directory?
-                                        '("~/code"
-                                          "~/git"))))
-      (-map
-       (lambda (directory)
-         (-map (lambda (project)
-                 (-> (concat  project "/") ;; Projectile likes trailing slashes
-                     (projectile-add-known-project)))
-               (-filter (lambda (f) (and (not (s-ends-with? "." f))
-                                         (f-directory? f)))
-                        (-map (lambda (f) (concat directory "/" f))
-                              (directory-files directory)))))
-       project-directories))
 
-    (projectile-cleanup-known-projects))
+    (defvar my/projectile-projects-cache (concat doom-cache-dir "my-projects"))
+    (defun my/projectile-add-known-projects ()
+      (interactive)
+      (->> (-filter #'f-directory? '("~/code" "~/git" "~/src"))
+           (--map (directory-files-recursively it "^\.git$" t #'f-directory?))
+           (-flatten)
+           (-map #'f-parent)
+           (--map (concat it "/"))
+           (-map #'projectile-add-known-project)))
+    (unless (f-exists? my/projectile-projects-cache)
+      (my/projectile-add-known-projects)
+      (with-temp-buffer
+        (insert (s-join "\n" projectile-known-projects))
+        (write-file my/projectile-projects-cache))
+      (projectile-cleanup-known-projects)))
 #+end_src
 *** Jira
 Add some commands for interacting with Jira within org documents.
