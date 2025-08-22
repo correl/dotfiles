@@ -1042,6 +1042,21 @@ live-updated previews within OpenSCAD itself using =C-c C-o=.
   (use-package! scad-mode
     :mode "\\.scad\\'")
 #+end_src
+** Python
+*** Project Environments (PET)
+The Python Executable Tracker
+
+#+begin_src emacs-lisp
+  (use-package! pet
+    :after python
+    :config
+    (add-hook 'python-base-mode-hook 'pet-mode -10))
+#+end_src
+*** Formatting (Ruff)
+#+begin_src emacs-lisp
+  (use-package! ruff-format
+    :after python)
+#+end_src
 ** Graphviz
 #+begin_src emacs-lisp
   (use-package! graphviz-dot-mode
