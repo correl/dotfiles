@@ -21,6 +21,7 @@
 (package! graphviz-dot-mode)
 (package! jira-api :recipe (:host github :repo "correl/jira-api"))
 (package! json-mode)
+(package! jwt)
 (package! kanji-glasses-mode :recipe (:host github :repo "correl/kanji-glasses-mode"))
 (package! kanji-mode)
 (package! kerl :recipe (:host github :repo "correl/kerl.el"))
