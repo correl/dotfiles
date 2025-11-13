@@ -183,7 +183,10 @@
         +poetry
         +tree-sitter)
        ;;qt                     ; the 'cutest' gui framework ever
-       ;;racket                 ; a DSL for DSLs
+       (racket                  ; a DSL for DSLs
+        +lsp
+        +xp
+        +hash-lang)
        ;;raku                   ; the artist formerly known as perl6
        ;;rest                   ; Emacs as a REST client
        ;;rst                    ; ReST in peace
@@ -196,7 +199,7 @@
        ;;solidity               ; do you need a blockchain? No.
        ;;swift                  ; who asked for emoji variables?
        ;;terra                  ; Earth and Moon in alignment for performance.
-       web                      ; the tubes
+       (web +lsp)               ; the tubes
        (yaml                    ; JSON, but readable
         +lsp
         +tree-sitter)
