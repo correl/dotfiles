@@ -33,6 +33,8 @@
 (package! mtg :recipe (:host nil :repo "git@git.phoenixinquis.net:correlr/emacs-mtg"))
 (package! nov)
 (package! ob-http)
+(package! ob-mermaid)
+(package! mermaid-mode)
 (package! pet)
 (package! scad-mode)
 (package! org-chef)

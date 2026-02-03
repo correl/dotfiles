@@ -1062,6 +1062,13 @@ The Python Executable Tracker
   (use-package! graphviz-dot-mode
     :mode "\\.dot\\'")
 #+end_src
+** Mermaid
+Fancier diagrams
+
+#+begin_src emacs-lisp
+  (use-package! mermaid-mode
+    :mode "\\.mermaid\\'")
+#+end_src
 * Applications
 ** Email
 Configure MU4E to read email synced from my personal and work accounts.
