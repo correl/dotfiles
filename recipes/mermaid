@@ -1,0 +1,10 @@
+#!/bin/bash
+# Description: Diagrams and visualizations
+set -e
+
+case $_PLATFORM in
+    arch)
+        _recipe _arch
+        _pacman mermaid-cli
+        ;;
+esac
