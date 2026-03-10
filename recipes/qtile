@@ -6,15 +6,16 @@ case $_PLATFORM in
     arch)
         _recipe _arch
 
-        _yay qtile
-        _yay python-dbus-fast
+        _pacman qtile
+        _pacman python-dbus-fast
 
-        _yay alacritty
-        _yay dunst
+        _pacman alacritty
+        _pacman dunst
+        _pacman slock
 
         # Automatic display management
-        _yay autorandr # X11
-        _yay kanshi    # Wayland
+        _pacman autorandr # X11
+        _pacman kanshi    # Wayland
         ;;
 esac
 

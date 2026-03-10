@@ -160,6 +160,7 @@ keys = [
     Key([], "Print", lazy.spawn("spectacle")),
     Key([mod, "control"], "w", lazy.screen.function(set_random_wallpaper)),
     Key([mod, "shift"], "w", lazy.screen.function(set_preferred_wallpaper)),
+    Key([mod], "l", lazy.spawn("slock"))
 ]
 
 # Add key bindings to switch VTs in Wayland.
