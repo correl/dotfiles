@@ -1,0 +1,22 @@
+[global]
+origin = top-center
+gap_size = 10
+font = "Beleren 16"
+icon_path = "/usr/share/icons/breeze-dark/status/16"
+transparency = 10
+frame_color = "#8aadf4"
+separator_color= frame
+highlight = "#8aadf4"
+
+[urgency_low]
+background = "#24273a"
+foreground = "#cad3f5"
+
+[urgency_normal]
+background = "#24273a"
+foreground = "#cad3f5"
+
+[urgency_critical]
+background = "#24273a"
+foreground = "#cad3f5"
+frame_color = "#f5a97f"

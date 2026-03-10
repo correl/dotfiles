@@ -1,0 +1,25 @@
+#!/bin/bash
+# Description: Python tiling window manager for X and Wayland
+set -e
+
+case $_PLATFORM in
+    arch)
+        _recipe _arch
+
+        _yay qtile
+        _yay python-dbus-fast
+
+        _yay alacritty
+        _yay dunst
+
+        # Automatic display management
+        _yay autorandr # X11
+        _yay kanshi    # Wayland
+        ;;
+esac
+
+for config in qtile alacritty dunst; do
+    if ! [ -d ${HOME}/.config/${config} ]; then
+        _run "[emacs-doom] Install .config/${config}" ln -s ${HOME}/dotfiles/.config/${config} ${HOME}/.config/${config}
+    fi
+done

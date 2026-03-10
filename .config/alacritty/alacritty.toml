@@ -1,0 +1,10 @@
+general.import = [
+  "~/.config/alacritty/catppuccin-macchiato.toml"
+]
+
+[window]
+opacity = 0.93
+
+[font]
+normal = { family = "Inconsolata", style = "Medium" }
+size = 8
