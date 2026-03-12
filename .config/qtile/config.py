@@ -160,7 +160,7 @@ keys = [
     Key([], "Print", lazy.spawn("spectacle")),
     Key([mod, "control"], "w", lazy.screen.function(set_random_wallpaper)),
     Key([mod, "shift"], "w", lazy.screen.function(set_preferred_wallpaper)),
-    Key([mod], "l", lazy.spawn("slock")),
+    Key([mod, "control"], "l", lazy.spawn("slock")),
     # Somehow, previous and next are backwards?
     Key([mod], "comma", lazy.next_screen()),
     Key([mod], "period", lazy.prev_screen()),
