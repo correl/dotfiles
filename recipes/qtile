@@ -12,6 +12,7 @@ case $_PLATFORM in
         _pacman alacritty
         _pacman dunst
         _pacman slock
+        _pacman numlockx
 
         # Automatic display management
         _pacman autorandr # X11
