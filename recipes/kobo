@@ -1,0 +1,32 @@
+#!/bin/bash
+# Description: Kobo
+set -e
+
+case $_PLATFORM in
+    arch)
+        _recipe _arch
+
+        _pacman wine
+        _pacman wine-gecko
+        _pacman wine-mono
+        _pacman lib32-gnutls
+        ;;
+esac
+
+mkdir -p ~/.kobo
+if [ ! -f ~/.kobo/kobosetup.exe ]; then
+    _run "Download kobo installer" curl -L -o ~/.kobo/kobosetup.exe https://cdn.kobo.com/downloads/desktop/kobodesktop/kobosetup.exe
+fi
+
+if [ ! -f ~/.wine/drive_c/Program\ Files\ \(x86\)/Kobo/Kobo.exe ]; then
+    _run "Installing Kobo" wine ~/.kobo/kobosetup.exe
+fi
+
+if [ ! -f ~/.local/share/applications/Kobo.desktop ]; then
+    cat << EOF > ~/.local/share/applications/Kobo.desktop
+[Desktop Entry]
+Type=Application
+Name=Kobo
+Exec=wine "$HOME/.wine/drive_c/Program Files (x86)/Kobo/Kobo.exe"
+EOF
+fi
