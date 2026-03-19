@@ -164,6 +164,8 @@ keys = [
     # Somehow, previous and next are backwards?
     Key([mod], "comma", lazy.next_screen()),
     Key([mod], "period", lazy.prev_screen()),
+    Key([mod], "p", lazy.spawn("rofi-power")),
+    Key([mod], "s", lazy.spawn("rofi-sound")),
 ]
 
 # Add key bindings to switch VTs in Wayland.

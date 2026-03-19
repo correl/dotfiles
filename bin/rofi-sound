@@ -1,0 +1,18 @@
+#!/bin/bash
+_rofi="rofi -dmenu -i -no-custom"
+soundmode=$(echo "Input|Output" | $_rofi -sep '|' -p Sound) || exit 0
+case $soundmode in
+    Input)
+        pactl_mode=source ;;
+    Output)
+        pactl_mode=sink ;;
+    *)
+        exit 1 ;;
+esac
+selection=$(pactl --format json list ${pactl_mode}s | jq -r '.[].description' | rofi -dmenu -i -no-custom -p) || exit 0
+device=$(pactl --format json list ${pactl_mode}s | jq -r ".[] | select(.description == \"${selection}\") | .name")
+if [ -z "$device" ]; then
+   exit 1
+fi
+pactl set-default-${pactl_mode} ${device}
+notify-send "Selected $soundmode $selection"

@@ -1,0 +1,16 @@
+#!/bin/bash
+
+option=$(echo "Lock Screen|Sleep|Reboot|Power Off" | rofi -i -sep '|' -no-custom -dmenu -p Power) || exit 0
+
+case $option in
+    "Lock Screen")
+        slock ;;
+    "Sleep")
+        slock systemctl suspend -i ;;
+    "Reboot")
+        systemctl reboot -i ;;
+    "Power Off")
+        shutdown now ;;
+    *)
+        exit 1 ;;
+esac
