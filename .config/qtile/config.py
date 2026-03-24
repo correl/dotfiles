@@ -166,6 +166,7 @@ keys = [
     Key([mod], "period", lazy.prev_screen()),
     Key([mod], "p", lazy.spawn("rofi-power")),
     Key([mod], "s", lazy.spawn("rofi-sound")),
+    Key([mod], "m", lazy.spawn("xfce4-find-cursor")),
 ]
 
 # Add key bindings to switch VTs in Wayland.

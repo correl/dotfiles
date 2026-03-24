@@ -22,6 +22,8 @@ case $_PLATFORM in
         _pacman rofi-pass
         _pacman rofi-emoji
         _pacman rofi-calc
+
+        _pacman xfce4-settings # For xfce4-find-cursor
         ;;
 esac
 
