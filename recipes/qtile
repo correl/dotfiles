@@ -17,6 +17,11 @@ case $_PLATFORM in
         # Automatic display management
         _pacman autorandr # X11
         _pacman kanshi    # Wayland
+
+        _pacman rofi
+        _pacman rofi-pass
+        _pacman rofi-emoji
+        _pacman rofi-calc
         ;;
 esac
 
