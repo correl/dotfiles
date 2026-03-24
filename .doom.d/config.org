@@ -1294,7 +1294,7 @@ Read blogs and articles from the RSS feeds I follow.
 ***** https://hackaday.com/feed/
 *** News :news:
 **** https://epgn.com/feed/
-**** https://ustransnews.com/feed/
+**** https://rss.beehiiv.com/feeds/ZwjrCnHCyS.xml
 *** Fun :fun:
 
 **** http://feeds.feedburner.com/FlipsideJapan
