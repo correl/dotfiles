@@ -2,8 +2,11 @@ import dataclasses
 import datetime
 import os
 import pathlib
+import platform
 import random
+import shutil
 import subprocess
+import typing
 
 import libqtile.resources
 from libqtile import bar, hook, layout, qtile, widget, utils
@@ -11,6 +14,21 @@ from libqtile.config import Click, Drag, Group, Key, Match, Screen
 from libqtile.lazy import lazy
 from libqtile.widget import backlight
 from libqtile.backend.wayland import InputConfig
+
+
+def first[T](
+    options: list[T],
+    predicate: typing.Callable[[T], typing.Any] | None = None,
+    default: T | None = None,
+) -> T:
+    predicate = predicate or (lambda _: True)
+    try:
+        return next(option for option in options if predicate(option))
+    except StopIteration:
+        if default:
+            return default
+        else:
+            raise RuntimeError("No valid options available")
 
 
 def wp_path():
@@ -62,17 +80,24 @@ def during_work_hours(check_time: datetime.datetime | None = None) -> bool:
 
 
 def preferred_wallpaper(screen):
-    if qtile and qtile.current_screen.width > 4000:
-        # Sunny
-        return os.path.expanduser("~/Pictures/Wallpapers/Ultrawide/o7i7rtkdwyd91.jpg")
-    else:
-        if during_work_hours():
-            return os.path.expanduser(
-                "~/Pictures/Wallpapers/cloud_by_sakimichan-d4ly1t6.jpg"
-            )
-        else:
-            # Lapis
-            return os.path.expanduser("~/Pictures/Wallpapers/20210704_191749.jpeg")
+    wp_sunny = ("wide", "safe", "~/Pictures/Wallpapers/Ultrawide/o7i7rtkdwyd91.jpg")
+    wp_lapis = ("full", "nsfw", "~/Pictures/Wallpapers/20210704_191749.jpeg")
+    wp_cloud = ("full", "safe", "~/Pictures/Wallpapers/cloud_by_sakimichan-d4ly1t6.jpg")
+    wp_xenia = ("full", "safe", "~/Pictures/Wallpapers/Xenia.png")
+    preferences = {
+        "framework13": [wp_sunny, wp_lapis, wp_cloud],
+        "snappy": [wp_sunny, wp_xenia],
+    }
+    size = "wide" if qtile and qtile.current_screen.width > 4000 else "full"
+    safety = "safe" if during_work_hours() else "nsfw"
+    wallpapers = preferences.get(platform.node(), "framework13")
+
+    def match(wp) -> bool:
+        wp_size, wp_safety, wp_path = wp
+        return wp_size == size and wp_safety == safety
+
+    wallpaper = first(wallpapers, match, wallpapers[-1])
+    return os.path.expanduser(wallpaper[-1])
 
 
 def set_random_wallpaper(screen):
@@ -84,7 +109,7 @@ def set_preferred_wallpaper(screen):
 
 
 mod = "mod4"
-terminal = "konsole"
+terminal = first(["konsole", "alacritty", "xterm"], shutil.which, "konsole")
 volume = os.path.expanduser("~/.config/qtile/dunst-volume.sh")
 keys = [
     # A list of available commands that can be bound to keys can be found
@@ -204,8 +229,12 @@ for i in groups:
             # ),
             # Or, use below if you prefer not to switch to that group.
             # mod + shift + group number = move focused window to group
-            Key([mod, "shift"], i.name, lazy.window.togroup(i.name),
-                desc="move focused window to group {}".format(i.name)),
+            Key(
+                [mod, "shift"],
+                i.name,
+                lazy.window.togroup(i.name),
+                desc="move focused window to group {}".format(i.name),
+            ),
         ]
     )
 
