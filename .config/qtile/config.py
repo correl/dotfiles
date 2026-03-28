@@ -92,11 +92,11 @@ def preferred_wallpaper(screen):
     safety = "safe" if during_work_hours() else "nsfw"
     wallpapers = preferences.get(platform.node(), "framework13")
 
-    def match(wp) -> bool:
+    def predicate(wp) -> bool:
         wp_size, wp_safety, wp_path = wp
-        return wp_size == size and wp_safety == safety
+        return wp_size == size and (wp_safety == safety or wp_safety == "safe")
 
-    wallpaper = first(wallpapers, match, wallpapers[-1])
+    wallpaper = first(wallpapers, predicate, wallpapers[-1])
     return os.path.expanduser(wallpaper[-1])
 
 
