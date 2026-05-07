@@ -1069,6 +1069,13 @@ Fancier diagrams
   (use-package! mermaid-mode
     :mode "\\.mermaid\\'")
 #+end_src
+** SQL
+Smart indentation for SQL files.
+
+#+begin_src emacs-lisp
+  (use-package! sql-indent
+    :hook (sql-mode . sqlind-minor-mode))
+#+end_src
 * Applications
 ** Email
 Configure MU4E to read email synced from my personal and work accounts.

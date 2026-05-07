@@ -55,6 +55,7 @@
 (package! prodigy)
 (package! python-black)
 (package! ruff-format)
+(package! sql-indent)
 (package! swagg :recipe (:host github :repo "isamert/swagg.el"))
 (package! ts)
 (package! unfill)
