@@ -901,20 +901,10 @@ keep them tidy.
       (org-roam-db-sync))
     slipbox)
 
-  (map! :leader
-        (:prefix-map ("n" . "notes")
-                     (:prefix ("r" . "roam")
-                      :desc "Select slipbox" "c" #'my/slipbox-select)))
-
-  (map! :leader
-        (:prefix-map ("n" . "notes")
-                     (:prefix ("r" . "roam")
-                      :desc "Find file in slipbox" "F" #'my/org-roam-slipbox-node-find)))
-
-  (map! :leader
-        (:prefix-map ("n" . "notes")
-                     (:prefix ("r" . "roam")
-                      :desc "Synchronize all slipbox databases" "S" #'my/org-roam-slipbox-db-sync)))
+  (map! :leader :prefix "nr"
+        :desc "Select slipbox" "c" #'my/slipbox-select
+        :desc "Find file in slipbox" "F" #'my/org-roam-slipbox-node-find
+        :desc "Synchronize all slipbox databases" "S" #'my/org-roam-slipbox-db-sync)
 
   ;; Set a default org-roam directory from the available slipboxes
   (if-let (slipbox (-first-item (my/slipbox-names)))
